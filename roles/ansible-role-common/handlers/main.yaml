@@ -1,0 +1,45 @@
+---
+# handlers file for common
+
+- name: restart time service ntp
+  service: 
+    name: ntp 
+    state: restarted
+  listen: "restart time services"
+  register: ts
+  when: 
+  - ansible_os_family == "Debian"
+  - time_service != "chronyd"
+
+- name: restart time service ntpd
+  service: 
+    name: ntpd
+    state: restarted
+  listen: "restart time services"
+  register: ts
+  when: 
+  - ansible_os_family != "Debian"
+  - time_service != "chronyd"
+
+- name: ntpq peer
+  shell: sleep 10 && ntpq -c peer
+  register: ntpq_peer
+  listen: "restart time services"
+  when: time_service != "chronyd"
+
+#- debug: var=ntpq_peer.stdout_lines
+#  listen: "restart time services"
+#  when: time_service == "ntpd" or time_service == "ntp"
+
+- name: chrony sources
+  shell: sleep 5 && chronyc sources
+  register: chronyc
+  listen: "restart time services"
+  when: time_service == "chronyd"
+
+- debug: var="{{ item }}"
+  with_items:
+#    - ts
+    - ntpq_peer.stdout_lines
+    - chronyc.stdout_lines
+  listen: "restart time services"

@@ -1,0 +1,4 @@
+# vars for RedHat Enterprise (*NOT* CentOS)
+---
+
+time_host: 0.redhat.pool.ntp.org

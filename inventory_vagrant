@@ -1,0 +1,29 @@
+# open-vpn demo inventory
+
+# ansible.cfg sets global default python_interpeter=/usr/libexec/platform-python
+[vpn]
+vpn7  ansible_host=192.168.10.107
+vpn8  ansible_host=192.168.10.108
+
+[vpn:vars]
+# look in group_vars/vpn
+
+
+[vpn_py3]
+vpn9  ansible_host=192.168.10.109
+vpn10 ansible_host=192.168.10.110
+vpn16 ansible_host=192.168.10.116
+vpn18 ansible_host=192.168.10.118
+vpn20 ansible_host=192.168.10.120
+
+[vpn_py3:vars]
+ansible_python_interpreter=/usr/bin/python3
+
+
+[all:children]
+vpn 
+vpn
+
+[all:vars]
+ansible_ssh_user=vagrant
+ansible_ssh_private_key_file=~/.vagrant.d/insecure_private_key

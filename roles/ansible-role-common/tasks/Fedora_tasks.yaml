@@ -1,0 +1,65 @@
+# Fedora install tasks for common
+---
+# this requires specific package manager because vim requires vim-common
+
+# https://bugzilla.redhat.com/show_bug.cgi?id=1329015
+# (dnf is installed since F18...fixed in f27+)
+- name: fix Fedora[22-26] vim-minimal
+  command: dnf update -y --allowerasing vim-minimal
+  args:
+    warn: no
+  register: vim_min
+  when: 
+  - ansible_distribution_major_version|int >= 22
+  - ansible_distribution_major_version|int <= 26
+
+# the following two tasks are to fix yum so that it will work to install
+# packages on Fedora 22 and 23.  Fedora 24 uses python3.5 dnf and works correctly.
+# however, using the package module works with all these versions 
+# if you install the yumdaemon and pip. With python3, this problem goes away
+# but since the version of python3 in the 22 and 23 repos is 3.4 and 
+# ansible requires 3.5, this workaround is in place
+#
+- name: fix Fedora[22-23] python2 dnf not allowing signatures
+  command: dnf install -y python-yumdaemon python-pip
+  args:
+    warn: no
+  register: yumdaemon
+  when: 
+  - ansible_distribution_major_version|int >= 22
+  - ansible_distribution_major_version|int <= 23
+
+- name: Fedora 22-23 pip package
+  pip: 
+    name: yum
+    state: present
+  register: pip
+  when: 
+  - ansible_distribution_major_version|int >= 22
+  - ansible_distribution_major_version|int <= 23
+
+# ansible 2.7 deprecates with_items and nosquash, should use variable directly
+# but it takes a long time to process all the packages at once, so do separately
+# this times out with Fedora32, even with bare ISP connection
+- name: Fedora packages
+  package:
+    name: '{{ item }}'
+    state: present
+  register: package
+  with_items:
+    - '{{ Fedora_packages }}'
+
+# mirror mirror.genesisadaptive.com and mirror.ette.biz for moreutils on Fedora32 return 404
+# regardless of the network connection, trying to add it sometimes times-out. 
+# So code a hard copy add for all other versions
+#- name: non-Fedora32 moreutils
+#  package:
+#    name: moreutils
+#    state: present
+#  register: moreutils
+#  when: ansible_distribution_major_version|int != 32
+
+# Fedora uses ntpd
+- name: Fedora set
+  set_fact: 
+    time_service: ntpd

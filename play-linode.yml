@@ -1,0 +1,14 @@
+# playbook for configuring vpn server hosts on linode servers
+# this will install both roles, then run the handlers for both roles
+# ansible should pull variables from group_vars/vpn anyway
+
+# https://docs.vpn.com/ee/administration/environment_variables.html
+---
+- hosts: all
+  vars:
+  vars_files:
+    - group_vars/vpn
+  become: true
+
+  roles:
+    - role: vpn

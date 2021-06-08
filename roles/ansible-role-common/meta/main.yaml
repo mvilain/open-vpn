@@ -1,0 +1,44 @@
+galaxy_info:
+  author: "Michael Vilain"
+  description: install baseline packages and services
+  license: license (GPLv2, CC-BY, etc)
+
+  min_ansible_version: 1.2
+
+  platforms:
+  - name: Debian
+    versions:
+    - 9.0 (stretch)
+    - 10.0 (buster)
+  - name: EL
+    versions:
+    - 6
+    - 7
+    - 8
+  - name: Fedora
+    versions:
+    - 21
+    - 22
+    - 23
+    - 24
+    - 25
+    - 26
+    - 27
+    - 28
+    - 29
+    - 30
+    - 31
+    - 32
+    - 33
+  - name: Ubuntu
+    versions:
+    - precise (12.04)
+    - trusty (14.04)
+    - xenial (16.04)
+    - bionic (18.04)
+    - focal (20.04)
+
+  galaxy_tags:
+    - networking
+
+dependencies: []

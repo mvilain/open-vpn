@@ -1,0 +1,21 @@
+---
+# CentOS install tasks for common
+# if there are more tasks that split on version, 
+# put them in their own tasks file. For now two is OK
+
+- name: CentOS packages
+  package: name={{ item }} state=present
+  with_items:
+    - "{{ CentOS_packages }}"
+
+# CentOS 8 uses ntpd
+- name: CentOS set
+  set_fact: 
+    time_service: ntpd
+  when: ansible_distribution_major_version|int <= 7
+
+# CentOS 8 uses chrony
+- name: CentOS8+ set
+  set_fact: 
+    time_service: chronyd
+  when: ansible_distribution_major_version|int > 7

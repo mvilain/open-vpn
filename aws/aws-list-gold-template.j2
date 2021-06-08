@@ -1,0 +1,41 @@
+// generated from vpn-aws-vars.j2 -- jinja2 template to provide vpn aws instances
+// [template for aws-list-gold-ami.py]
+//================================================== VARIABLES
+variable "aws_region" {
+  description = "default region to setup all resources"
+  type        = string
+  default     = "{{ region }}"
+}
+variable "aws_domain" {
+  description = "DNS domain where aws instances are running"
+  type        = string
+  default     = "aws-vilain.com"
+}
+
+#========================================== AVAILABILTY ZONES
+variable "aws_avz" {
+  description = "{{ region }}-zones"
+  type        = list(string)
+  default     = [ 
+  {%- for avz in avzs -%}"{{- avz.ZoneName }}{{ '", ' if not loop.last else '"' }}{% endfor -%} ]
+}
+
+{% for image in images -%}
+#========================================== {{ image.distro }} {{ image.CreationDate }}
+variable "aws_{{ image.distro }}_ami" {
+  description = "{{ image.region }}--{{ image.Description }}"
+  type        = string
+  default     = "{{ image.ImageID }}"
+}
+variable "aws_{{ image.distro }}_name" {
+  description = "name for {{ image.distro }} instance"
+  type        = string
+  default     = "vpn-{{ image.distro }}"
+}
+variable "aws_{{ image.distro }}_tag" {
+  description = "tag for {{ image.distro }} instance"
+  type        = string
+  default     = "vpn {{ image.distro }}"
+}
+
+{% endfor %}

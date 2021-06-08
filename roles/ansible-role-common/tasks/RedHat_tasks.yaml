@@ -1,0 +1,18 @@
+# RedHat install tasks for common
+---
+- name: RedHat packages
+  package: name={{ item }} state=present
+  with_items:
+    - "{{ RedHat_packages }}"
+
+# RedHat 7 uses ntpd
+- name: RedHat7 set
+  set_fact: 
+    time_service: ntpd
+  when: ansible_distribution_major_version|int <= 7
+
+# RedHat8 uses chrony
+- name: RedHat8 set
+  set_fact: 
+    time_service: chronyd
+  when: ansible_distribution_major_version|int > 7

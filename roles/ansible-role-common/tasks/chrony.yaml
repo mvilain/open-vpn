@@ -1,0 +1,28 @@
+---
+# configure chronyc time service
+
+- name: Install chrony time service
+  package: 
+    name: chrony 
+    state: present
+
+- name: configure chronyd
+  template:
+    src: templates/chrony.conf.j2
+    dest: /etc/chrony.conf
+    backup: true
+  register: chrony
+  notify: "restart time services"
+#- debug: var=chrony
+
+- name: start chronyd and timezone
+  block:
+  - service:
+      name: "{{ time_service }}"
+      state: started
+      enabled: yes
+  - timezone: 
+      name: "{{ timezone }}"
+  - command: date
+    register: tod
+  - debug: var=tod.stdout_lines

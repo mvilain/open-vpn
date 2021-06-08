@@ -1,0 +1,77 @@
+---
+# tasks file for common
+
+# ansible_os_family = dict(
+#  RedHat = 'RedHat', Fedora = 'RedHat', CentOS = 'RedHat', Scientific = 'RedHat',
+#  SLC = 'RedHat', Ascendos = 'RedHat', CloudLinux = 'RedHat', PSBM = 'RedHat',
+#  OracleLinux = 'RedHat', OVS = 'RedHat', OEL = 'RedHat', Amazon = 'RedHat',
+#  XenServer = 'RedHat', Ubuntu = 'Debian', Debian = 'Debian', SLES = 'Suse',
+#  SLED = 'Suse', OpenSuSE = 'Suse', SuSE = 'Suse', Gentoo = 'Gentoo',
+#  Archlinux = 'Archlinux', Mandriva = 'Mandrake', Mandrake = 'Mandrake',
+#  Solaris = 'Solaris', Nexenta = 'Solaris', OmniOS = 'Solaris', OpenIndiana = 'Solaris',
+#  SmartOS = 'Solaris', AIX = 'AIX', Alpine = 'Alpine', MacOSX = 'Darwin',
+#  FreeBSD = 'FreeBSD', HPUX = 'HP-UX'
+#)
+
+#- debug: var="{{ item }}"
+#  with_items:
+#  - ansible_os_family
+#  - ansible_distribution
+#  - ansible_distribution_major_version
+#  - ansible_distribution_release
+#  - ansible_distribution_version
+
+
+# Fedora requires dnf module with exclude feature
+# Fedora 32 won't resolve ansible_distribution variables w/ ansible 2.7
+# use pip install 'ansible==2.8.12' --update
+- name: Verify Ansible meets common-role's version requirements.
+  assert:
+    that: "ansible_version.full is version_compare('2.8.12', '>=')"
+    msg: >
+      "You must update Ansible to at least 2.8.12 to use this role."
+#- debug: var=ansible_version.full
+
+
+- name: override specific variables for distributions
+  # allow OS-specific file to override defaults/main.yaml
+  include_vars: "{{ item }}"
+  with_first_found:
+  - files:
+    - "{{ ansible_distribution }}.yaml"
+    - defaults.yaml
+- debug: var=group_vars
+
+# note: the following included tasks might configure and enable stuff in common_packages
+# requires 
+#   Debian_{tasks,services}.yaml run for Debian distro, NOT Ubuntu
+#   RedHat_{tasks,services}.yaml run for RedHat Enterprise, NOT CentOS
+#   CentOS_{tasks,services}.yaml
+#   Fedora_{tasks,services}.yaml
+#   Ubuntu_{tasks,services}.yaml
+# note: these tasks should be done first before the common tasks so prerequisite packages
+# can be added first (e.g. epel for centos)
+
+- include_tasks: "{{ ansible_distribution }}_tasks.yaml"
+
+# ansible 2.7 deprecates with_items and nosquash, use variable directly
+- name: Install COMMON packages (this may take a while, especially on Fedora 32+)
+  package: 
+    name: "{{ common_packages }}"
+    state: present
+
+- include_tasks: "{{ ansible_distribution }}_services.yaml"
+
+# selinux module untested on Debian systems, use edit of selinux/conf instead
+- name: configure SElinux
+  selinux:
+    state: disabled
+  when: ansible_os_family != "Debian"
+
+
+- include_tasks: ntp.yaml
+  when: time_service == "ntpd" or time_service == "ntp"
+
+# CentOS 8 and Ubuntu 18+ use chrony instead of ntp (set in distro-specific task file)
+- include_tasks: chrony.yaml
+  when: time_service == "chronyd"

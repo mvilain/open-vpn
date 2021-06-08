@@ -1,0 +1,4 @@
+# defaults for Ubuntu
+---
+
+time_host: 0.ubuntu.pool.ntp.org

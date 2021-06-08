@@ -1,0 +1,12 @@
+# playbook for vpn server hosts
+# this will install both roles, then run the handlers for both roles
+# ansible should pull variables from group_vars/vpn anyway
+---
+- hosts: all
+  vars:
+  vars_files:
+    - group_vars/vpn
+  become: true
+
+  roles:
+    - role: vpn
