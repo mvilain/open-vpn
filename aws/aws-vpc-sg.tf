@@ -218,6 +218,16 @@ resource "aws_security_group_rule" "gitlab_sgr_ssh_nord8524" {
   security_group_id = aws_security_group.gitlab_sg.id
 }
 
+resource "aws_security_group_rule" "gitlab_sgr_ssh_nord5650" {
+  type              = "ingress"
+  description       = "gitlab ssh nord5650"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  cidr_blocks       = [ "173.244.192.0/19" ]
+  security_group_id = aws_security_group.gitlab_sg.id
+}
+
 resource "aws_security_group_rule" "gitlab_sgr_ssh_nord6067" {
   type              = "ingress"
   description       = "gitlab ssh nord6067"
