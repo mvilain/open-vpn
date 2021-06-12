@@ -1,0 +1,25 @@
+# Ubuntu install tasks for common
+---
+# comparing version with |int will cause a deprecated error in ansible 2.8+
+
+- name: Ubuntu packages
+  package: name={{ item }} state=present
+  with_items:
+    - "{{ Ubuntu_packages }}"
+  when: ansible_distribution_major_version|int < 18
+
+# specific packages for Ubuntu18
+- name: Ubuntu18 packages
+  package: name=iproute2 state=present
+  when: ansible_distribution_major_version|int >= 18
+
+- name: Ubuntu set
+  set_fact: 
+    time_service: ntp
+  when: ansible_distribution_major_version|int < 18
+
+# Ubuntu18+ uses chrony
+- name: Ubuntu18+ set
+  set_fact: 
+    time_service: chronyd
+  when: ansible_distribution_major_version|int >= 18

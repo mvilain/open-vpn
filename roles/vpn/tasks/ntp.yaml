@@ -1,0 +1,34 @@
+---
+# tasks to start and configure ntp on various OS'
+
+# ntp should be installed from common_packages or one of the distro tasks
+# configure it by removing the server and pool lines, then add our own
+
+  - name: Install ntp time service
+    package: 
+      name: ntp 
+      state: present
+
+  - name: configure ntp time service
+    block:
+    - lineinfile:
+        path: /etc/ntp.conf
+        backup: yes
+        state: absent
+        regexp: "{{ item.regexp }}"
+      with_items:
+        - { regexp: '^pool\s+.*$' }
+        - { regexp: '^#pool\s+.*$' }
+        - { regexp: '^server\s+.*$' }
+        - { regexp: '^#server\s+.*$' }
+    - lineinfile:
+        path: /etc/ntp.conf
+        line: "pool {{ time_host }} iburst"
+      notify: "restart time services"
+    - service: 
+        name: "{{ time_service }}"
+        state: started
+        enabled: true
+    - shell: grep -E "^pool|^#pool|^server|^#server" /etc/ntp.conf
+      register: ntp
+#    - debug: var=ntp.stdout_lines

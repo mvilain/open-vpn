@@ -1,0 +1,15 @@
+# Debian install tasks for common
+---
+# ansible 2.8+: looping through apt items is deprecated...just pass list
+- name: Debian packages
+  apt: 
+    name: "{{ Debian_packages }}"
+    state: present
+    install_recommends: no
+#  with_items:
+#    - "{{ Debian_packages }}"
+
+# Debian 9 and 10 use ntp for time_service
+- name: Debian set
+  set_fact: 
+    time_service: ntp
