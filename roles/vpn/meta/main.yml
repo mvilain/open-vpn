@@ -6,6 +6,9 @@ galaxy_info:
   min_ansible_version: 1.2
 
   platforms:
+  - name: AlmaLinux
+    versions:
+    - 8.0
   - name: Debian
     versions:
     - 9.0 (stretch)
@@ -17,19 +20,9 @@ galaxy_info:
     - 8
   - name: Fedora
     versions:
-    - 21
-    - 22
-    - 23
-    - 24
-    - 25
-    - 26
-    - 27
-    - 28
-    - 29
-    - 30
-    - 31
     - 32
     - 33
+    - 34
   - name: Ubuntu
     versions:
     - xenial (16.04)

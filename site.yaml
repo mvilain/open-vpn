@@ -1,0 +1,7 @@
+# main playbook: site.yaml
+---
+- hosts: all
+  become: true
+# check_mode: yes  # yes=dry-run
+  roles:
+    - vpn

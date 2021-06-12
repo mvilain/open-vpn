@@ -1,0 +1,14 @@
+---
+# CentOS install tasks for common
+# if there are more tasks that split on version, 
+# put them in their own tasks file. For now two is OK
+
+- name: AlmaLinux packages
+  package: name={{ item }} state=present
+  with_items:
+    - "{{ CentOS_packages }}"
+
+# AlmaLinux 8 uses chrony
+- name: AlmaLinux set time_service
+  set_fact: 
+    time_service: chronyd
