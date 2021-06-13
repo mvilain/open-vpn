@@ -3,7 +3,7 @@
 - assert:
     that: "ansible_distribution_major_version is version_compare('16', '>=')"
     msg: "Ubuntu version supported"
-- debug: var=ansible_distribution_major_version
+#- debug: var=ansible_distribution_major_version
 
 # comparing version with |int will cause a deprecated error in ansible 2.8+
 
