@@ -138,6 +138,22 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  config.vm.define "f31" do |f31|
+    f31.vm.box = "fedora/31-cloud-base"
+    f31.ssh.insert_key = false
+    f31.vm.network 'private_network', ip: '192.168.10.131'
+    f31.vm.hostname = 'f31'
+    f31.vm.provision "shell", inline: <<-SHELL
+      dnf install -y python3
+    SHELL
+    # requires ansible_python_interpreter=/usr/bin/python3 in inventory
+    f31.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.playbook = "site.yaml"
+      ansible.inventory_path = "./inventory_vagrant"
+    end
+  end
+
   # 202101.10 lots of mirrors are broken for f32 making package install VERY slow
   # https://superuser.com/questions/1035780/how-can-i-use-a-specific-mirror-server-in-fedora
   # try updating packages and see if that improves things (not really)
@@ -183,63 +199,69 @@ Vagrant.configure("2") do |config|
     f34.ssh.insert_key = false
     f34.vm.network 'private_network', ip: '192.168.10.134'
     f34.vm.hostname = 'f34'
-        f34.vm.provision "shell", inline: <<-SHELL
-           dnf install -y python3
-        SHELL
-        # requires ansible_python_interpreter=/usr/bin/python3 in inventory
-        f34.vm.provision "ansible" do |ansible|
-          ansible.compatibility_mode = "2.0"
-          ansible.playbook = "site.yaml"
-          ansible.inventory_path = "./inventory_vagrant"
-        end
+    f34.vm.provision "shell", inline: <<-SHELL
+       dnf install -y python3
+    SHELL
+    # requires ansible_python_interpreter=/usr/bin/python3 in inventory
+    f34.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.playbook = "site.yaml"
+      ansible.inventory_path = "./inventory_vagrant"
+    end
   end
 
 
+  # 6/13/21 debian9 won't pass username/password to box, switch to bento
   config.vm.define "u16" do |u16|
-      u16.vm.box = "ubuntu/xenial64"
-      u16.vm.network 'private_network', ip: '192.168.10.116'
-      u16.vm.hostname = 'u16'
-      u16.vm.provision "shell", inline: <<-SHELL
-        apt-get -y install python3
-      SHELL
-      u16.vm.provision "ansible" do |ansible|
-        ansible.compatibility_mode = "2.0"
-        ansible.playbook = "site.yaml"
-        ansible.inventory_path = "./inventory_vagrant"
-      end
+#     u16.vm.box = "ubuntu/xenial64"
+    u16.vm.box = "bento/ubuntu-16.04"
+    u16.vm.network 'private_network', ip: '192.168.10.116'
+    u16.vm.hostname = 'u16'
+    u16.vm.provision "shell", inline: <<-SHELL
+      apt-get -y install python3
+    SHELL
+    u16.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.playbook = "site.yaml"
+      ansible.inventory_path = "./inventory_vagrant"
     end
+  end
 
   # ansible uses python3 1/7/21
+  # 6/13/21 debian9 won't pass username/password to box, switch to bento
   config.vm.define "u18" do |u18|
-      u18.vm.box = "ubuntu/bionic64"
-      u18.vm.network 'private_network', ip: '192.168.10.118'
-      u18.vm.hostname = 'u18'
-      u18.vm.provision "shell", inline: <<-SHELL
-        apt-get -y install python3
-      SHELL
-      u18.vm.provision "ansible" do |ansible|
-        ansible.compatibility_mode = "2.0"
-        ansible.playbook = "site.yaml"
-        ansible.inventory_path = "./inventory_vagrant"
-      end
+#     u18.vm.box = "ubuntu/bionic64"
+    u18.vm.box = "bento/ubuntu-18.04"
+    u18.vm.network 'private_network', ip: '192.168.10.118'
+    u18.vm.hostname = 'u18'
+    u18.vm.provision "shell", inline: <<-SHELL
+      apt-get -y install python3
+    SHELL
+    u18.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.playbook = "site.yaml"
+      ansible.inventory_path = "./inventory_vagrant"
+    end
   end
 
   # https://www.reddit.com/r/Ubuntu/comments/ga187h/focal64_vagrant_box_issues/
   # 1/7/21 earlier releases of focal64 didn't work with vagrant but that's now been fixed
   # requires setting ansible_python_interpreter=/usr/bin/python3 
+  # 6/13/21 debian9 won't pass username/password to box, switch to bento
   config.vm.define "u20" do |u20|
-      u20.vm.box = "ubuntu/focal64"
-      #u20.vm.box = "bento/ubuntu-20.04"
-      u20.vm.network 'private_network', ip: '192.168.10.120'
-      u20.vm.hostname = 'u20'
-      u20.vm.provision "shell", inline: <<-SHELL
-        apt-get -y install python3
-      SHELL
-      u20.vm.provision "ansible" do |ansible|
-        ansible.compatibility_mode = "2.0"
-        ansible.playbook = "site.yaml"
-        ansible.inventory_path = "./inventory_vagrant"
-      end
+#     u20.vm.box = "ubuntu/focal64"
+    u20.vm.box = "bento/ubuntu-20.04"
+    #u20.vm.box = "bento/ubuntu-20.04"
+    u20.vm.network 'private_network', ip: '192.168.10.120'
+    u20.vm.hostname = 'u20'
+    u20.vm.provision "shell", inline: <<-SHELL
+      apt-get -y install python3
+    SHELL
+    u20.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.playbook = "site.yaml"
+      ansible.inventory_path = "./inventory_vagrant"
+    end
   end
 
 end
