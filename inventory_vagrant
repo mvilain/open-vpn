@@ -54,6 +54,10 @@ fedora_py3_group
 ubuntu_group
 ubuntu_py3_group
 
+# centos6+7 uses python2 for ansible interpeter
+[centos_group:vars]
+ansible_python_interpreter=/usr/bin/python
+
 # centos8 uses python3 for ansible interpeter
 [centos8_group:vars]
 ansible_python_interpreter=/usr/libexec/platform-python
