@@ -4,4 +4,6 @@ Initially I stumbled across [this video](https://www.youtube.com/watch?v=gxpX_mu
 
 [Wolfgang's site](https://notthebe.ee/Creating-your-own-OpenVPN-server.html) has the full text of the project, albeit done manually.
 
+[Linode's Stackscript 1](https://cloud.linode.com/stackscripts/1) has many pre-defined functions useful in setting up Linodes.
+
 [Nyr's VPN setup script](https://github.com/Nyr/openvpn-install) is also mentioned.
