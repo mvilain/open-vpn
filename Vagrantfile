@@ -143,22 +143,23 @@ Vagrant.configure("2") do |config|
   # try updating packages and see if that improves things (not really)
   # added fastestmirror and specific mirror
   # tried changing from fedora/32-cloud-base to another box
+  # 2021.06.13 mirrors seem to be OK now, removing alternate repos
   config.vm.define "f32" do |f32|
     f32.vm.box = "fedora/32-cloud-base"
     f32.ssh.insert_key = false
-     f32.vm.network 'private_network', ip: '192.168.10.132'
+    f32.vm.network 'private_network', ip: '192.168.10.132'
     f32.vm.hostname = 'f32'
-        f32.vm.provision "shell", inline: <<-SHELL
-            dnf config-manager --setopt=fastestmirror=True --save
-            dnf config-manager --add-repo https://dl.fedoraproject.org/pub/fedora/linux/releases/32/Everything/x86_64/os/
-            dnf config-manager --add-repo http://mirrors.kernel.org/fedora/releases/32/Everything/x86_64/os/
-            dnf install -y python3
-        SHELL
-     f32.vm.provision "ansible" do |ansible|
-       ansible.compatibility_mode = "2.0"
-       ansible.playbook = "site.yaml"
-       ansible.inventory_path = "./inventory_vagrant"
-     end
+    f32.vm.provision "shell", inline: <<-SHELL
+#       dnf config-manager --setopt=fastestmirror=True --save
+#       dnf config-manager --add-repo https://dl.fedoraproject.org/pub/fedora/linux/releases/32/Everything/x86_64/os/
+#       dnf config-manager --add-repo http://mirrors.kernel.org/fedora/releases/32/Everything/x86_64/os/
+      dnf install -y python3
+    SHELL
+    f32.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.playbook = "site.yaml"
+      ansible.inventory_path = "./inventory_vagrant"
+    end
   end
   
   config.vm.define "f33" do |f33|
@@ -166,15 +167,15 @@ Vagrant.configure("2") do |config|
     f33.ssh.insert_key = false
     f33.vm.network 'private_network', ip: '192.168.10.133'
     f33.vm.hostname = 'f33'
-        f33.vm.provision "shell", inline: <<-SHELL
-           dnf install -y python3
-        SHELL
-        # requires ansible_python_interpreter=/usr/bin/python3 in inventory
-        f33.vm.provision "ansible" do |ansible|
-            ansible.compatibility_mode = "2.0"
-            ansible.playbook = "site.yaml"
-            ansible.inventory_path = "./inventory_vagrant"
-        end
+    f33.vm.provision "shell", inline: <<-SHELL
+      dnf install -y python3
+    SHELL
+    # requires ansible_python_interpreter=/usr/bin/python3 in inventory
+    f33.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.playbook = "site.yaml"
+      ansible.inventory_path = "./inventory_vagrant"
+    end
   end
   
   config.vm.define "f34" do |f34|
