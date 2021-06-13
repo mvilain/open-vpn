@@ -21,9 +21,6 @@ Vagrant.configure("2") do |config|
     echo "...disabling CheckHostIP..."
     sed -i.orig -e "s/#   CheckHostIP yes/CheckHostIP no/" /etc/ssh/ssh_config
     sed -i -e "s/.*PermitRootLogin.*/PermitRootLogin yes/" /etc/ssh/ssh_config
-#     for i in /etc/sysconfig/network-scripts/ifcfg-eth1 /etc/sysconfig/network-scripts/ifcfg-enp0s8; do
-#       if [ -e ${i} ]; then echo "...displaying ${i}..."; cat ${i}; fi
-#     done
   SHELLALL
 
 
@@ -56,10 +53,12 @@ Vagrant.configure("2") do |config|
   config.vm.define "c6" do |c6|
     c6.vm.box = "bento/centos-6"
     c6.ssh.insert_key = false
+    config.ssh.password = 'vagrant'
     c6.vm.network 'private_network', ip: '192.168.10.106'
     c6.vm.hostname = 'c6'
     c6.vm.provision "shell", inline: <<-SHELL
-      yum install -y python libselinux-python
+      yum install -y epel-release
+      yum install -y ansible libselinux-python
     SHELL
     c6.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
