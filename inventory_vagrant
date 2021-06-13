@@ -15,7 +15,6 @@ d10 ansible_host=192.168.10.210
 # requires python3.5 installed prior to running ansible
 # and setting ansible_python_interpreter=/usr/bin/python3 below
 [fedora_group]
-f31 ansible_host=192.168.10.131
 f32 ansible_host=192.168.10.132
 f33 ansible_host=192.168.10.133
 f34 ansible_host=192.168.10.134
