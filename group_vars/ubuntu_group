@@ -1,0 +1,3 @@
+# group_vars for vpn servers group
+---
+group_vars: "ubutunu_group"

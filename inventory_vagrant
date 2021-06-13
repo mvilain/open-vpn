@@ -12,34 +12,17 @@ a8 ansible_host=192.168.10.188
 d9 ansible_host=192.168.10.209
 d10 ansible_host=192.168.10.210
 
-# requires python35 but repo has python34, so use python27 with broken dnf module
-[fedora_group]
-f21 ansible_host=192.168.10.121
-f22 ansible_host=192.168.10.122
-f23 ansible_host=192.168.10.123
-
 # requires python3.5 installed prior to running ansible
 # and setting ansible_python_interpreter=/usr/bin/python3 below
-[fedora_py3_group]
-f24 ansible_host=192.168.10.124
-f25 ansible_host=192.168.10.125
-f26 ansible_host=192.168.10.126
-f27 ansible_host=192.168.10.127
-f28 ansible_host=192.168.10.128
-f29 ansible_host=192.168.10.129
-f30 ansible_host=192.168.10.130
+[fedora_group]
 f31 ansible_host=192.168.10.131
 f32 ansible_host=192.168.10.132
 f33 ansible_host=192.168.10.133
 f34 ansible_host=192.168.10.134
 
-[ubuntu_group]
-u12 ansible_host=192.168.10.112
-u14 ansible_host=192.168.10.114
-
 # requires python3 installed prior to running ansible
 # and setting ansible_python_interpreter=/usr/bin/python3 below
-[ubuntu_py3_group]
+[ubuntu_group]
 u16 ansible_host=192.168.10.116
 u18 ansible_host=192.168.10.118
 u20 ansible_host=192.168.10.120
@@ -50,9 +33,7 @@ centos_group
 centos8_group
 debian_group
 fedora_group
-fedora_py3_group
 ubuntu_group
-ubuntu_py3_group
 
 # centos6+7 uses python2 for ansible interpeter
 [centos_group:vars]
@@ -66,10 +47,10 @@ ansible_python_interpreter=/usr/libexec/platform-python
 ansible_python_interpreter=/usr/bin/python3
 
 # https://docs.ansible.com/ansible/latest/reference_appendices/python_3_support.html
-[fedora_py3_group:vars]
+[fedora_group:vars]
 ansible_python_interpreter=/usr/bin/python3
 
-[ubuntu_py3_group:vars]
+[ubuntu_group:vars]
 ansible_python_interpreter=/usr/bin/python3
 
 [all:vars]
