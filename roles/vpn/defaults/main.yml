@@ -6,7 +6,6 @@ common_packages:
   - lsof
   - make
   - net-tools
-  - bind-utils
   - vim
   - wget
 
@@ -27,10 +26,12 @@ CentOS_packages:
   - epel-release
   - iproute
   - moreutils
+  - bind-utils
 
 Debian_packages:
   - apt-transport-https
   - ntpdate
+  - dnsutils
 
 # for some reason moreutils on Fedora32 is on bad repos
 # if you install packages manually, many mirrors show code 404 for packages
@@ -40,12 +41,15 @@ Fedora_packages:
   - iproute
   - vim-common
   - moreutils
+  - bind-utils
 
 RedHat_packages:
   - iproute
   - moreutils
+  - bind-utils
 
 # Ubuntu time_service is defined in group_vars/{ubuntu,ubuntu_py3}_group
 Ubuntu_packages:
   - iproute
   - apt-transport-https
+  - dnsutils
