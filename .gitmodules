@@ -1,0 +1,6 @@
+[submodule "linode/terraform-modules/terraform-linode-instance"]
+	path = linode/terraform-modules/terraform-linode-instance
+	url = git@github.com:mvilain/terraform-linode-instance.git
+[submodule "linode/terraform-modules/terraform-aws-ec2-instance"]
+	path = linode/terraform-modules/terraform-aws-ec2-instance
+	url = git@github.com:mvilain/terraform-aws-ec2-instance.git
