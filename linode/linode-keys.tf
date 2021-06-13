@@ -38,35 +38,3 @@ resource "local_file" "root_passwd" {
   directory_permission = "0755"
   file_permission      = "0600"
 }
-
-# manage ansible's inventory file because it will have different IPs each run
-
-# resource "local_file" "inventory" {
-#   content = <<-EOT
-#   # this is overridden with every terraform run
-#   [all:vars]
-#   ansible_ssh_user=root
-#   ansible_ssh_private_key_file=./id_rsa
-#   ansible_python_interpreter=/usr/libexec/platform-python
-#   
-#   [all]
-#   EOT
-#   filename             = "inventory"
-#   directory_permission = "0755"
-#   file_permission      = "0644"
-# }
-# 
-# resource "local_file" "inventory_py3" {
-#   content = <<-EOT
-#   # this is overridden with every terraform run
-#   [all:vars]
-#   ansible_ssh_user=root
-#   ansible_ssh_private_key_file=./id_rsa
-#   ansible_python_interpreter=/usr/bin/python3
-# 
-#   [all]
-#   EOT
-#   filename             = "inventory_py3"
-#   directory_permission = "0755"
-#   file_permission      = "0644"
-# }
