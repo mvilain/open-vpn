@@ -111,8 +111,8 @@ Vagrant.configure("2") do |config|
     d9.vm.network 'private_network', ip: '192.168.10.209'
     d9.vm.hostname = 'd9'
     d9.vm.provision "shell", inline: <<-SHELL
-      apt-get update
-      apt-get install -y apt-transport-https
+      apt-get install -y apt-transport-https python3-selinux \
+        selinux-policy-default selinux-basics
     SHELL
     d9.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -129,7 +129,8 @@ Vagrant.configure("2") do |config|
     d10.vm.network 'private_network', ip: '192.168.10.210'
     d10.vm.hostname = 'd10'
     d10.vm.provision "shell", inline: <<-SHELL
-      apt-get install -y apt-transport-https
+      apt-get install -y apt-transport-https python3-selinux \
+        selinux-policy-default selinux-basics
     SHELL
     d10.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -138,11 +139,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # 202101.10 lots of mirrors are broken for f32 making package install VERY slow
-  # https://superuser.com/questions/1035780/how-can-i-use-a-specific-mirror-server-in-fedora
-  # try updating packages and see if that improves things (not really)
-  # added fastestmirror and specific mirror
-  # tried changing from fedora/32-cloud-base to another box
   # 2021.06.13 mirrors seem to be OK now, removing alternate repos
   config.vm.define "f32" do |f32|
     f32.vm.box = "fedora/32-cloud-base"
@@ -150,9 +146,6 @@ Vagrant.configure("2") do |config|
     f32.vm.network 'private_network', ip: '192.168.10.132'
     f32.vm.hostname = 'f32'
     f32.vm.provision "shell", inline: <<-SHELL
-#       dnf config-manager --setopt=fastestmirror=True --save
-#       dnf config-manager --add-repo https://dl.fedoraproject.org/pub/fedora/linux/releases/32/Everything/x86_64/os/
-#       dnf config-manager --add-repo http://mirrors.kernel.org/fedora/releases/32/Everything/x86_64/os/
       dnf install -y python3
     SHELL
     f32.vm.provision "ansible" do |ansible|
@@ -170,7 +163,6 @@ Vagrant.configure("2") do |config|
     f33.vm.provision "shell", inline: <<-SHELL
       dnf install -y python3
     SHELL
-    # requires ansible_python_interpreter=/usr/bin/python3 in inventory
     f33.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "site.yaml"
@@ -186,7 +178,6 @@ Vagrant.configure("2") do |config|
     f34.vm.provision "shell", inline: <<-SHELL
        dnf install -y python3
     SHELL
-    # requires ansible_python_interpreter=/usr/bin/python3 in inventory
     f34.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "site.yaml"
@@ -197,7 +188,6 @@ Vagrant.configure("2") do |config|
 
   # 6/13/21 debian9 won't pass username/password to box, switch to bento
   config.vm.define "u16" do |u16|
-#     u16.vm.box = "ubuntu/xenial64"
     u16.vm.box = "bento/ubuntu-16.04"
     u16.vm.network 'private_network', ip: '192.168.10.116'
     u16.vm.hostname = 'u16'
@@ -214,7 +204,6 @@ Vagrant.configure("2") do |config|
   # ansible uses python3 1/7/21
   # 6/13/21 debian9 won't pass username/password to box, switch to bento
   config.vm.define "u18" do |u18|
-#     u18.vm.box = "ubuntu/bionic64"
     u18.vm.box = "bento/ubuntu-18.04"
     u18.vm.network 'private_network', ip: '192.168.10.118'
     u18.vm.hostname = 'u18'
@@ -235,7 +224,6 @@ Vagrant.configure("2") do |config|
   config.vm.define "u20" do |u20|
 #     u20.vm.box = "ubuntu/focal64"
     u20.vm.box = "bento/ubuntu-20.04"
-    #u20.vm.box = "bento/ubuntu-20.04"
     u20.vm.network 'private_network', ip: '192.168.10.120'
     u20.vm.hostname = 'u20'
     u20.vm.provision "shell", inline: <<-SHELL

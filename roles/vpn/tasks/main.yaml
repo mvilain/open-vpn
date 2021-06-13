@@ -87,7 +87,7 @@
 - name: configure SElinux
   selinux:
     state: disabled
-  when: ansible_os_family != "Debian"
+  when: not is_aws_environment
 
 
 - include_tasks: ntp.yaml
