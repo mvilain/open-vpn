@@ -138,22 +138,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  config.vm.define "f31" do |f31|
-    f31.vm.box = "fedora/31-cloud-base"
-    f31.ssh.insert_key = false
-    f31.vm.network 'private_network', ip: '192.168.10.131'
-    f31.vm.hostname = 'f31'
-    f31.vm.provision "shell", inline: <<-SHELL
-      dnf install -y python3
-    SHELL
-    # requires ansible_python_interpreter=/usr/bin/python3 in inventory
-    f31.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.playbook = "site.yaml"
-      ansible.inventory_path = "./inventory_vagrant"
-    end
-  end
-
   # 202101.10 lots of mirrors are broken for f32 making package install VERY slow
   # https://superuser.com/questions/1035780/how-can-i-use-a-specific-mirror-server-in-fedora
   # try updating packages and see if that improves things (not really)
