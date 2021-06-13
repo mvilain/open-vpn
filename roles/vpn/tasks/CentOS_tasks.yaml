@@ -3,6 +3,11 @@
 # if there are more tasks that split on version, 
 # put them in their own tasks file. For now two is OK
 
+- assert:
+    that: "ansible_distribution_major_version is version_compare('6', '>=')"
+    msg: "CentOS version supported"
+#- debug: var=ansible_distribution_major_version
+
 - name: CentOS packages
   package: name={{ item }} state=present
   with_items:

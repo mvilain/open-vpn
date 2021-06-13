@@ -1,5 +1,10 @@
 # RedHat install tasks for common
 ---
+- assert:
+    that: "ansible_distribution_major_version is version_compare('6', '>=')"
+    msg: "RedHat Enterprise version supported"
+- debug: var=ansible_distribution_major_version
+
 - name: RedHat packages
   package: name={{ item }} state=present
   with_items:

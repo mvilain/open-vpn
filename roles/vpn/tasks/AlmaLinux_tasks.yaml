@@ -1,7 +1,12 @@
 ---
-# CentOS install tasks for common
+# AlmaLinux install tasks for vpn
 # if there are more tasks that split on version, 
 # put them in their own tasks file. For now two is OK
+
+- assert:
+    that: "ansible_distribution_major_version is version_compare('8', '>=')"
+    msg: "AlmaLinux version supported"
+#- debug: var=ansible_distribution_major_version
 
 - name: AlmaLinux packages
   package: name={{ item }} state=present

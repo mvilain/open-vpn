@@ -2,15 +2,17 @@
 # tasks file for common
 
 # ansible_os_family = dict(
-#  RedHat = 'RedHat', Fedora = 'RedHat', CentOS = 'RedHat', Scientific = 'RedHat',
-#  SLC = 'RedHat', Ascendos = 'RedHat', CloudLinux = 'RedHat', PSBM = 'RedHat',
-#  OracleLinux = 'RedHat', OVS = 'RedHat', OEL = 'RedHat', Amazon = 'RedHat',
-#  XenServer = 'RedHat', Ubuntu = 'Debian', Debian = 'Debian', SLES = 'Suse',
-#  SLED = 'Suse', OpenSuSE = 'Suse', SuSE = 'Suse', Gentoo = 'Gentoo',
-#  Archlinux = 'Archlinux', Mandriva = 'Mandrake', Mandrake = 'Mandrake',
-#  Solaris = 'Solaris', Nexenta = 'Solaris', OmniOS = 'Solaris', OpenIndiana = 'Solaris',
-#  SmartOS = 'Solaris', AIX = 'AIX', Alpine = 'Alpine', MacOSX = 'Darwin',
-#  FreeBSD = 'FreeBSD', HPUX = 'HP-UX'
+#  AlmaLinux = 'AlmaLinux', RedHat = 'RedHat', Fedora = 'RedHat',
+#  CentOS = 'RedHat', Scientific = 'RedHat', SLC = 'RedHat',
+#  Ascendos = 'RedHat', CloudLinux = 'RedHat', PSBM = 'RedHat',
+#  OracleLinux = 'RedHat', OVS = 'RedHat', OEL = 'RedHat',
+#  Amazon = 'RedHat', XenServer = 'RedHat', Ubuntu = 'Debian',
+#  Debian = 'Debian', SLES = 'Suse', SLED = 'Suse', OpenSuSE = 'Suse',
+#  SuSE = 'Suse', Gentoo = 'Gentoo', Archlinux = 'Archlinux',
+#  Mandriva = 'Mandrake', Mandrake = 'Mandrake', Solaris = 'Solaris',
+#  Nexenta = 'Solaris', OmniOS = 'Solaris', OpenIndiana = 'Solaris',
+#  SmartOS = 'Solaris', AIX = 'AIX', Alpine = 'Alpine',
+#  MacOSX = 'Darwin', FreeBSD = 'FreeBSD', HPUX = 'HP-UX'
 #)
 
 #- debug: var="{{ item }}"
@@ -32,6 +34,24 @@
       "You must update Ansible to at least 2.8.12 to use this role."
 #- debug: var=ansible_version.full
 
+- name: Check if inside AWS
+  uri:
+    url: http://169.254.169.254/latest/meta-data
+    timeout: 2
+  register: aws_uri_check
+  failed_when: False
+#- debug: var=aws_uri_check
+
+- set_fact:
+    is_aws_environment: "{{ aws_uri_check.status == 200 }}"
+
+- name: setting hostname with hostnamectl
+  command: hostnamectl set-hostname "{{ inventory_hostname }}"
+  args:
+    warn: no
+  register: hostname
+  when: is_aws_environment
+
 
 - name: override specific variables for distributions
   # allow OS-specific file to override defaults/main.yaml
@@ -46,6 +66,7 @@
 # requires 
 #   Debian_{tasks,services}.yaml run for Debian distro, NOT Ubuntu
 #   RedHat_{tasks,services}.yaml run for RedHat Enterprise, NOT CentOS
+#   AlmaLinux_{tasks,services}.yaml
 #   CentOS_{tasks,services}.yaml
 #   Fedora_{tasks,services}.yaml
 #   Ubuntu_{tasks,services}.yaml

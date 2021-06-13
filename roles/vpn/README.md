@@ -1,7 +1,7 @@
 vpn
 =========
 
-This role can be called to install the vpn package and services across all hosts in a site.
+This role can be called to install the vpn package and services across all hosts in a site. It relies on [this outline](https://notthebe.ee/Creating-your-own-OpenVPN-server.html) from
 
 Requirements
 ------------
@@ -23,7 +23,7 @@ A description of the settable variables for this role should go here, including 
 
 Note that variables put in vars/ directory tree cannot be overridden by the command line prompt.  It's better to put varibables in defaults where the values can be overridden.
 
-Time services packages and names aren't uniform.  To install the correct package and start the service, tasks/<distro>_tasks.yaml will check versions and install the appropriate package. This way ntp/chronyd aren't dependent on group_vars or vars/<distro>.
+Time services packages and names aren't uniform.  To install the correct package and start the service, tasks/<distro>\_tasks.yaml will check versions and install the appropriate package. This way ntp/chronyd aren't dependent on group_vars or vars/<distro>.
 
 Dependencies
 ------------
