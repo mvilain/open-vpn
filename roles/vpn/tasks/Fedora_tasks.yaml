@@ -1,7 +1,7 @@
 # Fedora install tasks for common
 ---
 - assert:
-    that: "ansible_distribution_major_version is version_compare('31', '>=')"
+    that: "ansible_distribution_major_version is version_compare('32', '>=')"
     msg: "Fedora version supported"
 #- debug: var=ansible_distribution_major_version
 

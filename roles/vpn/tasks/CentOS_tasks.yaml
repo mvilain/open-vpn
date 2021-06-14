@@ -4,7 +4,7 @@
 # put them in their own tasks file. For now two is OK
 
 - assert:
-    that: "ansible_distribution_major_version is version_compare('6', '>=')"
+    that: "ansible_distribution_major_version is version_compare('7', '>=')"
     msg: "CentOS version supported"
 #- debug: var=ansible_distribution_major_version
 
