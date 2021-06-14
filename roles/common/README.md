@@ -16,6 +16,14 @@ Rather than install ntp, chronyd will be installed and configured as it's best s
 
 Fedora32's repos are hosted on mirrors with very poor network response from my VPN.  Tasks that install products take a very long time and frequently timed out. I even get timeouts on my straight ISP connection, so I have no workaround for this.  User's experience of Fedora32 may vary. Use Fedora33 instead.
 
+vagrant requires a public/private key pair to login to the vagrant boxes. This is usually specified in the inventory file, but if ssh-agent has been enabled (e.g. `AddKeysToAgent yes` is set in the `.ssh/config file`), some vagrant boxes won't be able to connect and authenticate.
+
+As of 6/14/21, CentOS 8, Debian, and Ubuntu boxes won't work if `AddKeysToAgent` is set.  The workaround for this is to set the environment SSH\_AUTH\_SOCK to a blank string:
+
+    export SSH_AUTH_SOCK=""
+
+See [this link](https://github.com/hashicorp/vagrant/issues/8204).  Adding the key to the ssh-agent doesn't fix this.
+
 Role Variables
 --------------
 
