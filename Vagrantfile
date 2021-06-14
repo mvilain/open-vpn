@@ -8,7 +8,7 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder '.', '/vagrant', disabled: true
   config.ssh.insert_key = false
   # 6/14/21 https://github.com/hashicorp/vagrant/issues/8204 export SSH_AUTH_SOCK=""
-  # remove config.ssh.{username,password}
+  # remove config.ssh.{username,password} and set .ssh/config AddKeysToAgent no
   #config.ssh.username = 'vagrant'
   #config.ssh.password = 'vagrant'
   config.vm.boot_timeout = 120
@@ -26,10 +26,6 @@ Vagrant.configure("2") do |config|
   SHELLALL
 
 
-# 6/12/21 centos/8 and almalinux/8 stopped being able to auth w/ insecure private key
-# https://stackoverflow.com/questions/22922891/vagrant-ssh-authentication-failure
-# cp ~/.vagrant.d/insecure_private_key ~/.vagrant/machines/default/virtualbox/private_key
-# once box is running, can login with vagrant/vagrant but vagrant can't ssh into it
   config.vm.define "a8" do |a8|
     a8.vm.box = "almalinux/8"
     a8.ssh.insert_key = false
@@ -52,24 +48,6 @@ Vagrant.configure("2") do |config|
   end
 
 
-  config.vm.define "c6" do |c6|
-    c6.vm.box = "bento/centos-6"
-    c6.ssh.insert_key = false
-    c6.ssh.password = 'vagrant'
-    c6.vm.network 'private_network', ip: '192.168.10.106'
-    c6.vm.hostname = 'c6'
-    c6.vm.provision "shell", inline: <<-SHELL
-      yum install -y epel-release
-      yum install -y ansible libselinux-python
-    SHELL
-    c6.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.playbook = "site.yaml"
-      ansible.inventory_path = "./inventory_vagrant"
-    end
-  end
-
-  # 6/14/21 https://github.com/hashicorp/vagrant/issues/8204 export SSH_AUTH_SOCK=""
   config.vm.define "c7" do |c7|
     c7.vm.box = "centos/7"
     c7.ssh.insert_key = false
@@ -86,7 +64,6 @@ Vagrant.configure("2") do |config|
   end
   
   # https://bugzilla.redhat.com/show_bug.cgi?id=1820925
-  # 6/14/21 https://github.com/hashicorp/vagrant/issues/8204 export SSH_AUTH_SOCK=""
   config.vm.define "c8" do |c8|
     c8.vm.box = "centos/8"
     c8.ssh.insert_key = false
@@ -108,8 +85,6 @@ Vagrant.configure("2") do |config|
 
 
   # https://stackoverflow.com/questions/56460494/apt-get-install-apt-transport-https-fails-in-docker
-  # 6/13/21 debian9 won't pass username/password to box, switch to bento
-  # 6/14/21 https://github.com/hashicorp/vagrant/issues/8204 export SSH_AUTH_SOCK=""
   config.vm.define "d9" do |d9|
     d9.vm.box = "bento/debian-9"
     d9.ssh.insert_key = false
@@ -127,8 +102,6 @@ Vagrant.configure("2") do |config|
   end
 
   # don't use apt: update_cache=yes here because it won't work to trap
-  # 6/13/21 debian9 won't pass username/password to box, switch to bento
-  # 6/14/21 https://github.com/hashicorp/vagrant/issues/8204 export SSH_AUTH_SOCK=""
   config.vm.define "d10" do |d10|
     d10.vm.box = "bento/debian-10"
     d10.ssh.insert_key = false
@@ -145,7 +118,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # 2021.06.13 mirrors seem to be OK now, removing alternate repos
   config.vm.define "f32" do |f32|
     f32.vm.box = "fedora/32-cloud-base"
     f32.ssh.insert_key = false
@@ -192,8 +164,6 @@ Vagrant.configure("2") do |config|
   end
 
 
-  # 6/13/21 debian9 won't pass username/password to box, switch to bento
-  # 6/14/21 https://github.com/hashicorp/vagrant/issues/8204 export SSH_AUTH_SOCK=""
   config.vm.define "u16" do |u16|
     u16.vm.box = "ubuntu/xenial64"
     u16.vm.network 'private_network', ip: '192.168.10.116'
@@ -208,9 +178,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # ansible uses python3 1/7/21
-  # 6/13/21 debian9 won't pass username/password to box, switch to bento
-  # 6/14/21 https://github.com/hashicorp/vagrant/issues/8204 export SSH_AUTH_SOCK=""
   config.vm.define "u18" do |u18|
     u18.vm.box = "ubuntu/bionic64"
     u18.vm.network 'private_network', ip: '192.168.10.118'
@@ -225,8 +192,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-  # 6/13/21 debian9 won't pass username/password to box, switch to bento
-  # 6/14/21 https://github.com/hashicorp/vagrant/issues/8204 export SSH_AUTH_SOCK=""
   config.vm.define "u20" do |u20|
     u20.vm.box = "ubuntu/focal64"
     u20.vm.network 'private_network', ip: '192.168.10.120'
