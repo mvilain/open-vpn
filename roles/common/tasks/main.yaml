@@ -95,15 +95,3 @@
 # CentOS 8 and Ubuntu 18+ use chrony instead of ntp (set in distro-specific task file)
 - include_tasks: chrony.yaml
   when: time_service == "chronyd"
-
-# https://github.com/Nyr/openvpn-install
-- name: copy openvpn script
-  get_url:
-    url: https://git.io/vpn 
-    dest: "./openvpn-install.sh"
-    checksum: "sha256:a57cdc385e48c6e4a898c4663da7bec17cdbe89b2a469f44a883c7b289dcd74f"
-    mode: '0755'
-    backup: yes
-  register: openvpn_script
-- debug: var=openvpn_script
-  

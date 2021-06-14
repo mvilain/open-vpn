@@ -1,5 +1,5 @@
 ---
-# handlers file for vpn
+# handlers file for common
 
 - name: restart time service ntp
   service: 

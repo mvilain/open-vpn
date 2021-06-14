@@ -1,7 +1,7 @@
-vpn
+common
 =========
 
-This role can be called to install the vpn package and services across all hosts in a site. It relies on [this outline](https://notthebe.ee/Creating-your-own-OpenVPN-server.html) from
+This role can be called to install common package and services across all hosts in a site. 
 
 Requirements
 ------------
@@ -37,7 +37,7 @@ Including an example of how to use your role (for instance, with variables passe
 
     - hosts: servers
       roles:
-         - { role: vpn, x: 42 }
+         - { role: common }
 
 License
 -------
