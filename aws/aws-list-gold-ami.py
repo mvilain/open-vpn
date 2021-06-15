@@ -1,9 +1,10 @@
 #! /usr/bin/env python3
 """
-202105.20MeV
+202106.15MeV
 uses aws boto3 to crawl through AWS' marketplace and list instances for
 - centos7 almalinux (centos8 replacement)
 - debian9 debian10
+- fedora32, fedora33, fedora34
 - ubuntu16.04 ubuntu18.04 ubuntu20.04
 
 python3 and the boto3 library are required to run this tool
@@ -34,6 +35,9 @@ DISTROS = dict(
     centos8  =  'ef6kit54bxdxm5ec5h7921duf',
     debian9  =  'wa59nhjens2s3nbfqlcjxiyy',
     debian10 =  'a8to8juz0snuukwdxuz7x3ol8',
+    fedora32 =  '633jhlnyl61qp9ukyefuy0a07',
+    fedora33 =  '7qjerp2ue62lxpstjf287pwk9',
+    fedora34 =  '4qwehlrxvcsc9mxvcn5sx08zi',
     ubuntu16 =  'a77pfe5qy4y0x0ovr82l3q0jt',
     ubuntu18 =  '3iplms73etrdhxdepv72l6ywj',
     ubuntu20 =  '9rxhntdy981dz5t3gbzpdd60w'
@@ -48,7 +52,7 @@ def parse_arguments(default_region):
         a namespace with the arguments passed and their values
     """
     parser = argparse.ArgumentParser(
-             description='display the AMI strings for vpn-supported virtual machines')
+             description='display the AMI strings for supported virtual machines')
     parser.add_argument('REGION',
                         action="store",
                         default=default_region,
