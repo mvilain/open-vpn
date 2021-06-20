@@ -110,7 +110,6 @@ resource "linode_stackscript" "fedora" {
     dnf install -y python3
   EOF
   images = [
-    "linode/fedora31",
     "linode/fedora32",
     "linode/fedora33",
     "linode/fedora34"
@@ -138,7 +137,6 @@ resource "linode_stackscript" "ubuntu" {
     apt-get install -y install python3
   EOF
   images = [
-    "linode/ubuntu16.04lts", 
     "linode/ubuntu18.04",
     "linode/ubuntu20.04",
   ]
