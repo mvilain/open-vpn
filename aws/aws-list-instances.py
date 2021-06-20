@@ -241,8 +241,7 @@ def main():
                 templ_centos.append(d)
             elif ins['Tag_os'] == 'debian9' or ins['Tag_os'] == 'debian10':
                 templ_debian.append(d)
-            elif ins['Tag_os'] == 'ubuntu16' or ins['Tag_os'] == 'ubuntu18' or \
-            ins['Tag_os'] == 'ubuntu20':
+            elif ins['Tag_os'] == 'ubuntu18' or ins['Tag_os'] == 'ubuntu20':
                 templ_ubuntu.append(d)
             else:
                 templ_unk.append(d)
