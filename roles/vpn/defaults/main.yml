@@ -1,0 +1,32 @@
+---
+# defaults file for vpn
+
+vpn_packages:
+  - wget
+  - openvpn
+  - openssl
+  - ca-certificates
+
+easy_rsa_src: https://github.com/OpenVPN/easy-rsa/releases/download/v3.0.8/EasyRSA-3.0.8.tgz
+easy_rsa_dest: /etc/openvpn/server/easy-rsa
+easy_rsa_cert_expire: 3650
+
+Debian_packages:
+  - apt-transport-https
+  - dnsutils
+  - iptables
+
+# https://bugzilla.redhat.com/show_bug.cgi?id=1820925
+# moreutils requires EPEL plus Powertools on CentOS 8
+# https://fedoraproject.org/wiki/EPEL#How_can_I_use_these_extra_packages.3F
+RedHat_packages:
+  - iproute
+  - bind-utils
+  - tar 
+  - firewalld
+
+Ubuntu_packages:
+  - apt-transport-https
+#  - iproute
+  - dnsutils
+  - iptables

@@ -1,0 +1,9 @@
+# Debian install tasks for common
+---
+# ansible 2.7 deprecates with_items and nosquash, should use variable directly
+# but it takes a long time to process all the packages at once, so do separately
+- name: Debian packages
+  package:
+    name: '{{ Debian_packages }}'
+    state: present
+  register: package
