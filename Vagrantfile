@@ -60,6 +60,7 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "site.yaml"
       ansible.inventory_path = "./inventory_vagrant"
+#       ansible.verbose = "vvv"
     end
   end
   
@@ -118,12 +119,15 @@ Vagrant.configure("2") do |config|
     end
   end
 
+  # 2021.06.13 mirrors seem to be OK now, removing alternate repos
+  # 2021.06.17 mirrors are slow with Torguard VPN
   config.vm.define "f32" do |f32|
     f32.vm.box = "fedora/32-cloud-base"
     f32.ssh.insert_key = false
     f32.vm.network 'private_network', ip: '192.168.10.132'
     f32.vm.hostname = 'f32'
     f32.vm.provision "shell", inline: <<-SHELL
+      dnf config-manager --setopt=fastestmirror=True --save
       dnf install -y python3
     SHELL
     f32.vm.provision "ansible" do |ansible|
@@ -154,7 +158,7 @@ Vagrant.configure("2") do |config|
     f34.vm.network 'private_network', ip: '192.168.10.134'
     f34.vm.hostname = 'f34'
     f34.vm.provision "shell", inline: <<-SHELL
-       dnf install -y python3
+      dnf install -y python3
     SHELL
     f34.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -163,20 +167,6 @@ Vagrant.configure("2") do |config|
     end
   end
 
-
-  config.vm.define "u16" do |u16|
-    u16.vm.box = "ubuntu/xenial64"
-    u16.vm.network 'private_network', ip: '192.168.10.116'
-    u16.vm.hostname = 'u16'
-    u16.vm.provision "shell", inline: <<-SHELL
-      apt-get -y install python3
-    SHELL
-    u16.vm.provision "ansible" do |ansible|
-      ansible.compatibility_mode = "2.0"
-      ansible.playbook = "site.yaml"
-      ansible.inventory_path = "./inventory_vagrant"
-    end
-  end
 
   config.vm.define "u18" do |u18|
     u18.vm.box = "ubuntu/bionic64"
@@ -203,6 +193,7 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "site.yaml"
       ansible.inventory_path = "./inventory_vagrant"
+#       ansible.verbose = "vvv"
     end
   end
 
