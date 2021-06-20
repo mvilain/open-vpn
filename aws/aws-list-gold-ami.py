@@ -1,11 +1,11 @@
 #! /usr/bin/env python3
 """
-202106.15MeV
+202106.19MeV
 uses aws boto3 to crawl through AWS' marketplace and list instances for
-- centos7 almalinux (centos8 replacement)
+- centos7 centos8 almalinux (centos8 replacement)
 - debian9 debian10
 - fedora32, fedora33, fedora34
-- ubuntu16.04 ubuntu18.04 ubuntu20.04
+- ubuntu18.04 ubuntu20.04
 
 python3 and the boto3 library are required to run this tool
 uses region defined in awscli's credentials if not specified in REGION
