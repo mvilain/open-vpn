@@ -53,8 +53,9 @@ Vagrant.configure("2") do |config|
     c7.ssh.insert_key = false
     c7.vm.network 'private_network', ip: '192.168.10.107'
     c7.vm.hostname = 'c7'
+    # ensure ip command installed w/ iproute
     c7.vm.provision "shell", inline: <<-SHELL
-      yum install -y python libselinux-python
+      yum install -y python libselinux-python iproute
     SHELL
     c7.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
