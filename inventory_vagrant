@@ -1,7 +1,6 @@
 # open-vpn demo inventory
 
 [centos_group]
-c6 ansible_host=192.168.10.106
 c7 ansible_host=192.168.10.107
 
 [centos8_group]
@@ -22,7 +21,6 @@ f34 ansible_host=192.168.10.134
 # requires python3 installed prior to running ansible
 # and setting ansible_python_interpreter=/usr/bin/python3 below
 [ubuntu_group]
-u16 ansible_host=192.168.10.116
 u18 ansible_host=192.168.10.118
 u20 ansible_host=192.168.10.120
 
