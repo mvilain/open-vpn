@@ -12,3 +12,23 @@
   package:
     name: '{{ RedHat_packages }}'
     state: present
+
+- name: get iptables location
+  block:
+  - shell: command -v iptables
+    args:
+      warn: no
+    register: iptables
+  - set_fact:
+      iptables_path: "{{ iptables.stdout_lines[0] }}"
+#- debug: var=iptables_path
+
+- name: get ip6tables location
+  block:
+  - shell: command -v ip6tables
+    args:
+      warn: no
+    register: ip6tables
+  - set_fact:
+      ip6tables_path: "{{ ip6tables.stdout_lines[0] }}"
+#- debug: var=ip6tables_path

@@ -11,6 +11,9 @@ easy_rsa_src: https://github.com/OpenVPN/easy-rsa/releases/download/v3.0.8/EasyR
 easy_rsa_dest: /etc/openvpn/server/easy-rsa
 easy_rsa_cert_expire: 3650
 
+openvpn_port: 1194
+openvpn_protocol: udp    # udp|tcp
+
 Debian_packages:
   - apt-transport-https
   - dnsutils

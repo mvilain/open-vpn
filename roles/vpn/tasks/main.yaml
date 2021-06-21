@@ -9,35 +9,37 @@
 #  - ansible_distribution_release
 #  - ansible_distribution_version
 
-# Fedora requires dnf module with exclude feature
-# Fedora 32 won't resolve ansible_distribution variables w/ ansible 2.7
-#    use pip install 'ansible==2.8.12' --update
-- name: Verify Ansible meets common-role's version requirements.
-  assert:
-    that: "ansible_version.full is version_compare('2.8.12', '>=')"
-    fail_msg: "You must update Ansible to at least ansible 2.8.12 to use this role."
-    success_msg: "ansible V{{ ansible_version.full }} is OK"
-#- debug: var=ansible_version.full
-
 - name: check for /dev/net/tun
   file:
     path: /dev/net/tun
     state: file
   register: tun_exists
-- assert:
-    that: not tun_exists.failed
-    fail_msg: "The system does not have the TUN device available."
-    success_msg: "/dev/net/tun exists"
+
+# Fedora requires dnf module with exclude feature
+# Fedora 32 won't resolve ansible_distribution variables w/ ansible 2.7
+#    use pip install 'ansible==2.8.12' --update
+- name: Verify Ansible and system requirements
+  block:
+  - assert:
+      that: "ansible_version.full is version_compare('2.8.12', '>=')"
+      fail_msg: "You must update Ansible to at least ansible 2.8.12 to use this role."
+      success_msg: "ansible V{{ ansible_version.full }} is OK"
+  - assert:
+      that: not tun_exists.failed
+      fail_msg: "The system does not have the TUN device available."
+      success_msg: "/dev/net/tun exists"
+#- debug: var=ansible_version.full
 
 
 - name: Check if inside AWS
-  uri:
-    url: http://169.254.169.254/latest/meta-data
-    timeout: 2
-  register: aws_uri_check
-  failed_when: False
-- set_fact:
-    is_aws_environment: "{{ aws_uri_check.status == 200 }}"
+  block:
+  - uri:
+      url: http://169.254.169.254/latest/meta-data
+      timeout: 2
+    register: aws_uri_check
+    failed_when: False
+  - set_fact:
+      is_aws_environment: "{{ aws_uri_check.status == 200 }}"
 - debug: var=is_aws_environment
 
 - name: setting hostname with hostnamectl
@@ -49,21 +51,27 @@
 
 
 - name: get external IP
-  uri:
-    url: https://api.ipify.org/
-    validate_certs: yes
-    return_content: yes
-    timeout: 2
-  register: pub_ip
-  failed_when: False
-#- debug: var=pub_ip
-- set_fact:
-   public_ip: "{{ pub_ip.content }}"
-- debug: var=public_ip
+  block:
+  - uri:
+      url: https://api.ipify.org/
+      validate_certs: yes
+      return_content: yes
+      timeout: 2
+    register: pub_ip
+    failed_when: False
+  - set_fact:
+     public_ip: "{{ pub_ip.content }}"
 
-- debug: var=ansible_facts.all_ipv4_addresses
+- debug: 
+    var: "{{ item }}"
+  loop:
+    - public_ip
+    - ansible_facts.all_ipv4_addresses
+    - ansible_facts.all_ipv6_addresses
+
+#- debug: var=ansible_facts.all_ipv4_addresses
 #  with_items:
-#    - ansible_facts.eth1.ipv4.address
+#    - ansible_facts.eth0.ipv4.address
 #    - ansible_facts.eth1.ipv4.address
 
 
@@ -85,143 +93,66 @@
 
 - include_tasks: "{{ ansible_os_family }}_services.yaml"
 
-- name: create /etc/openvpn/server/easy-rsa
-  file:
-    path: /etc/openvpn/server/easy-rsa
-    mode: '0755'
+# this is very long, so it's separate for clarity
+- include_tasks: easy-rsa.yaml
+
+- name: build server.conf
+  template:
+    src: templates/server.conf.j2
+    dest: /etc/openvpn/server/server.conf
     owner: root
     group: root
-    state: directory
-  register: easy_rsa_dir
-#- debug: var=easy_rsa_dir
-
-- name: get easyrsa
-  unarchive:
-    src: "{{ easy_rsa_src }}"
-    dest: "{{ easy_rsa_dest }}"
-#    creates: "{{ easy_rsa_dest }}"
-    owner: root
-    group: root
-    remote_src: yes
-    extra_opts: 
-      - "--strip-components"
-      - 1
-  register: easyrsa_tar
-#- debug: var=easyrsa_tar
-
-# Create the PKI, set up the CA and the server and client certificates
-- name: easyrsa init-pki
-  command: ./easyrsa init-pki
-  args:
-    chdir: /etc/openvpn/server/easy-rsa/
-    creates: /etc/openvpn/server/easy-rsa/pki
-    warn: no
-  register: easyrsa_init_pki
-- debug: var=easyrsa_init_pki.stdout_lines
-
-- name: easyrsa build-ca
-  command: ./easyrsa --batch build-ca nopass
-  args:
-    chdir: /etc/openvpn/server/easy-rsa/
-    creates: /etc/openvpn/server/easy-rsa/pki/private/ca.key
-    warn: no
-  register: easyrsa_ca
-- debug: var=easyrsa_ca.stdout_lines
-  when: not easyrsa_ca.changed
-- debug: var=easyrsa_ca.stderr_lines
-  when: easyrsa_ca.changed
-
-- name: easyrsa build-server
-  shell: EASYRSA_CERT_EXPIRE="{{ easy_rsa_cert_expire }}" ./easyrsa build-server-full server nopass
-  args:
-    chdir: /etc/openvpn/server/easy-rsa/
-    creates: /etc/openvpn/server/easy-rsa/pki/private/server.key
-    warn: no
-  register: easyrsa_server
-- debug: var=easyrsa_server.stdout_lines
-  when: not easyrsa_server.changed
-- debug: var=easyrsa_server.stderr_lines
-  when: easyrsa_server.changed
-
-- name: easyrsa build-client
-  shell: EASYRSA_CERT_EXPIRE="{{ easy_rsa_cert_expire }}" ./easyrsa build-client-full client nopass
-  args:
-    chdir: /etc/openvpn/server/easy-rsa/
-    creates: /etc/openvpn/server/easy-rsa/pki/private/client.key
-    warn: no
-  register: easyrsa_client
-- debug: var=easyrsa_client.stdout_lines
-  when: not easyrsa_client.changed
-- debug: var=easyrsa_client.stderr_lines
-  when: easyrsa_client.changed
-
-- name: easyrsa gen-clr
-  shell: EASYRSA_CLR_DAYS="{{ easy_rsa_cert_expire }}" ./easyrsa gen-crl
-  args:
-    chdir: /etc/openvpn/server/easy-rsa/
-    creates: /etc/openvpn/server/easy-rsa/pki/crl.pem
-    warn: no
-  register: easyrsa_clr
-- debug: var=easyrsa_clr.stdout_lines
-
-- name: copy files to server directory
-  copy:
-    src: "/etc/openvpn/server/easy-rsa/{{ item }}"
-    dest: /etc/openvpn/server/
-    remote_src: yes
-  with_items:
-    - pki/ca.crt
-    - pki/private/ca.key
-    - pki/issued/server.crt
-    - pki/private/server.key
-    - pki/crl.pem
-
-# nobody_group_id defined in vars/{ansible_os_family}.yaml
-- name: set crl.pem permissions
-  file:
-    path: /etc/openvpn/server/crl.pem
-    state: file
-    owner: nobody
-    group: "{{ nobody_group_id }}"
-  register: crl_permissions
-#- debug: var=crl_permissions
-
-# ensure OpenVPN can read the clr file
-- name: set /etc/openvpn/server permissions
-  file:
-    path: /etc/openvpn/server/
-    state: directory
-    mode: "0755"
-
-- name: openvpn genkey (ignore deprecated warning on some system)
-  command: openvpn --genkey --secret /etc/openvpn/server/tc.key
-  args:
-    chdir: /etc/openvpn/server/easy-rsa/
-    creates: /etc/openvpn/server/tc.key
-    warn: no
-  register: openvpn_genkey
-#- debug: var=openvpn_genkey
-
-- name: copy dh.pem
-  copy:
-    src: dh.pem
-    dest: /etc/openvpn/server/dh.pem
-    owner: root
-    group: root
-    mode: "0600"
-  register: copy_dh
-#- debug: var=copy_dh
-
-#- name: build server.conf
-#  template:
-#    src: server.conf.j2
-#    dest: /etc/openvpn/server/server.conf
-#    owner: root
-#    group: root
-#    mode: "0644"
-#  register: server_conf
+    mode: "0644"
+    backup: yes
+  register: server_conf
 #- debug: var=server_conf
-#
+
+- name: build client-common.txt
+  template:
+    src: templates/client-common.txt.j2
+    dest: /etc/openvpn/server/client-common.txt
+    owner: root
+    group: root
+    mode: "0644"
+    backup: yes
+  register: client_conf
+#- debug: var=client_conf
+
+- name: build openvpn-iptables.service
+  template:
+    src: templates/openvpn-iptables.service.j2
+    dest: /etc/systemd/system/openvpn-iptables.service
+    owner: root
+    group: root
+    mode: "0644"
+    backup: yes
+  register: iptables_service
+#- debug: var=iptables_service
+
+- name: enable net.ipv4.ip_forward
+  block:
+  - sysctl:
+      name: net.ipv4.ip_forward
+      value: 1
+      reload: yes
+      state: present
+  - copy:
+      dest: /etc/sysctl.d/99-openvpn-forward.conf
+      backup: yes
+      content: 'net.ipv4.ip_forward=1'
+
+# how to figure out system is using ipv6?
+- name: enable net.ipv6.conf.all.forwarding
+  block:
+  - sysctl:
+      name: net.ipv6.conf.all.forwarding
+      value: 1
+      reload: yes
+      state: present
+  - copy:
+      dest: /etc/sysctl.d/99-openvpn-forward.conf
+      content: 'net.ipv6.conf.all.forwarding=1'
+
 
 - name: get openvpn script
   get_url:

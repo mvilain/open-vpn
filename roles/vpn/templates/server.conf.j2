@@ -1,0 +1,55 @@
+# /etc/openvpn/server/server.conf
+# *** {{ ansible_managed }} ***
+
+{% for ipv4 in ansible_facts.all_ipv4_addresses %}
+local {{ ipv4 }}
+{% endfor %}
+
+port {{ openvpn_port }}
+proto {{ openvpn_protocol }}
+dev tun
+ca ca.crt
+cert server.crt
+key server.key
+dh dh.pem
+auth SHA512
+tls-crypt tc.key
+topology subnet
+server 10.8.0.0 255.255.255.0
+push "redirect-gateway def1 bypass-dhcp
+
+#server-ipv6 fddd:1194:1194:1194::/64
+#push "redirect-gateway def1 ipv6 bypass-dhcp"
+
+ifconfig-pool-persist ipp.txt
+
+#1 local dns
+push "dhcp-option DNS 10.0.2.3"
+
+#2 google
+# dhcp-option DNS 8.8.8.8"
+# dhcp-option DNS 8.8.4.4"
+#3 cloudflare
+# push "dhcp-option DNS 1.1.1.1"
+# push "dhcp-option DNS 1.0.0.1"
+#4 opendns
+# push "dhcp-option DNS 208.67.222.222"
+# push "dhcp-option DNS 208.67.220.220"
+#5 quad9
+# push "dhcp-option DNS 9.9.9.9"
+# push "dhcp-option DNS 149.112.112.112"
+#6 adguard
+# push "dhcp-option DNS 94.140.14.14"
+# push "dhcp-option DNS 94.140.15.15"
+
+keepalive 10 120
+cipher AES-256-CBC
+user nobody
+group {{ nobody_group_id }}
+persist-key
+persist-tun
+verb 0
+crl-verify crl.pem
+{% if openvpn_protocol == 'udp' %}
+explicit-exit-notify
+{% endif %}
