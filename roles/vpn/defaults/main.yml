@@ -6,6 +6,7 @@ vpn_packages:
   - openvpn
   - openssl
   - ca-certificates
+  - mosh
 
 easy_rsa_src: https://github.com/OpenVPN/easy-rsa/releases/download/v3.0.8/EasyRSA-3.0.8.tgz
 easy_rsa_dest: /etc/openvpn/server/easy-rsa
@@ -27,9 +28,3 @@ RedHat_packages:
   - bind-utils
   - tar 
   - firewalld
-
-Ubuntu_packages:
-  - apt-transport-https
-#  - iproute
-  - dnsutils
-  - iptables
