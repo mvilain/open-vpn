@@ -4,6 +4,10 @@
   package:
     name: epel-release
     state: present
+  when: >
+    ansible_distribution == "AlmaLinux" or
+    ansible_distribution == "CentOS" or
+    ansible_distribution == "RedHat"
 
 # ansible 2.7 deprecates with_items and nosquash, should use variable directly
 # but it takes a long time to process all the packages at once, so do separately

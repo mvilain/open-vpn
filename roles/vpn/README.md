@@ -3,6 +3,9 @@ vpn
 
 This role can be called to install the vpn package and services across all hosts in a site. It relies on [this outline](https://notthebe.ee/Creating-your-own-OpenVPN-server.html) script.
 
+Most of the heavy lifting to install and create the VPN is from [this script](https://raw.githubusercontent.com/Nyr/openvpn-install/master/openvpn-install.sh).
+
+
 Requirements
 ------------
 
