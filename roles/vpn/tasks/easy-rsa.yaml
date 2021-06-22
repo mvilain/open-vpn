@@ -49,7 +49,9 @@
   when: easyrsa_ca.changed
 
 - name: easyrsa build-server
-  shell: EASYRSA_CERT_EXPIRE="{{ easy_rsa_cert_expire }}" ./easyrsa build-server-full server nopass
+  shell: >
+    EASYRSA_CERT_EXPIRE="{{ easy_rsa_cert_expire }}" 
+    ./easyrsa build-server-full server nopass
   args:
     chdir: /etc/openvpn/server/easy-rsa/
     creates: /etc/openvpn/server/easy-rsa/pki/private/server.key
@@ -61,10 +63,12 @@
   when: easyrsa_server.changed
 
 - name: easyrsa build-client
-  shell: EASYRSA_CERT_EXPIRE="{{ easy_rsa_cert_expire }}" ./easyrsa build-client-full client nopass
+  shell: >
+    EASYRSA_CERT_EXPIRE="{{ easy_rsa_cert_expire }}" 
+    ./easyrsa build-client-full "{{ inventory_hostname }}" nopass
   args:
     chdir: /etc/openvpn/server/easy-rsa/
-    creates: /etc/openvpn/server/easy-rsa/pki/private/client.key
+    creates: "/etc/openvpn/server/easy-rsa/pki/private/{{ inventory_hostname }}.key"
     warn: no
   register: easyrsa_client
 - debug: var=easyrsa_client.stdout_lines

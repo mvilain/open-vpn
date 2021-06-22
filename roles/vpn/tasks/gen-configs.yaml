@@ -1,0 +1,55 @@
+---
+# gen-configs.yaml for vpn
+# generates server, client, and systemd files
+
+- name: build server.conf
+  template:
+    src: templates/server.conf.j2
+    dest: /etc/openvpn/server/server.conf
+    owner: root
+    group: root
+    mode: "0644"
+    backup: yes
+  register: server_conf
+#- debug: var=server_conf
+
+- name: build client-common.txt
+  template:
+    src: templates/client-common.txt.j2
+    dest: /etc/openvpn/server/client-common.txt
+    owner: root
+    group: root
+    mode: "0644"
+    backup: yes
+  register: client_conf
+#- debug: var=client_conf
+
+#Generates the custom client.ovpn
+#{
+#  cat /etc/openvpn/server/client-common.txt
+#  echo "<ca>"
+#  cat /etc/openvpn/server/easy-rsa/pki/ca.crt
+#  echo "</ca>"
+#  echo "<cert>"
+#  sed -ne '/BEGIN CERTIFICATE/,$ p' "/etc/openvpn/server/easy-rsa/pki/issued/{{ inventory_hostname }}.crt"
+#  echo "</cert>"
+#  echo "<key>"
+#  cat /etc/openvpn/server/easy-rsa/pki/private/"{{ inventory_hostname }}".key
+#  echo "</key>"
+#  echo "<tls-crypt>"
+#  sed -ne '/BEGIN OpenVPN Static key/,$ p' /etc/openvpn/server/tc.key
+#  echo "</tls-crypt>"
+#} > ~/"{{ inventory_hostname }}".ovpn
+#
+
+
+- name: build openvpn-iptables.service
+  template:
+    src: templates/openvpn-iptables.service.j2
+    dest: /etc/systemd/system/openvpn-iptables.service
+    owner: root
+    group: root
+    mode: "0644"
+    backup: yes
+  register: iptables_service
+#- debug: var=iptables_service

@@ -90,38 +90,8 @@
 # this is very long, so it's separate for clarity
 - include_tasks: easy-rsa.yaml
 
-- name: build server.conf
-  template:
-    src: templates/server.conf.j2
-    dest: /etc/openvpn/server/server.conf
-    owner: root
-    group: root
-    mode: "0644"
-    backup: yes
-  register: server_conf
-#- debug: var=server_conf
-
-- name: build client-common.txt
-  template:
-    src: templates/client-common.txt.j2
-    dest: /etc/openvpn/server/client-common.txt
-    owner: root
-    group: root
-    mode: "0644"
-    backup: yes
-  register: client_conf
-#- debug: var=client_conf
-
-- name: build openvpn-iptables.service
-  template:
-    src: templates/openvpn-iptables.service.j2
-    dest: /etc/systemd/system/openvpn-iptables.service
-    owner: root
-    group: root
-    mode: "0644"
-    backup: yes
-  register: iptables_service
-#- debug: var=iptables_service
+# generate the configuration and systemd files
+- include_tasks: gen-configs.yaml
 
 - name: enable net.ipv4.ip_forward
   block:
@@ -148,26 +118,26 @@
       content: 'net.ipv6.conf.all.forwarding=1'
 
 
-- name: get openvpn script
-  get_url:
-    url: https://raw.githubusercontent.com/Nyr/openvpn-install/master/openvpn-install.sh
-    dest: ./openvpn-install.sh
-    checksum: sha256:55cb078e469b5405cb6d59478ec0ce430a8782076dd4205b194be2bd8b8646da
-    mode: "0755"
-    backup: yes
-  register: openvpn_script
-#- debug: var=openvpn_script
 
-- name: patching openvpn-install
-  replace:
-    path: openvpn-install.sh
-    regexp: "{{ item.regex }}"
-    replace: "{{ item.replace }}"
-    backup: yes
-  loop:
-    - { regex: '^(\s+)clear', replace: '\g<1>#clear' }
-    - { regex: 'verb 3',      replace: 'verb 0'   }
-  register: patch
+- name: get and patch openvpn script
+  block:
+  - get_url:
+      url: https://raw.githubusercontent.com/Nyr/openvpn-install/master/openvpn-install.sh
+      dest: ./openvpn-install.sh
+      checksum: sha256:55cb078e469b5405cb6d59478ec0ce430a8782076dd4205b194be2bd8b8646da
+      mode: "0755"
+      backup: yes
+    register: openvpn_script
+  - replace:
+      path: openvpn-install.sh
+      regexp: "{{ item.regex }}"
+      replace: "{{ item.replace }}"
+      backup: yes
+    loop:
+      - { regex: '^(\s+)clear', replace: '\g<1>#clear' }
+      - { regex: 'verb 3',      replace: 'verb 0'   }
+    register: patch
+#- debug: var=openvpn_script
 #- debug: var=patch
 
 #- debug: var=ansible_facts
