@@ -62,17 +62,9 @@
   - set_fact:
      public_ip: "{{ pub_ip.content }}"
 
-- debug: 
-    var: "{{ item }}"
-  loop:
-    - public_ip
-    - ansible_facts.all_ipv4_addresses
-    - ansible_facts.all_ipv6_addresses
-
-#- debug: var=ansible_facts.all_ipv4_addresses
-#  with_items:
-#    - ansible_facts.eth0.ipv4.address
-#    - ansible_facts.eth1.ipv4.address
+- debug: var=public_ip
+- debug: var=ansible_facts.all_ipv4_addresses
+- debug: var=ansible_facts.all_ipv6_addresses
 
 
 - name: override specific variables for distributions
@@ -88,8 +80,10 @@
 
 - name: Install vpn packages (this may take a while)
   package: 
-    name: "{{ vpn_packages }}"
+    name: "{{ item }}"
     state: present
+  loop:
+    - "{{ vpn_packages }}"
 
 - include_tasks: "{{ ansible_os_family }}_services.yaml"
 

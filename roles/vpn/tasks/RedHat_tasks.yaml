@@ -1,17 +1,19 @@
 # RedHat install tasks for vpn
 ---
-- name: CentOS epel-release
+- name: RHEL epel-release for vpn package
   package:
     name: epel-release
     state: present
-  when: ansible_distribution == "CentOS"
 
 # ansible 2.7 deprecates with_items and nosquash, should use variable directly
 # but it takes a long time to process all the packages at once, so do separately
+# this displays the packages after they're installed
 - name: RedHat packages
   package:
-    name: '{{ RedHat_packages }}'
+    name: '{{ item }}'
     state: present
+  loop:
+    - "{{ RedHat_packages }}"
 
 - name: get iptables location
   block:

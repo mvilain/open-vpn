@@ -2,11 +2,14 @@
 ---
 # ansible 2.7 deprecates with_items and nosquash, should use variable directly
 # but it takes a long time to process all the packages at once, so do separately
+# this displays the packages after they're installed
 - name: Debian packages
   package:
-    name: '{{ Debian_packages }}'
+    name: '{{ item }}'
     state: present
   register: package
+  loop:
+    - '{{ Debian_packages }}'
 
 - name: get iptables location
   block:
