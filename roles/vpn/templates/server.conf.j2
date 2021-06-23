@@ -2,7 +2,9 @@
 # *** {{ ansible_managed }} ***
 
 {% for ipv4 in ansible_facts.all_ipv4_addresses %}
+  {%- if not ipv4|regex_search('^(10\.|172\.1[6789]\.|172\.2[0-9]\.|172\.3[01]\.|192\.168xxx)') %}
 local {{ ipv4 }}
+  {%- endif %}
 {% endfor %}
 
 port {{ openvpn_port }}
@@ -26,6 +28,8 @@ ifconfig-pool-persist ipp.txt
 #1 local dns
 push "dhcp-option DNS 10.0.2.3"
 
+
+{#
 #2 google
 # dhcp-option DNS 8.8.8.8"
 # dhcp-option DNS 8.8.4.4"
@@ -41,6 +45,7 @@ push "dhcp-option DNS 10.0.2.3"
 #6 adguard
 # push "dhcp-option DNS 94.140.14.14"
 # push "dhcp-option DNS 94.140.15.15"
+#}
 
 keepalive 10 120
 cipher AES-256-CBC

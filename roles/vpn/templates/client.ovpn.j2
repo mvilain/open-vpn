@@ -1,0 +1,46 @@
+# /etc/openvpn/server/client.opvn
+# *** {{ ansible_managed }} ***
+
+client
+dev tun
+proto {{ openvpn_protocol }}
+
+remote {{ public_ip }} {{ openvpn_port }}
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+remote-cert-tls server
+auth SHA512
+cipher AES-256-CBC
+ignore-unknown-option block-outside-dns
+block-outside-dns
+verb 0
+
+# include /etc/openvpn/server/easy-rsa/pki/ca.crt #
+<ca>
+{% for line in ca_text.stdout_lines %}
+{{ line }}
+{% endfor %}
+</ca>
+
+#  sed -ne '/BEGIN CERTIFICATE/,$ p' "/etc/openvpn/server/easy-rsa/pki/issued/{{ inventory_hostname }}.crt"
+<cert>
+{% for line in cert_text.stdout_lines %}
+{{ line }}
+{% endfor %}
+</cert>
+
+# include /etc/openvpn/server/easy-rsa/pki/private/"{{ inventory_hostname }}".key #
+<key>
+{% for line in key_text.stdout_lines %}
+{{ line }}
+{% endfor %}
+</key>
+
+#  sed -ne '/BEGIN OpenVPN Static key/,$ p' /etc/openvpn/server/tc.key
+<tls-crypt>
+{% for line in tls_text.stdout_lines %}
+{{ line }}
+{% endfor %}
+</tls-crypt>
