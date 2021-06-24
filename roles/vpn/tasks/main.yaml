@@ -90,7 +90,7 @@
 # this is very long, so it's separate for clarity
 - include_tasks: easy-rsa.yaml
 
-# generate the configuration and systemd files
+# generate configuration and systemd files
 - include_tasks: gen-configs.yaml
 
 - name: enable net.ipv4.ip_forward
@@ -118,26 +118,23 @@
       content: 'net.ipv6.conf.all.forwarding=1'
 
 
-
-- name: get and patch openvpn script
-  block:
-  - get_url:
-      url: https://raw.githubusercontent.com/Nyr/openvpn-install/master/openvpn-install.sh
-      dest: ./openvpn-install.sh
-      checksum: sha256:55cb078e469b5405cb6d59478ec0ce430a8782076dd4205b194be2bd8b8646da
-      mode: "0755"
-      backup: yes
-    register: openvpn_script
-  - replace:
-      path: openvpn-install.sh
-      regexp: "{{ item.regex }}"
-      replace: "{{ item.replace }}"
-      backup: yes
-    loop:
-      - { regex: '^(\s+)clear', replace: '\g<1>#clear' }
-      - { regex: 'verb 3',      replace: 'verb 0'   }
-    register: patch
+#- name: get and patch openvpn script
+#  block:
+#  - get_url:
+#      url: https://raw.githubusercontent.com/Nyr/openvpn-install/master/openvpn-install.sh
+#      dest: ./openvpn-install.sh
+#      checksum: sha256:55cb078e469b5405cb6d59478ec0ce430a8782076dd4205b194be2bd8b8646da
+#      mode: "0755"
+#      backup: yes
+#    register: openvpn_script
+#  - replace:
+#      path: openvpn-install.sh
+#      regexp: "{{ item.regex }}"
+#      replace: "{{ item.replace }}"
+#      backup: yes
+#    loop:
+#      - { regex: '^(\s+)clear', replace: '\g<1>#clear' }
+#      - { regex: 'verb 3',      replace: 'verb 0'   }
+#    register: patch
 #- debug: var=openvpn_script
 #- debug: var=patch
-
-#- debug: var=ansible_facts

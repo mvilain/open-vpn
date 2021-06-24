@@ -93,8 +93,6 @@
 - debug: var=fetch_client
 
 
-
-
 - name: build openvpn-iptables.service
   template:
     src: templates/openvpn-iptables.service.j2
