@@ -1,6 +1,6 @@
 # RedHat install tasks for vpn
 ---
-- name: RHEL epel-release for vpn package
+- name: RHEL epel-release contains openvpn package
   package:
     name: epel-release
     state: present
@@ -19,6 +19,7 @@
   loop:
     - "{{ RedHat_packages }}"
 
+# these are used to get the path for the iptables+ip6tables commands for systemd startup
 - name: get iptables location
   block:
   - shell: command -v iptables
