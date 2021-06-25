@@ -18,6 +18,7 @@
     loop:
       - '{{ Debian_packages }}'
 
+# these are used to get the path for the iptables+ip6tables commands for systemd startup
 - name: get iptables location
   block:
   - shell: command -v iptables
