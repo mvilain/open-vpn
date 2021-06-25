@@ -4,3 +4,6 @@
 [submodule "aws/terraform-modules/terraform-aws-ec2-instance"]
 	path = aws/terraform-modules/terraform-aws-ec2-instance
 	url = git@github.com:mvilain/terraform-aws-ec2-instance.git
+[submodule "roles/wireguard"]
+	path = roles/wireguard
+	url = git@github.com:mvilain/wireguard.git

@@ -19,12 +19,12 @@ Debian_packages:
   - apt-transport-https
   - dnsutils
   - iptables
+  - libpam-google-authenticator
 
-# https://bugzilla.redhat.com/show_bug.cgi?id=1820925
-# moreutils requires EPEL plus Powertools on CentOS 8
 # https://fedoraproject.org/wiki/EPEL#How_can_I_use_these_extra_packages.3F
 RedHat_packages:
   - iproute
   - bind-utils
   - tar 
   - firewalld
+  - google-authenticator

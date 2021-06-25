@@ -24,6 +24,13 @@ f34 ansible_host=192.168.10.134
 u18 ansible_host=192.168.10.118
 u20 ansible_host=192.168.10.120
 
+[rhel_group]
+c8 ansible_host=192.168.10.108
+a8 ansible_host=192.168.10.188
+f32 ansible_host=192.168.10.132
+f33 ansible_host=192.168.10.133
+f34 ansible_host=192.168.10.134
+
 
 [all:children]
 centos_group
