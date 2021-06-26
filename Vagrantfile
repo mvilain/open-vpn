@@ -61,7 +61,7 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "site.yaml"
       ansible.inventory_path = "./inventory_vagrant"
-#       ansible.verbose = "vvv"
+      # ansible.verbose = "vvv"
     end
   end
   
@@ -86,6 +86,26 @@ Vagrant.configure("2") do |config|
   end
 
 
+  config.vm.define "r8" do |r8|
+    r8.vm.box = "rockylinux/8"
+    r8.ssh.insert_key = false
+    r8.vm.network 'private_network', ip: '192.168.10.189'
+    r8.vm.hostname = 'r8'
+    r8.vm.provision "shell", inline: <<-SHELL
+      dnf install -y epel-release
+      dnf config-manager --set-enabled powertools
+      dnf makecache
+      dnf install -y ansible
+      alternatives --set python /usr/bin/python3
+    SHELL
+    r8.vm.provision "ansible" do |ansible|
+      ansible.compatibility_mode = "2.0"
+      ansible.playbook = "site.yaml"
+      ansible.inventory_path = "./inventory_vagrant"
+    end
+  end
+
+
   # https://stackoverflow.com/questions/56460494/apt-get-install-apt-transport-https-fails-in-docker
   config.vm.define "d9" do |d9|
     d9.vm.box = "bento/debian-9"
@@ -94,7 +114,6 @@ Vagrant.configure("2") do |config|
     d9.vm.hostname = 'd9'
     d9.vm.provision "shell", inline: <<-SHELL
       apt-get install -y apt-transport-https
-#       apt-get install -y python3-selinux selinux-policy-default selinux-basics
     SHELL
     d9.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -110,8 +129,7 @@ Vagrant.configure("2") do |config|
     d10.vm.network 'private_network', ip: '192.168.10.210'
     d10.vm.hostname = 'd10'
     d10.vm.provision "shell", inline: <<-SHELL
-      apt-get install -y apt-transport-https 
-#       apt-get install -y python3-selinux selinux-policy-default selinux-basics
+      apt-get install -y apt-transport-https
     SHELL
     d10.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
@@ -194,7 +212,6 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "site.yaml"
       ansible.inventory_path = "./inventory_vagrant"
-#       ansible.verbose = "vvv"
     end
   end
 
