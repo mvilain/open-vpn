@@ -11,12 +11,6 @@ Requirements
 
 vagrant requires a public/private key pair to login to the vagrant boxes. This is usually specified in the inventory file, but if ssh-agent has been enabled (e.g. `AddKeysToAgent yes` is set in the `.ssh/config file`), some vagrant boxes won't be able to connect and authenticate.
 
-As of 6/14/21, CentOS 8, Debian, and Ubuntu boxes won't work if `AddKeysToAgent` is set.  The workaround for this is to set the environment SSH\_AUTH\_SOCK to a blank string:
-
-    export SSH_AUTH_SOCK=""
-
-See [this link](https://github.com/hashicorp/vagrant/issues/8204).  Adding the key to the ssh-agent doesn't fix this.
-
 CentOS 7 -- ansible must run under python 2.7 as the python3 version available is to old; the ansible\_python\_interpreter should be set to /usr/bin/python in the inventory file
 
 CentOS 8 and AlmaLinux 8 -- ansible needs to be installed prior on the client to install all python3 modules and libraries; the ansible\_python\_interpreter should be set to /usr/libexec/platform-python in the inventory file
