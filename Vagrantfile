@@ -32,10 +32,9 @@ Vagrant.configure("2") do |config|
     a8.vm.network 'private_network', ip: '192.168.10.188'
     a8.vm.hostname = 'a8'
     a8.vm.provision "shell", inline: <<-SHELL
-      dnf install -y epel-release
       dnf config-manager --set-enabled powertools
       dnf makecache
-      dnf install -y ansible
+      dnf install -y python3
       alternatives --set python /usr/bin/python3
     SHELL
     a8.vm.provision "ansible" do |ansible|
@@ -72,10 +71,9 @@ Vagrant.configure("2") do |config|
     c8.vm.network 'private_network', ip: '192.168.10.108'
     c8.vm.hostname = 'c8'
     c8.vm.provision "shell", inline: <<-SHELL
-      dnf install -y epel-release
       dnf config-manager --set-enabled powertools
       dnf makecache
-      dnf install -y ansible
+      dnf install -y python3
       alternatives --set python /usr/bin/python3
     SHELL
     c8.vm.provision "ansible" do |ansible|
@@ -92,10 +90,9 @@ Vagrant.configure("2") do |config|
     r8.vm.network 'private_network', ip: '192.168.10.189'
     r8.vm.hostname = 'r8'
     r8.vm.provision "shell", inline: <<-SHELL
-      dnf install -y epel-release
       dnf config-manager --set-enabled powertools
       dnf makecache
-      dnf install -y ansible
+      dnf install -y python3
       alternatives --set python /usr/bin/python3
     SHELL
     r8.vm.provision "ansible" do |ansible|

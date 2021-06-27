@@ -30,7 +30,7 @@ resource "linode_stackscript" "rhel7" {
   images = [
     "linode/centos7"
   ]
-  rev_note = "2021.06.13"
+  rev_note = "2021.06.27"
 }
 
 resource "linode_stackscript" "rhel8" {
@@ -50,17 +50,17 @@ resource "linode_stackscript" "rhel8" {
     system_configure_ntp
     enable_fail2ban
 
-    dnf install -y epel-release
     dnf config-manager --set-enabled powertools
     dnf makecache
-    dnf install -y ansible
+    dnf install -y python3
     alternatives --set python /usr/bin/python3
   EOF
   images = [
     "linode/almalinux8", 
-    "linode/centos8"
+    "linode/centos8",
+    "linode/rocky8"
   ]
-  rev_note = "2021.06.13"
+  rev_note = "2021.06.27"
 }
 
 resource "linode_stackscript" "debian" {
@@ -87,7 +87,7 @@ resource "linode_stackscript" "debian" {
     "linode/debian9", 
     "linode/debian10"
   ]
-  rev_note = "2021.06.13"
+  rev_note = "2021.06.27"
 }
 
 resource "linode_stackscript" "fedora" {
@@ -114,7 +114,7 @@ resource "linode_stackscript" "fedora" {
     "linode/fedora33",
     "linode/fedora34"
   ]
-  rev_note = "2021.06.13"
+  rev_note = "2021.06.27"
 }
 
 resource "linode_stackscript" "ubuntu" {
@@ -140,5 +140,5 @@ resource "linode_stackscript" "ubuntu" {
     "linode/ubuntu18.04",
     "linode/ubuntu20.04",
   ]
-  rev_note = "2021.06.13"
+  rev_note = "2021.06.27"
 }

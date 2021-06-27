@@ -18,17 +18,13 @@ auth SHA512
 tls-crypt tc.key
 topology subnet
 server 10.8.0.0 255.255.255.0
-push "redirect-gateway def1 bypass-dhcp
-
+push "redirect-gateway def1 bypass-dhcp"
 #server-ipv6 fddd:1194:1194:1194::/64
 #push "redirect-gateway def1 ipv6 bypass-dhcp"
-
 ifconfig-pool-persist ipp.txt
 
 #1 local dns
 push "dhcp-option DNS 10.0.2.3"
-
-
 {#
 #2 google
 # dhcp-option DNS 8.8.8.8"
@@ -53,7 +49,12 @@ user nobody
 group {{ nobody_group_id }}
 persist-key
 persist-tun
+{% if openvpn_nolog -%}
 verb 0
+{% else %}
+log-append /var/log/openvpn.log
+verb 3
+{% endif %}
 crl-verify crl.pem
 {% if openvpn_protocol == 'udp' %}
 explicit-exit-notify

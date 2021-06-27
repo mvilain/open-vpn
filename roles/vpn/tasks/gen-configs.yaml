@@ -73,16 +73,4 @@
       dest: "./client-{{ inventory_hostname }}.ovpn"
       flat: true
     register: fetch_client
-- debug: var=fetch_client
-
-
-- name: build openvpn-iptables.service
-  template:
-    src: templates/openvpn-iptables.service.j2
-    dest: /etc/systemd/system/openvpn-iptables.service
-    owner: root
-    group: root
-    mode: "0644"
-    backup: yes
-  register: iptables_service
-#- debug: var=iptables_service
+- debug: var=fetch_client.dest

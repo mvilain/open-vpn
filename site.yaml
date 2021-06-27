@@ -4,5 +4,9 @@
   become: true
 # check_mode: yes  # yes=dry-run
   roles:
-#    - vpn
+    - vpn
+
+- hosts: ubuntu_group:debian_group
+  become: true
+  roles:
     - 2fa

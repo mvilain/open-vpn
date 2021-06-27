@@ -14,12 +14,12 @@ easy_rsa_cert_expire: 3650
 
 openvpn_port: 1194
 openvpn_protocol: udp    # udp|tcp
+openvpn_nolog: false
 
 Debian_packages:
   - apt-transport-https
   - dnsutils
   - iptables
-  - libpam-google-authenticator
 
 # https://fedoraproject.org/wiki/EPEL#How_can_I_use_these_extra_packages.3F
 RedHat_packages:
@@ -27,4 +27,3 @@ RedHat_packages:
   - bind-utils
   - tar 
   - firewalld
-  - google-authenticator

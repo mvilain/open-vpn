@@ -235,7 +235,9 @@ def main():
         # linodes all give access to root, so this really isn't needed
         templ_alma = []
         templ_centos = []
-        templ_debian  = []
+        templ_debian = []
+        templ_fedora = []
+        templ_rocky = []
         templ_ubuntu = []
         templ_unk = []
 
@@ -257,6 +259,10 @@ def main():
                 templ_centos.append(d)
             elif d['os'] == 'debian9' or d['os'] == 'debian10':
                 templ_debian.append(d)
+            elif d['os'] == 'fedora32' or d['os'] == 'fedora33' or d['os'] == 'fedora34':
+                templ_fedora.append(d)
+            elif d['os'] == 'rocky8':
+                templ_rocky.append(d)
             elif d['os'] == 'ubuntu16lts' or d['os'] == 'ubuntu18' or d['os'] == 'ubuntu20':
                 templ_ubuntu.append(d)
             else:
@@ -272,6 +278,8 @@ def main():
                 alma=templ_alma,
                 centos=templ_centos,
                 debian=templ_debian,
+                fedora=templ_fedora,
+                rocky=templ_rocky,
                 ubuntu=templ_ubuntu,
                 unk=templ_unk
                 )
@@ -286,24 +294,44 @@ def main():
                     size = os.get_terminal_size()
                     print('{} {}'.format(dashes,'alma'))
                     pprint.pprint(templ_alma,width=size.columns)
+
                     print('{} {}'.format(dashes,'centos'))
                     pprint.pprint(templ_centos,width=size.columns)
+
                     print('{} {}'.format(dashes,'debian'))
                     pprint.pprint(templ_debian,width=size.columns)
+
+                    print('{} {}'.format(dashes,'fedora'))
+                    pprint.pprint(templ_fedora,width=size.columns)
+
+                    print('{} {}'.format(dashes,'rocky'))
+                    pprint.pprint(templ_rocky,width=size.columns)
+
                     print('{} {}'.format(dashes,'ubuntu'))
                     pprint.pprint(templ_ubuntu,width=size.columns)
+
                     print('{} {}'.format(dashes,'unk'))
                     pprint.pprint(templ_unk,width=size.columns)
 
                 except OSError:     # likely can't get terminal info in debugging session
                     print('{} {}'.format(dashes,'alma'))
                     pprint.pprint(templ_alma,width=132)
+
                     print('{} {}'.format(dashes,'centos'))
                     pprint.pprint(templ_centos,width=132)
+
                     print('{} {}'.format(dashes,'debian'))
                     pprint.pprint(templ_debian,width=132)
+
+                    print('{} {}'.format(dashes,'fedora'))
+                    pprint.pprint(templ_fedora,width=132)
+
+                    print('{} {}'.format(dashes,'rocky'))
+                    pprint.pprint(templ_rocky,width=132)
+
                     print('{} {}'.format(dashes,'ubuntu'))
                     pprint.pprint(templ_ubuntu,width=132)
+
                     print('{} {}'.format(dashes,'unk'))
                     pprint.pprint(templ_unk,width=132)
 

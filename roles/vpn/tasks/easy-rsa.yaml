@@ -85,7 +85,7 @@
   register: easyrsa_clr
 - debug: var=easyrsa_clr.stdout_lines
 
-- name: copy files to server directory
+- name: copy certs to server directory
   copy:
     src: "/etc/openvpn/server/easy-rsa/{{ item }}"
     dest: /etc/openvpn/server/
@@ -98,14 +98,21 @@
     - pki/crl.pem
 
 # nobody_group_id defined in vars/{ansible_os_family}.yaml
-- name: set crl.pem permissions
+- name: set certs permissions and ownership
   file:
-    path: /etc/openvpn/server/crl.pem
+    path: "/etc/openvpn/server/{{ item.file }}"
+    owner: "{{ item.owner }}"
+    group: "{{  item.group }}"
     state: file
-    owner: nobody
-    group: "{{ nobody_group_id }}"
-  register: crl_permissions
-#- debug: var=crl_permissions
+    mode: "{{ item.mode }}"
+  with_items:
+    - { file: ca.crt,     mode: "0644", owner: root, group: root}
+    - { file: ca.key,     mode: "0600", owner: root, group: root}
+    - { file: server.crt, mode: "0644", owner: root, group: root}
+    - { file: server.key, mode: "0600", owner: root, group: root}
+    - { file: crl.pem,    mode: "0644", owner: nobody, group: "{{ nobody_group_id }}"}
+  register: perm
+#- debug: var=perm
 
 # ensure OpenVPN can read the clr file
 - name: set /etc/openvpn/server permissions

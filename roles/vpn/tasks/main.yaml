@@ -66,9 +66,32 @@
 - debug: var=ansible_facts.all_ipv4_addresses
 - debug: var=ansible_facts.all_ipv6_addresses
 
+- name: enable net.ipv4.ip_forward
+  block:
+  - sysctl:
+      name: net.ipv4.ip_forward
+      value: 1
+      reload: yes
+      state: present
+  - copy:
+      dest: /etc/sysctl.d/99-openvpn-forward.conf
+      backup: yes
+      content: 'net.ipv4.ip_forward=1'
 
+# how to figure out system is using ipv6?
+- name: enable net.ipv6.conf.all.forwarding
+  block:
+  - sysctl:
+      name: net.ipv6.conf.all.forwarding
+      value: 1
+      reload: yes
+      state: present
+  - copy:
+      dest: /etc/sysctl.d/99-openvpn-forward.conf
+      content: 'net.ipv6.conf.all.forwarding=1'
+
+# allow OS-specific file to override vars/main.yaml
 - name: override specific variables for distributions
-  # allow OS-specific file to override defaults/main.yaml
   include_vars: "{{ item }}"
   with_first_found:
   - files:
@@ -93,26 +116,27 @@
 # generate configuration and systemd files
 - include_tasks: gen-configs.yaml
 
-- name: enable net.ipv4.ip_forward
-  block:
-  - sysctl:
-      name: net.ipv4.ip_forward
-      value: 1
-      reload: yes
-      state: present
-  - copy:
-      dest: /etc/sysctl.d/99-openvpn-forward.conf
-      backup: yes
-      content: 'net.ipv4.ip_forward=1'
 
-# how to figure out system is using ipv6?
-- name: enable net.ipv6.conf.all.forwarding
+- name: build openvpn-iptables.service
+  template:
+    src: templates/openvpn-iptables.service.j2
+    dest: /etc/systemd/system/openvpn-iptables.service
+    owner: root
+    group: root
+    mode: "0644"
+    backup: yes
+  register: iptables_service
+#- debug: var=iptables_service
+
+# all supported os' have systemd
+- name: start openvpn service
   block:
-  - sysctl:
-      name: net.ipv6.conf.all.forwarding
-      value: 1
-      reload: yes
-      state: present
-  - copy:
-      dest: /etc/sysctl.d/99-openvpn-forward.conf
-      content: 'net.ipv6.conf.all.forwarding=1'
+  - service:
+      name: openvpn-server@server
+      state: started
+      enabled: yes
+  - shell: systemctl status openvpn-server@server
+    args:
+      warn: no
+    register: vpn_service
+- debug: var=vpn_service.stdout_lines

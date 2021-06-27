@@ -3,6 +3,7 @@
 //================================================== PROVIDERS (in providers.tf)
 //================================================== GENERATE KEYS AND SAVE (in linode-keys.tf)
 //================================================== INSTANCES
+// current account limits to 10 Linodes
 # inputs:
 #  password  - Linode root password                              [default: NONE ]
 #  ssh_key   - Linode public ssh key for setting authorize_hosts [default: NONE ]
@@ -12,17 +13,17 @@
 #  label     - label used to create the instance and hostname    [default: "example"]
 #  domain    - Linode-managed DNS domain used to assign host IP  [default: "example.com"]
 #  script    - linode stackscript to run on instance boot        [default: NONE ]
-module "lin_vpn_alma8" {
-  source   = "./terraform-modules/terraform-linode-instance"
-
-  password  = random_password.linode_root_pass.result
-  ssh_key   = chomp(tls_private_key.linode_ssh_key.public_key_openssh)
-  domain    = var.linode_domain
-  image     = "linode/almalinux8"
-  type      = "g6-nanode-1"
-  script    = linode_stackscript.rhel8.id
-  label     = "vpn-a"
-}
+#module "lin_vpn_alma8" {
+#  source   = "./terraform-modules/terraform-linode-instance"
+#
+#  password  = random_password.linode_root_pass.result
+#  ssh_key   = chomp(tls_private_key.linode_ssh_key.public_key_openssh)
+#  domain    = var.linode_domain
+#  image     = "linode/almalinux8"
+#  type      = "g6-nanode-1"
+#  script    = linode_stackscript.rhel8.id
+#  label     = "vpn-a"
+#}
 # outputs:
 #  id
 #  status
@@ -117,18 +118,19 @@ module "lin_vpn_fedora34" {
 }
 
 
-
-module "lin_vpn_ubuntu16" {
+module "lin_vpn_rocky8" {
   source   = "./terraform-modules/terraform-linode-instance"
 
   password  = random_password.linode_root_pass.result
   ssh_key   = chomp(tls_private_key.linode_ssh_key.public_key_openssh)
   domain    = var.linode_domain
-  image     = "linode/ubuntu16.04lts"
+  image     = "linode/rocky8"
   type      = "g6-nanode-1"
-  script    = linode_stackscript.ubuntu.id
-  label     = "vpn16"
+  script    = linode_stackscript.rhel8.id
+  label     = "vpn-r"
 }
+
+
 module "lin_vpn_ubuntu18" {
   source   = "./terraform-modules/terraform-linode-instance"
 

@@ -4,6 +4,8 @@ Initially I stumbled across [this video](https://www.youtube.com/watch?v=gxpX_mu
 
 [Wolfgang's site](https://notthebe.ee/Creating-your-own-OpenVPN-server.html) has the full text of the project, albeit done manually.
 
+Note: the instructions for adding 2-Factor Authentication with Google Authenticator only works on CentOS 7.  All the other versions and RHEL distros don't work.
+
 [Linode's Stackscript 1](https://cloud.linode.com/stackscripts/1) has many pre-defined functions useful in setting up Linodes.
 
 [Nyr's VPN setup script](https://github.com/Nyr/openvpn-install) is also mentioned.
@@ -23,6 +25,8 @@ This creates a HEADless snapshot of the submodule in the main repo.
     git submodule add git@github.com:mvilain/terraform-linode-instance.git
     cd ~/vpn/aws/terraform-modules
     git submodule add git@github.com:mvilain/terraform-aws-ec2-instance.git
+    cd ~/vpn/roles/wireguard
+    git submodule add git@github.com:mvilain/wireguard.git
 
 When you update the submodule and push it, the snapshot must be refreshed with the changes.
 

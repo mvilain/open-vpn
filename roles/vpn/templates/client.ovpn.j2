@@ -15,23 +15,23 @@ auth SHA512
 cipher AES-256-CBC
 ignore-unknown-option block-outside-dns
 block-outside-dns
-verb 0
+verb 3
 
-# include /etc/openvpn/server/easy-rsa/pki/ca.crt
+# include /etc/openvpn/server/ca.crt
 <ca>
 {% for line in ca_text.stdout_lines %}
 {{ line }}
 {% endfor %}
 </ca>
 
-#  sed -ne '/BEGIN CERTIFICATE/,$ p' "/etc/openvpn/server/easy-rsa/pki/issued/{{ inventory_hostname }}.crt"
+#  sed -ne '/BEGIN CERTIFICATE/,$ p' "/etc/openvpn/server/{{ inventory_hostname }}.crt"
 <cert>
 {% for line in cert_text.stdout_lines %}
 {{ line }}
 {% endfor %}
 </cert>
 
-# include /etc/openvpn/server/easy-rsa/pki/private/"{{ inventory_hostname }}".key #
+# include /etc/openvpn/server/"{{ inventory_hostname }}".key #
 <key>
 {% for line in key_text.stdout_lines %}
 {{ line }}

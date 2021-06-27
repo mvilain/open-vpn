@@ -6,9 +6,14 @@
 ---
 - hosts: all
   vars:
-  vars_files:
-    - group_vars/vpn
+#  vars_files:
+#    - group_vars/vpn
   become: true
-
   roles:
-    - role: vpn
+    - vpn
+
+
+- hosts: ubuntu debian
+  become: true
+  roles:
+    - 2fa
