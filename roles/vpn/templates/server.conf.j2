@@ -1,12 +1,10 @@
 # /etc/openvpn/server/server.conf
 # *** {{ ansible_managed }} ***
-
 {% for ipv4 in ansible_facts.all_ipv4_addresses %}
   {%- if not ipv4|regex_search('^(10\.|172\.1[6789]\.|172\.2[0-9]\.|172\.3[01]\.|192\.168xxx)') %}
 local {{ ipv4 }}
-  {%- endif %}
+  {% endif %}
 {% endfor %}
-
 port {{ openvpn_port }}
 proto {{ openvpn_protocol }}
 dev tun
@@ -19,13 +17,15 @@ tls-crypt tc.key
 topology subnet
 server 10.8.0.0 255.255.255.0
 push "redirect-gateway def1 bypass-dhcp"
+
 #server-ipv6 fddd:1194:1194:1194::/64
 #push "redirect-gateway def1 ipv6 bypass-dhcp"
+
 ifconfig-pool-persist ipp.txt
 
 #1 local dns
 push "dhcp-option DNS 10.0.2.3"
-{#
+
 #2 google
 # dhcp-option DNS 8.8.8.8"
 # dhcp-option DNS 8.8.4.4"
@@ -41,7 +41,6 @@ push "dhcp-option DNS 10.0.2.3"
 #6 adguard
 # push "dhcp-option DNS 94.140.14.14"
 # push "dhcp-option DNS 94.140.15.15"
-#}
 
 keepalive 10 120
 cipher AES-256-CBC
@@ -53,7 +52,7 @@ persist-tun
 verb 0
 {% else %}
 log-append /var/log/openvpn.log
-verb 3
+verb 1
 {% endif %}
 crl-verify crl.pem
 {% if openvpn_protocol == 'udp' %}
