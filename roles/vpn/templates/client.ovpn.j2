@@ -5,7 +5,8 @@ client
 dev tun
 proto {{ openvpn_protocol }}
 
-remote {{ public_ip }} {{ openvpn_port }}
+#remote {{ public_ip }} {{ openvpn_port }}
+remote {{ ansible_host }} {{ openvpn_port }}
 resolv-retry infinite
 nobind
 persist-key
