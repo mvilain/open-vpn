@@ -1,10 +1,7 @@
-# /etc/openvpn/server/client-common.txt
-# *** {{ ansible_managed }} ***
 
 client
 dev tun
 proto {{ openvpn_protocol }}
-
 remote {{ public_ip }} {{ openvpn_port }}
 resolv-retry infinite
 nobind

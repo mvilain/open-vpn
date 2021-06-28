@@ -13,18 +13,6 @@
   register: server_conf
 #- debug: var=server_conf
 
-#- name: build client-common.txt
-#  template:
-#    src: templates/client-common.txt.j2
-#    dest: /etc/openvpn/server/client-common.txt
-#    owner: root
-#    group: root
-#    mode: "0644"
-#    backup: yes
-#  register: client_conf
-#- debug: var=client_conf
-
-
 # extract ca text for client.ovpn
 - name: get cert text
   shell: cat ca.crt
@@ -63,6 +51,9 @@
 
 - name: build and fetch client.ovpn
   block:
+  - template:
+      src: templates/client-common.txt.j2
+      dest: /etc/openvpn/server/client-common.txt
   - template:
       src: templates/client.ovpn.j2
       dest: client.ovpn
