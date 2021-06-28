@@ -1,0 +1,8 @@
+---
+# handlers file for 2fa
+#systemctl restart sshd
+- name: restart sshd
+  service: 
+    name: sshd 
+    state: restarted
+  listen: "restart sshd service"

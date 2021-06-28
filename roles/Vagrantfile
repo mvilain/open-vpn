@@ -1,0 +1,33 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.define "vpn" do |vpn|
+    vpn.vm.synced_folder '.', '/vagrant', disabled: true
+    vpn.ssh.insert_key = false
+    #vpn.vm.box = "ubuntu/bionic64"
+    vpn.vm.box = "centos/8"
+    vpn.vm.hostname = 'vpn'
+
+    # vpn.vm.box_check_update = false
+    # vpn.vm.network "forwarded_port", guest: 80, host: 8080
+    # vpn.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+    # vpn.vm.network "public_network"
+    vpn.vm.network "private_network", ip: "192.168.33.18"
+
+    vpn.vm.provider "virtualbox" do |vb|
+      vb.gui = false
+      vb.memory = "1024"
+    end
+    vpn.vm.provision "shell", inline: <<-SHELL
+      #yum install -y epel-release wget curl
+      #apt-get install -y wget curl
+      echo "...fetching openvpn-install script..."
+      script=https://raw.githubusercontent.com/Nyr/openvpn-install/master/openvpn-install.sh
+      wget -T 10 -t 1 -4q ${script} 2>/dev/null || curl -s ${script} -O openvpn-install.sh
+      echo "...removing clear commands..."
+      sed -i.bak -e "s/^.*clear/#clear/g" -e "s/verb 3/verb 0/g" openvpn-install.sh
+      #bash -xv ./openvpn-install.sh
+    SHELL
+  end
+end

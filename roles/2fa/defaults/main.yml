@@ -1,0 +1,19 @@
+---
+# defaults file for 2fa
+
+common_packages:
+  - wget
+  - mosh
+
+Debian_packages:
+  - apt-transport-https
+  - dnsutils
+  - iptables
+  - libpam-google-authenticator
+
+RedHat_packages:
+  - iproute
+  - bind-utils
+  - tar 
+  - firewalld
+  - google-authenticator

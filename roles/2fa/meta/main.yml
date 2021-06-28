@@ -1,0 +1,24 @@
+galaxy_info:
+  author: "Michael Vilain"
+  description: install and configure Google Authenticator package and services
+  license: license (GPLv2, CC-BY, etc)
+
+  min_ansible_version: 1.0
+
+  platforms:
+  - name: Debian
+    versions:
+    - 9.0 (stretch)
+    - 10.0 (buster)
+  - name: RHEL
+    versions:
+    - 7
+  - name: Ubuntu
+    versions:
+    - bionic (18.04)
+    - focal (20.04)
+
+  galaxy_tags:
+    - networking
+
+dependencies: []
