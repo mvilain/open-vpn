@@ -12,6 +12,7 @@ easy_rsa_src: https://github.com/OpenVPN/easy-rsa/releases/download/v3.0.8/EasyR
 easy_rsa_dest: /etc/openvpn/server/easy-rsa
 easy_rsa_cert_expire: 3650
 
+openvpn_installer: https://raw.githubusercontent.com/Nyr/openvpn-install/master/openvpn-install.sh
 openvpn_port: 1194
 openvpn_protocol: udp    # udp|tcp
 openvpn_nolog: false
