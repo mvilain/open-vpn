@@ -97,23 +97,6 @@
     - pki/private/server.key
     - pki/crl.pem
 
-# nobody_group_id defined in vars/{ansible_os_family}.yaml
-- name: set certs permissions and ownership
-  file:
-    path: "/etc/openvpn/server/{{ item.file }}"
-    owner: "{{ item.owner }}"
-    group: "{{  item.group }}"
-    state: file
-    mode: "{{ item.mode }}"
-  with_items:
-    - { file: ca.crt,     mode: "0644", owner: root, group: root}
-    - { file: ca.key,     mode: "0600", owner: root, group: root}
-    - { file: server.crt, mode: "0644", owner: root, group: root}
-    - { file: server.key, mode: "0600", owner: root, group: root}
-    - { file: crl.pem,    mode: "0644", owner: nobody, group: "{{ nobody_group_id }}"}
-  register: perm
-#- debug: var=perm
-
 # ensure OpenVPN can read the clr file
 - name: set /etc/openvpn/server permissions
   file:
@@ -136,6 +119,25 @@
     dest: /etc/openvpn/server/dh.pem
     owner: root
     group: root
-    mode: "0600"
+    mode: "0644"
   register: copy_dh
 #- debug: var=copy_dh
+
+# nobody_group_id defined in vars/{ansible_os_family}.yaml
+- name: set certs permissions and ownership
+  file:
+    path: "/etc/openvpn/server/{{ item.file }}"
+    owner: "{{ item.owner }}"
+    group: "{{  item.group }}"
+    state: file
+    mode: "{{ item.mode }}"
+  with_items:
+    - { file: ca.crt,     mode: "0600", owner: root, group: root}
+    - { file: ca.key,     mode: "0600", owner: root, group: root}
+#    - { file: ipp.pem,    mode: "0600", owner: root, group: root}
+    - { file: server.crt, mode: "0600", owner: root, group: root}
+    - { file: server.key, mode: "0600", owner: root, group: root}
+    - { file: tc.key,     mode: "0600", owner: root, group: root}
+    - { file: crl.pem,    mode: "0600", owner: nobody, group: "{{ nobody_group_id }}"}
+  register: perm
+#- debug: var=perm
