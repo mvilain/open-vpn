@@ -62,9 +62,9 @@
   - set_fact:
      public_ip: "{{ pub_ip.content }}"
 
-- debug: var=public_ip
-- debug: var=ansible_facts.all_ipv4_addresses
-- debug: var=ansible_facts.all_ipv6_addresses
+#- debug: var=public_ip
+#- debug: var=ansible_facts.all_ipv4_addresses
+#- debug: var=ansible_facts.all_ipv6_addresses
 
 - name: enable net.ipv4.ip_forward
   block:
@@ -75,7 +75,6 @@
       state: present
   - copy:
       dest: /etc/sysctl.d/99-openvpn-forward.conf
-      backup: yes
       content: 'net.ipv4.ip_forward=1'
 
 # how to figure out system is using ipv6?
@@ -140,3 +139,5 @@
       warn: no
     register: vpn_service
 - debug: var=vpn_service.stdout_lines
+
+- include_tasks: "users.yaml"
