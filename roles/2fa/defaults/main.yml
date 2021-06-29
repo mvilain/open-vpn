@@ -6,14 +6,14 @@ common_packages:
   - mosh
 
 Debian_packages:
-  - apt-transport-https
-  - dnsutils
-  - iptables
+#  - apt-transport-https
+#  - dnsutils
+#  - iptables
   - libpam-google-authenticator
 
 RedHat_packages:
-  - iproute
-  - bind-utils
-  - tar 
-  - firewalld
+#  - iproute
+#  - bind-utils
+#  - tar
+#  - firewalld
   - google-authenticator
