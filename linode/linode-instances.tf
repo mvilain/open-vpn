@@ -35,121 +35,129 @@
 
 module "lin_vpn_centos7" {
   source   = "./terraform-modules/terraform-linode-instance"
-
   password  = random_password.linode_root_pass.result
   ssh_key   = chomp(tls_private_key.linode_ssh_key.public_key_openssh)
   domain    = var.linode_domain
+  region    = "ca-central"
+
   image     = "linode/centos7"
   type      = "g6-nanode-1"
   script    = linode_stackscript.rhel7.id
-  label     = "vpn7"
+  label     = "vpn7tor"
 }
 module "lin_vpn_centos8" {
   source   = "./terraform-modules/terraform-linode-instance"
-
   password  = random_password.linode_root_pass.result
   ssh_key   = chomp(tls_private_key.linode_ssh_key.public_key_openssh)
   domain    = var.linode_domain
+  region    = "eu-west"
+
   image     = "linode/centos8"
   type      = "g6-nanode-1"
   script    = linode_stackscript.rhel8.id
-  label     = "vpn8"
+  label     = "vpn8lon"
 }
-
 
 
 module "lin_vpn_debian9" {
   source   = "./terraform-modules/terraform-linode-instance"
-
   password  = random_password.linode_root_pass.result
   ssh_key   = chomp(tls_private_key.linode_ssh_key.public_key_openssh)
   domain    = var.linode_domain
+  region    = "us-central"
+
   image     = "linode/debian9"
   type      = "g6-nanode-1"
   script    = linode_stackscript.debian.id
-  label     = "vpn9"
+  label     = "vpn9dfw"
 }
 module "lin_vpn_debian10" {
   source   = "./terraform-modules/terraform-linode-instance"
-
   password  = random_password.linode_root_pass.result
   ssh_key   = chomp(tls_private_key.linode_ssh_key.public_key_openssh)
   domain    = var.linode_domain
+  region    = "us-east"
+
   image     = "linode/debian10"
   type      = "g6-nanode-1"
   script    = linode_stackscript.debian.id
-  label     = "vpn10"
+  label     = "vpn10nj"
 }
 
 
+#module "lin_vpn_fedora32" {
+#  source   = "./terraform-modules/terraform-linode-instance"
+#  password  = random_password.linode_root_pass.result
+#  ssh_key   = chomp(tls_private_key.linode_ssh_key.public_key_openssh)
+#  domain    = var.linode_domain
+#  region    = "us-west"
+#
+#  image     = "linode/fedora32"
+#  type      = "g6-nanode-1"
+#  script    = linode_stackscript.fedora.id
+#  label     = "vpn32"
+#}
+#module "lin_vpn_fedora33" {
+#  source   = "./terraform-modules/terraform-linode-instance"
+#  password  = random_password.linode_root_pass.result
+#  ssh_key   = chomp(tls_private_key.linode_ssh_key.public_key_openssh)
+#  domain    = var.linode_domain
+#  region    = "us-west"
+#
+#  image     = "linode/fedora33"
+#  type      = "g6-nanode-1"
+#  script    = linode_stackscript.fedora.id
+#  label     = "vpn33"
+#}
+#module "lin_vpn_fedora34" {
+#  source   = "./terraform-modules/terraform-linode-instance"
+#  password  = random_password.linode_root_pass.result
+#  ssh_key   = chomp(tls_private_key.linode_ssh_key.public_key_openssh)
+#  domain    = var.linode_domain
+#  region    = "us-west"
+#
+#  image     = "linode/fedora34"
+#  type      = "g6-nanode-1"
+#  script    = linode_stackscript.fedora.id
+#  label     = "vpn34"
+#}
 
-module "lin_vpn_fedora32" {
-  source   = "./terraform-modules/terraform-linode-instance"
 
-  password  = random_password.linode_root_pass.result
-  ssh_key   = chomp(tls_private_key.linode_ssh_key.public_key_openssh)
-  domain    = var.linode_domain
-  image     = "linode/fedora32"
-  type      = "g6-nanode-1"
-  script    = linode_stackscript.fedora.id
-  label     = "vpn32"
-}
-module "lin_vpn_fedora33" {
-  source   = "./terraform-modules/terraform-linode-instance"
-
-  password  = random_password.linode_root_pass.result
-  ssh_key   = chomp(tls_private_key.linode_ssh_key.public_key_openssh)
-  domain    = var.linode_domain
-  image     = "linode/fedora33"
-  type      = "g6-nanode-1"
-  script    = linode_stackscript.fedora.id
-  label     = "vpn33"
-}
-module "lin_vpn_fedora34" {
-  source   = "./terraform-modules/terraform-linode-instance"
-
-  password  = random_password.linode_root_pass.result
-  ssh_key   = chomp(tls_private_key.linode_ssh_key.public_key_openssh)
-  domain    = var.linode_domain
-  image     = "linode/fedora34"
-  type      = "g6-nanode-1"
-  script    = linode_stackscript.fedora.id
-  label     = "vpn34"
-}
-
-
-module "lin_vpn_rocky8" {
-  source   = "./terraform-modules/terraform-linode-instance"
-
-  password  = random_password.linode_root_pass.result
-  ssh_key   = chomp(tls_private_key.linode_ssh_key.public_key_openssh)
-  domain    = var.linode_domain
-  image     = "linode/rocky8"
-  type      = "g6-nanode-1"
-  script    = linode_stackscript.rhel8.id
-  label     = "vpn-r"
-}
+#module "lin_vpn_rocky8" {
+#  source   = "./terraform-modules/terraform-linode-instance"
+#  password  = random_password.linode_root_pass.result
+#  ssh_key   = chomp(tls_private_key.linode_ssh_key.public_key_openssh)
+#  domain    = var.linode_domain
+#  region    = "us-west"
+#
+#  image     = "linode/rocky8"
+#  type      = "g6-nanode-1"
+#  script    = linode_stackscript.rhel8.id
+#  label     = "vpn-r"
+#}
 
 
 module "lin_vpn_ubuntu18" {
   source   = "./terraform-modules/terraform-linode-instance"
-
   password  = random_password.linode_root_pass.result
   ssh_key   = chomp(tls_private_key.linode_ssh_key.public_key_openssh)
   domain    = var.linode_domain
+  region    = "us-southeast"
+
   image     = "linode/ubuntu18.04"
   type      = "g6-nanode-1"
   script    = linode_stackscript.ubuntu.id
-  label     = "vpn18"
+  label     = "vpn18atl"
 }
 module "lin_vpn_ubuntu20" {
   source   = "./terraform-modules/terraform-linode-instance"
-
   password  = random_password.linode_root_pass.result
   ssh_key   = chomp(tls_private_key.linode_ssh_key.public_key_openssh)
   domain    = var.linode_domain
+  region    = "us-west"
+
   image     = "linode/ubuntu20.04"
   type      = "g6-nanode-1"
   script    = linode_stackscript.ubuntu.id
-  label     = "vpn20"
+  label     = "vpn20sfo"
 }
