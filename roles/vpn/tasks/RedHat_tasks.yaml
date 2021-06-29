@@ -16,6 +16,8 @@
   loop:
     - "{{ RedHat_packages }}"
 
+# 6/28/21 fedora32 has connectivity issue with it's repos. 
+# policycoreutils-python-utils loads exceedingly slowly on f32
 - name: selinux package
   block:
   - package:
