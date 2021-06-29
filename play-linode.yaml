@@ -11,8 +11,7 @@
   roles:
     - vpn
 
-
-- hosts: ubuntu debian
+- hosts: ubuntu_lin debian_lin
   become: true
   roles:
     - 2fa
