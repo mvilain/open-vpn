@@ -1,5 +1,5 @@
-# /etc/openvpn/server/server.conf
-# *** {{ ansible_managed }} ***
+# /etc/openvpn/server/server.conf *** {{ ansible_managed }} ***
+
 {% for ipv4 in ansible_facts.all_ipv4_addresses %}
   {%- if not ipv4|regex_search('^(10\.|172\.1[6789]\.|172\.2[0-9]\.|172\.3[01]\.|192\.168xxx)') %}
 local {{ ipv4 }}
@@ -48,11 +48,11 @@ user nobody
 group {{ nobody_group_id }}
 persist-key
 persist-tun
-{% if openvpn_nolog -%}
-verb 0
-{% else %}
+{% if openvpn_log -%}
 log-append /var/log/openvpn.log
-verb 1
+verb 3
+{% else %}
+verb 0
 {% endif %}
 crl-verify crl.pem
 {% if openvpn_protocol == 'udp' %}
