@@ -1,5 +1,7 @@
 ---
 # defaults file for vpn
+# file is encrypted with Ansible vault
+# https://docs.ansible.com/ansible/latest/user_guide/vault.html
 
 vpn_packages:
   - wget
@@ -15,7 +17,9 @@ easy_rsa_cert_expire: 3650
 openvpn_installer: https://raw.githubusercontent.com/Nyr/openvpn-install/master/openvpn-install.sh
 openvpn_port: 1194
 openvpn_protocol: udp    # udp|tcp
-openvpn_nolog: false
+openvpn_log: false
+openvpn_user: openvpn
+openvpn_password: "{{ 'openvpn' | password_hash('sha512') }}"
 
 Debian_packages:
   - apt-transport-https
