@@ -1,3 +1,0 @@
-# group_vars for vpn servers group
----
-group_vars: "fedora_group"

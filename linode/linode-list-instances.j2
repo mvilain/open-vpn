@@ -1,66 +1,66 @@
 # vpn demo inventory using linode and linode-list-instances.py
 
-[alma]
+[alma_lin]
 {% for index in alma -%}
 {{ index.name }} ansible_host={{ index.public_ip }} # {{ index.dns }} {{ index.id }}
 {% endfor %}
 
-[centos]
+[centos_lin]
 {% for index in centos -%}
 {{ index.name }} ansible_host={{ index.public_ip }} # {{ index.dns }} {{ index.id }}
 {% endfor %}
 
-[debian]
+[debian_lin]
 {% for index in debian -%}
 {{ index.name }} ansible_host={{ index.public_ip }} # {{ index.dns }} {{ index.id }}
 {% endfor %}
 
-[rocky]
+[rocky_lin]
 {% for index in rocky -%}
 {{ index.name }} ansible_host={{ index.public_ip }} # {{ index.dns }} {{ index.id }}
 {% endfor %}
 
-[fedora]
+[fedora_lin]
 {% for index in fedora -%}
 {{ index.name }} ansible_host={{ index.public_ip }} # {{ index.dns }} {{ index.id }}
 {% endfor %}
 
-[ubuntu]
+[ubuntu_lin]
 {% for index in ubuntu -%}
 {{ index.name }} ansible_host={{ index.public_ip }} # {{ index.dns }} {{ index.id }}
 {% endfor %}
 
-[unk]
+[unk_lin]
 {% for index in unk -%}
 {{ index.name }} ansible_host={{ index.public_ip }} # {{ index.dns }} {{ index.id }}
 {% endfor %}
 
-[alma:vars]
+[alma_lin:vars]
 ansible_ssh_user=root
 ansible_ssh_private_key_file=./linode/id_rsa
 ansible_python_interpreter=/usr/libexec/platform-python
 
-[centos:vars]
+[centos_lin:vars]
 ansible_ssh_user=root
 ansible_ssh_private_key_file=./linode/id_rsa
 ansible_python_interpreter=/usr/libexec/platform-python
 
-[debian:vars]
+[debian_lin:vars]
 ansible_ssh_user=root
 ansible_ssh_private_key_file=./linode/id_rsa
 ansible_python_interpreter=/usr/bin/python3
 
-[fedora:vars]
+[fedora_lin:vars]
 ansible_ssh_user=root
 ansible_ssh_private_key_file=./linode/id_rsa
 ansible_python_interpreter=/usr/bin/python3
 
-[rocky:vars]
+[rocky_lin:vars]
 ansible_ssh_user=root
 ansible_ssh_private_key_file=./linode/id_rsa
 ansible_python_interpreter=/usr/libexec/platform-python
 
-[ubuntu:vars]
+[ubuntu_lin:vars]
 ansible_ssh_user=root
 ansible_ssh_private_key_file=./linode/id_rsa
 ansible_python_interpreter=/usr/bin/python3

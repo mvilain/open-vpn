@@ -1,4 +1,4 @@
-# main vpn playbook: site.yaml
+# main Vagrant vpn playbook: site.yaml
 ---
 - hosts: all
   become: true
@@ -6,7 +6,7 @@
   roles:
     - vpn
 
-- hosts: ubuntu_group:debian_group
+- hosts: ubuntu_vag:debian_vag
   become: true
   roles:
     - 2fa

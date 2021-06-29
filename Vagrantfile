@@ -39,7 +39,7 @@ Vagrant.configure("2") do |config|
     SHELL
     a8.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.playbook = "site.yaml"
+      ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
       # ansible.verbose = "v"
       # ansible.raw_arguments = [""]
@@ -58,7 +58,7 @@ Vagrant.configure("2") do |config|
     SHELL
     c7.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.playbook = "site.yaml"
+      ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
       # ansible.verbose = "vvv"
     end
@@ -78,7 +78,7 @@ Vagrant.configure("2") do |config|
     SHELL
     c8.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.playbook = "site.yaml"
+      ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
     end
   end
@@ -97,7 +97,7 @@ Vagrant.configure("2") do |config|
     SHELL
     r8.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.playbook = "site.yaml"
+      ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
     end
   end
@@ -114,7 +114,7 @@ Vagrant.configure("2") do |config|
     SHELL
     d9.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.playbook = "site.yaml"
+      ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
     end
   end
@@ -130,7 +130,7 @@ Vagrant.configure("2") do |config|
     SHELL
     d10.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.playbook = "site.yaml"
+      ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
     end
   end
@@ -148,7 +148,7 @@ Vagrant.configure("2") do |config|
     SHELL
     f32.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.playbook = "site.yaml"
+      ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
     end
   end
@@ -163,7 +163,7 @@ Vagrant.configure("2") do |config|
     SHELL
     f33.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.playbook = "site.yaml"
+      ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
     end
   end
@@ -178,7 +178,7 @@ Vagrant.configure("2") do |config|
     SHELL
     f34.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.playbook = "site.yaml"
+      ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
     end
   end
@@ -193,7 +193,7 @@ Vagrant.configure("2") do |config|
     SHELL
     u18.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.playbook = "site.yaml"
+      ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
     end
   end
@@ -207,7 +207,7 @@ Vagrant.configure("2") do |config|
     SHELL
     u20.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
-      ansible.playbook = "site.yaml"
+      ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
     end
   end

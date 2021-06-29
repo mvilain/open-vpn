@@ -1,0 +1,3 @@
+# group_vars debian_vag for vagrant vpn servers
+---
+group_vars: "debian_vag"

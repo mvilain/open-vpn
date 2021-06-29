@@ -1,31 +1,31 @@
 # open-vpn demo inventory
 
-[centos_group]
+[centos_vag]
 c7 ansible_host=192.168.10.107
 
-[centos8_group]
+[centos8_vag]
 c8 ansible_host=192.168.10.108
 a8 ansible_host=192.168.10.188
 r8 ansible_host=192.168.10.189
 
-[debian_group]
+[debian_vag]
 d9 ansible_host=192.168.10.209
 d10 ansible_host=192.168.10.210
 
 # requires python3.5 installed prior to running ansible
 # and setting ansible_python_interpreter=/usr/bin/python3 below
-[fedora_group]
+[fedora_vag]
 f32 ansible_host=192.168.10.132
 f33 ansible_host=192.168.10.133
 f34 ansible_host=192.168.10.134
 
 # requires python3 installed prior to running ansible
 # and setting ansible_python_interpreter=/usr/bin/python3 below
-[ubuntu_group]
+[ubuntu_vag]
 u18 ansible_host=192.168.10.118
 u20 ansible_host=192.168.10.120
 
-[rhel_group]
+[rhel_vag]
 c8 ansible_host=192.168.10.108
 a8 ansible_host=192.168.10.188
 r8 ansible_host=192.168.10.189
@@ -35,28 +35,28 @@ f34 ansible_host=192.168.10.134
 
 
 [all:children]
-centos_group
-centos8_group
-debian_group
-fedora_group
-ubuntu_group
+centos_vag
+centos8_vag
+debian_vag
+fedora_vag
+ubuntu_vag
 
 # centos6+7 uses python2 for ansible interpeter
-[centos_group:vars]
+[centos_vag:vars]
 ansible_python_interpreter=/usr/bin/python
 
 # centos8 uses python3 for ansible interpeter
-[centos8_group:vars]
+[centos8_vag:vars]
 ansible_python_interpreter=/usr/libexec/platform-python
 
-[debian_group:vars]
+[debian_vag:vars]
 ansible_python_interpreter=/usr/bin/python3
 
 # https://docs.ansible.com/ansible/latest/reference_appendices/python_3_support.html
-[fedora_group:vars]
+[fedora_vag:vars]
 ansible_python_interpreter=/usr/bin/python3
 
-[ubuntu_group:vars]
+[ubuntu_vag:vars]
 ansible_python_interpreter=/usr/bin/python3
 
 [all:vars]
