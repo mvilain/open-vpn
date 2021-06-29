@@ -1,0 +1,51 @@
+---
+# create and manage users file for vpn
+
+# https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html#hash-filters
+- name: create user
+  block:
+  - user:
+      name: '{{ openvpn_user }}'
+      comment: 'OpenVPN user'
+      shell: /bin/bash
+      generate_ssh_key: yes
+      ssh_key_bits: 2048
+      ssh_key_file: .ssh/id_rsa
+      password: "{{ openvpn_password }}"
+    register: add_user
+    when: ansible_os_family == "Debian"
+  - user:
+      name: '{{ openvpn_user }}'
+      comment: 'OpenVPN user'
+      shell: /bin/bash
+      groups: wheel
+      generate_ssh_key: yes
+      ssh_key_bits: 2048
+      ssh_key_file: .ssh/id_rsa
+      password: "{{ openvpn_password }}"
+    register: add_user
+    when: ansible_os_family == "RedHat"
+- debug: var=add_user
+
+- name: fetch user ssh keys
+  fetch:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    flat: true
+  loop:
+    - {src: "/home/{{openvpn_user}}/.ssh/id_rsa", 
+      dest: "./client-{{ inventory_hostname }}.id_rsa" }
+    - {src: "/home/{{openvpn_user}}/.ssh/id_rsa.pub", 
+      dest: "./client-{{ inventory_hostname }}.id_rsa.pub" }
+  register: fetch_user
+#- debug: var=fetch_user
+
+- name: add user to sudoers
+  copy:
+    dest: "/etc/sudoers.d/{{ openvpn_user }}"
+    content: "{{ openvpn_user }} ALL = NOPASSWD: ALL"
+    owner: root
+    group: root
+    mode: "0440"
+  register: user_sudoer
+- debug: var=user_sudoer
