@@ -23,11 +23,11 @@
   - assert:
       that: "ansible_version.full is version_compare('2.8.12', '>=')"
       fail_msg: "You must update Ansible to at least ansible 2.8.12 to use this role."
-      success_msg: "ansible V{{ ansible_version.full }} is OK"
+#      success_msg: "ansible V{{ ansible_version.full }} is OK"
   - assert:
       that: not tun_exists.failed
       fail_msg: "The system does not have the TUN device available."
-      success_msg: "/dev/net/tun exists"
+#      success_msg: "/dev/net/tun exists"
 #- debug: var=ansible_version.full
 
 
