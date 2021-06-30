@@ -49,19 +49,6 @@
   register: auth_user
 #- debug: var=auth_user
 
-#- name: fetch user ssh keys
-#  fetch:
-#    src: "{{ item.src }}"
-#    dest: "{{ item.dest }}"
-#    flat: true
-#  loop:
-#    - {src: "/home/{{openvpn_user}}/.ssh/id_rsa", 
-#      dest: "./client-{{ inventory_hostname }}.id_rsa" }
-#    - {src: "/home/{{openvpn_user}}/.ssh/id_rsa.pub", 
-#      dest: "./client-{{ inventory_hostname }}.id_rsa.pub" }
-#  register: fetch_user
-#- debug: var=fetch_user
-
 - name: add user to sudoers
   copy:
     dest: "/etc/sudoers.d/{{ openvpn_user }}"
