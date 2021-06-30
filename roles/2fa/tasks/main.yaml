@@ -17,9 +17,9 @@
   - assert:
       that: "ansible_version.full is version_compare('2.8.12', '>=')"
       fail_msg: "You must update Ansible to at least ansible 2.8.12 to use this role."
-      success_msg: "ansible V{{ ansible_version.full }} is OK"
-  - debug: var=group_vars
-#- debug: var=ansible_version.full
+#  - debug: var=ansible_version.full
+- debug: var=group_vars
+
 
 # since Google Authenticator's package is named differently
 # depending on the distro, it's package is installed here
