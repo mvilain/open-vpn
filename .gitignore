@@ -21,6 +21,7 @@ __pycache__/
 
 # Crash log files
 crash.log
+.vault_pass.txt
 terraform
 .DS_Store
 .htaccess
