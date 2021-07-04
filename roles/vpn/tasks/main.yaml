@@ -98,6 +98,11 @@
     - defaults.yaml
 - debug: var=group_vars
 
+# encrypted with ansible vault
+#      ansible-vault encrypt --ask-vault-pass vars/vault.yaml
+# playbook must ask for vault password or use a password file
+- include_vars: vars/vault.yaml
+
 - include_tasks: "{{ ansible_os_family }}_tasks.yaml"
 
 - name: Install vpn packages (this may take a while)

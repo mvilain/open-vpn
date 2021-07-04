@@ -19,7 +19,10 @@ openvpn_port: 1194
 openvpn_protocol: udp    # udp|tcp
 openvpn_log: false
 openvpn_user: openvpn
-openvpn_password: "{{ 'openvpn' | password_hash('sha512') }}"
+
+# use openssl 1.1k (from brew on MacOS or epel on CentOS)
+# /usr/local/Cellar/openssl\@1.1/1.1.1k/bin/openssl passwd -5 PASSWORD
+#openvpn_password: "$5$5t7eD1A44k6p7sow$FjjHm5SnvQYZzEX4OoKQVMPww3Rc5b24b85PSKiY6r6"
 
 Debian_packages:
   - apt-transport-https

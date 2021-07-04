@@ -23,17 +23,15 @@ __pycache__/
 crash.log
 terraform
 .DS_Store
+.htaccess
+htpasswd
+account.json
+.vscode
+.idea/
 
 # Module directory and lock file
 .terraform/
 .terraform.lock.hcl
-
-# Crash log files
-crash.log
-
-account.json
-.vscode
-.idea/
 
 # Ignore any .tfvars files that are generated automatically for each Terraform run. Most
 # .tfvars files are managed as part of configuration and so should be included in

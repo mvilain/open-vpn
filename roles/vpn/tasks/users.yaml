@@ -1,7 +1,7 @@
 ---
 # create and manage users file for vpn
 
-# https://docs.ansible.com/ansible/latest/user_guide/playbooks_filters.html#hash-filters
+# NOTE: vars/vault.yaml contains the openvpn_password variable and is encrypted with vault
 - name: create user
   block:
   - user:
@@ -24,7 +24,7 @@
       generate_ssh_key: yes
       ssh_key_bits: 2048
       ssh_key_file: .ssh/id_rsa
-      password: "{{ openvpn_password }}"
+      password: "{{ openvpn_password | password_hash('sha512') }}"
     register: add_rhel_user
     when: ansible_os_family == "RedHat"
 
