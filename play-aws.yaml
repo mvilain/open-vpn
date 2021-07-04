@@ -1,6 +1,6 @@
-# playbook for vpn server hosts
+# playbook for vpn server hosts on AWS
 # this will install both roles, then run the handlers for both roles
-# ansible should pull variables from group_vars/vpn anyway
+#    ansible-playbook play-aws.yaml --vault-password-file ~/.vault_pass.txt
 ---
 - hosts: all
   vars:

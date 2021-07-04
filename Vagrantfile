@@ -7,10 +7,6 @@ Vagrant.configure("2") do |config|
   # config.vm.network 'forwarded_port', guest: 80, host: 8080
   config.vm.synced_folder '.', '/vagrant', disabled: true
   config.ssh.insert_key = false
-  # 6/14/21 https://github.com/hashicorp/vagrant/issues/8204 export SSH_AUTH_SOCK=""
-  # remove config.ssh.{username,password} and set .ssh/config AddKeysToAgent no
-  #config.ssh.username = 'vagrant'
-  #config.ssh.password = 'vagrant'
   config.vm.boot_timeout = 120
   config.vm.provider :virtualbox do |vb|
     #vb.gui = true
@@ -41,8 +37,8 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
+      ansible.vault_password_file = ".vault_pass.txt"
       # ansible.verbose = "v"
-      # ansible.raw_arguments = [""]
     end
   end
 
@@ -60,7 +56,8 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
-      # ansible.verbose = "vvv"
+      ansible.vault_password_file = ".vault_pass.txt"
+      # ansible.verbose = "v"
     end
   end
   
@@ -80,6 +77,8 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
+      ansible.vault_password_file = ".vault_pass.txt"
+      # ansible.verbose = "v"
     end
   end
 
@@ -99,6 +98,8 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
+      ansible.vault_password_file = ".vault_pass.txt"
+      # ansible.verbose = "v"
     end
   end
 
@@ -116,6 +117,8 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
+      ansible.vault_password_file = ".vault_pass.txt"
+      # ansible.verbose = "v"
     end
   end
 
@@ -132,6 +135,8 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
+      ansible.vault_password_file = ".vault_pass.txt"
+      # ansible.verbose = "v"
     end
   end
 
@@ -155,6 +160,8 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
+      ansible.vault_password_file = ".vault_pass.txt"
+      # ansible.verbose = "v"
     end
   end
   
@@ -170,6 +177,8 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
+      ansible.vault_password_file = ".vault_pass.txt"
+      # ansible.verbose = "v"
     end
   end
   
@@ -185,6 +194,8 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
+      ansible.vault_password_file = ".vault_pass.txt"
+      # ansible.verbose = "v"
     end
   end
 
@@ -200,6 +211,8 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
+      ansible.vault_password_file = ".vault_pass.txt"
+      # ansible.verbose = "v"
     end
   end
 
@@ -214,6 +227,8 @@ Vagrant.configure("2") do |config|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
+      ansible.vault_password_file = ".vault_pass.txt"
+      # ansible.verbose = "v"
     end
   end
 

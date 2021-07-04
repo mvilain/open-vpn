@@ -1,4 +1,5 @@
 # main Vagrant vpn playbook: site.yaml
+#    ansible-playbook play-vagrant.yaml --vault-password-file ~/.vault_pass.txt
 ---
 - hosts: all
   become: true

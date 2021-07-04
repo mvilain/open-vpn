@@ -11,6 +11,11 @@ Requirements
 
 vagrant requires a public/private key pair to login to the vagrant boxes. The known, insecure private key is typically replaced by a generated key as part of the boot process.  But the known key can be used to create testing instances.  The location of the known, insecure key is specified in the inventory file.  If ssh-agent has been enabled (e.g. `AddKeysToAgent yes` is set in the `.ssh/config file`), some vagrant boxes won't be able to connect and authenticate. *Do not turn on this feature if you expect to use Vagrant.*
 
+This role encrypts the openvpn_password variable in vars/vault.yaml using Ansible vault.
+The password for this file is stored in a gitignored file .vault_pass.txt.  Any of the playbooks will required to run with the `--vault-password-file` parameter:
+
+    ansible-playbook -i inventory\_vagrant play-vagrant.yaml --vault-password-file ~/.vault_pass.txt
+_
 CentOS 7 -- ansible must run under python 2.7 as the python3 version available is to old; the ansible\_python\_interpreter should be set to /usr/bin/python in the inventory file
 
 CentOS 8, AlmaLinux 8 and RockyLinux 8 -- ansible needs to be installed prior on the client to install all python3 modules and libraries; the ansible\_python\_interpreter should be set to /usr/libexec/platform-python in the inventory file

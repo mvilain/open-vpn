@@ -2,11 +2,10 @@
 # this will install both roles, then run the handlers for both roles
 
 # https://docs.vpn.com/ee/administration/environment_variables.html
+
+#    ansible-playbook play-linode.yaml --vault-password-file ~/.vault_pass.txt
 ---
 - hosts: all
-  vars:
-#  vars_files:
-#    - group_vars/vpn
   become: true
   roles:
     - vpn
