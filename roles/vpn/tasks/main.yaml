@@ -101,7 +101,9 @@
 # encrypted with ansible vault
 #      ansible-vault encrypt --ask-vault-pass vars/vault.yaml
 # playbook must ask for vault password or use a password file
-- include_vars: vars/vault.yaml
+# variable is used in users.yaml for openvpn account password
+- name: Vault encrypted variables
+  include_vars: vars/vault.yaml
 
 - include_tasks: "{{ ansible_os_family }}_tasks.yaml"
 

@@ -18,11 +18,11 @@ openvpn_installer: https://raw.githubusercontent.com/Nyr/openvpn-install/master/
 openvpn_port: 1194
 openvpn_protocol: udp    # udp|tcp
 openvpn_log: false
-openvpn_user: openvpn
 
-# use openssl 1.1k (from brew on MacOS or epel on CentOS)
-# /usr/local/Cellar/openssl\@1.1/1.1.1k/bin/openssl passwd -5 PASSWORD
-#openvpn_password: "$5$5t7eD1A44k6p7sow$FjjHm5SnvQYZzEX4OoKQVMPww3Rc5b24b85PSKiY6r6"
+# openssl 1.1k (from brew on MacOS or epel on CentOS)
+# /usr/local/Cellar/openssl\@1.1/1.1.1k/bin/openssl passwd -6 PASSWORD
+#openvpn_password: "$6$wiUAzfNpb4dUdl7L$2m8piPft.OuVMQPn.KrNJJqHKH8YtyQn.3mRHacvNOFmf46o55ewJxUaYVFfRE.pCM/qHYptQokEP6KKKDWfE0"
+openvpn_user: openvpn
 
 Debian_packages:
   - apt-transport-https

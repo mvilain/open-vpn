@@ -1,7 +1,11 @@
 ---
 # create and manage users file for vpn
 
-# NOTE: vars/vault.yaml contains the openvpn_password variable and is encrypted with vault
+# NOTE: vars/vault.yaml contains the openvpn_password variable
+# it is encrypted with vault using .vault_pass.txt for the password
+#
+# ansible.cfg defines vault_password_file to point to .vault_pass.txt
+# so that running ansible-playbook doesn't require specifying --vault-pass-file
 - name: create user
   block:
   - user:
@@ -12,7 +16,7 @@
       generate_ssh_key: yes
       ssh_key_bits: 2048
       ssh_key_file: .ssh/id_rsa
-      password: "{{ openvpn_password }}"
+      password: "{{ openvpn_password | password_hash('sha512') }}"
     register: add_deb_user
     when: ansible_os_family == "Debian"
   - user:

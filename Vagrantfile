@@ -4,7 +4,6 @@
 # Vagrantfile for vpn
 
 Vagrant.configure("2") do |config|
-  # config.vm.network 'forwarded_port', guest: 80, host: 8080
   config.vm.synced_folder '.', '/vagrant', disabled: true
   config.ssh.insert_key = false
   config.vm.boot_timeout = 120
@@ -27,18 +26,18 @@ Vagrant.configure("2") do |config|
     a8.ssh.insert_key = false
     a8.vm.network 'private_network', ip: '192.168.10.188'
     a8.vm.hostname = 'a8'
-    a8.vm.provision "shell", inline: <<-SHELL
-      dnf config-manager --set-enabled powertools
-      dnf makecache
-      dnf install -y python3
-      alternatives --set python /usr/bin/python3
-    SHELL
+#     a8.vm.provision "shell", inline: <<-SHELL
+#       dnf config-manager --set-enabled powertools
+#       dnf makecache
+#       dnf install -y python3
+#       alternatives --set python /usr/bin/python3
+#     SHELL
     a8.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
-      ansible.vault_password_file = ".vault_pass.txt"
-      # ansible.verbose = "v"
+      #ansible.vault_password_file = ".vault_pass.txt"
+      #ansible.verbose = "v"
     end
   end
 
@@ -48,16 +47,15 @@ Vagrant.configure("2") do |config|
     c7.ssh.insert_key = false
     c7.vm.network 'private_network', ip: '192.168.10.107'
     c7.vm.hostname = 'c7'
-    # ensure ip command installed w/ iproute
-    c7.vm.provision "shell", inline: <<-SHELL
-      yum install -y python libselinux-python iproute
-    SHELL
+#     c7.vm.provision "shell", inline: <<-SHELL
+#       yum install -y python libselinux-python iproute
+#     SHELL
     c7.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
-      ansible.vault_password_file = ".vault_pass.txt"
-      # ansible.verbose = "v"
+      #ansible.vault_password_file = ".vault_pass.txt"
+      #ansible.verbose = "v"
     end
   end
   
@@ -67,18 +65,18 @@ Vagrant.configure("2") do |config|
     c8.ssh.insert_key = false
     c8.vm.network 'private_network', ip: '192.168.10.108'
     c8.vm.hostname = 'c8'
-    c8.vm.provision "shell", inline: <<-SHELL
-      dnf config-manager --set-enabled powertools
-      dnf makecache
-      dnf install -y python3
-      alternatives --set python /usr/bin/python3
-    SHELL
+#     c8.vm.provision "shell", inline: <<-SHELL
+#       dnf config-manager --set-enabled powertools
+#       dnf makecache
+#       dnf install -y python3
+#       alternatives --set python /usr/bin/python3
+#     SHELL
     c8.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
-      ansible.vault_password_file = ".vault_pass.txt"
-      # ansible.verbose = "v"
+      #ansible.vault_password_file = ".vault_pass.txt"
+      #ansible.verbose = "v"
     end
   end
 
@@ -88,18 +86,18 @@ Vagrant.configure("2") do |config|
     r8.ssh.insert_key = false
     r8.vm.network 'private_network', ip: '192.168.10.189'
     r8.vm.hostname = 'r8'
-    r8.vm.provision "shell", inline: <<-SHELL
-      dnf config-manager --set-enabled powertools
-      dnf makecache
-      dnf install -y python3
-      alternatives --set python /usr/bin/python3
-    SHELL
+#     r8.vm.provision "shell", inline: <<-SHELL
+#       dnf config-manager --set-enabled powertools
+#       dnf makecache
+#       dnf install -y python3
+#       alternatives --set python /usr/bin/python3
+#     SHELL
     r8.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
-      ansible.vault_password_file = ".vault_pass.txt"
-      # ansible.verbose = "v"
+      #ansible.vault_password_file = ".vault_pass.txt"
+      #ansible.verbose = "v"
     end
   end
 
@@ -110,15 +108,15 @@ Vagrant.configure("2") do |config|
     d9.ssh.insert_key = false
     d9.vm.network 'private_network', ip: '192.168.10.209'
     d9.vm.hostname = 'd9'
-    d9.vm.provision "shell", inline: <<-SHELL
-      apt-get install -y apt-transport-https
-    SHELL
+#     d9.vm.provision "shell", inline: <<-SHELL
+#       apt-get install -y apt-transport-https
+#     SHELL
     d9.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
-      ansible.vault_password_file = ".vault_pass.txt"
-      # ansible.verbose = "v"
+      #ansible.vault_password_file = ".vault_pass.txt"
+      #ansible.verbose = "v"
     end
   end
 
@@ -128,15 +126,15 @@ Vagrant.configure("2") do |config|
     d10.ssh.insert_key = false
     d10.vm.network 'private_network', ip: '192.168.10.210'
     d10.vm.hostname = 'd10'
-    d10.vm.provision "shell", inline: <<-SHELL
-      apt-get install -y apt-transport-https
-    SHELL
+#     d10.vm.provision "shell", inline: <<-SHELL
+#       apt-get install -y apt-transport-https
+#     SHELL
     d10.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
-      ansible.vault_password_file = ".vault_pass.txt"
-      # ansible.verbose = "v"
+      #ansible.vault_password_file = ".vault_pass.txt"
+      #ansible.verbose = "v"
     end
   end
 
@@ -154,14 +152,14 @@ Vagrant.configure("2") do |config|
       dnf config-manager --add-repo http://mirror.metrocast.net/fedora/linux/releases/32/Everything/x86_64/os/
       dnf config-manager --add-repo http://mirrors.kernel.org/fedora/releases/32/Everything/x86_64/os/
       dnf config-manager --add-repo https://sjc.edge.kernel.org/fedora-buffet/fedora/linux/releases/32/Everything/x86_64/os/
-      dnf install -y python3
+#       dnf install -y python3
     SHELL
     f32.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
-      ansible.vault_password_file = ".vault_pass.txt"
-      # ansible.verbose = "v"
+      #ansible.vault_password_file = ".vault_pass.txt"
+      #ansible.verbose = "v"
     end
   end
   
@@ -170,15 +168,15 @@ Vagrant.configure("2") do |config|
     f33.ssh.insert_key = false
     f33.vm.network 'private_network', ip: '192.168.10.133'
     f33.vm.hostname = 'f33'
-    f33.vm.provision "shell", inline: <<-SHELL
-      dnf install -y python3
-    SHELL
+#     f33.vm.provision "shell", inline: <<-SHELL
+#       dnf install -y python3
+#     SHELL
     f33.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
-      ansible.vault_password_file = ".vault_pass.txt"
-      # ansible.verbose = "v"
+      #ansible.vault_password_file = ".vault_pass.txt"
+      #ansible.verbose = "v"
     end
   end
   
@@ -187,15 +185,15 @@ Vagrant.configure("2") do |config|
     f34.ssh.insert_key = false
     f34.vm.network 'private_network', ip: '192.168.10.134'
     f34.vm.hostname = 'f34'
-    f34.vm.provision "shell", inline: <<-SHELL
-      dnf install -y python3
-    SHELL
+#     f34.vm.provision "shell", inline: <<-SHELL
+#       dnf install -y python3
+#     SHELL
     f34.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
-      ansible.vault_password_file = ".vault_pass.txt"
-      # ansible.verbose = "v"
+      #ansible.vault_password_file = ".vault_pass.txt"
+      #ansible.verbose = "v"
     end
   end
 
@@ -204,15 +202,15 @@ Vagrant.configure("2") do |config|
     u18.vm.box = "ubuntu/bionic64"
     u18.vm.network 'private_network', ip: '192.168.10.118'
     u18.vm.hostname = 'u18'
-    u18.vm.provision "shell", inline: <<-SHELL
-      apt-get -y install python3
-    SHELL
+#     u18.vm.provision "shell", inline: <<-SHELL
+#       apt-get -y install python3
+#     SHELL
     u18.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
-      ansible.vault_password_file = ".vault_pass.txt"
-      # ansible.verbose = "v"
+      #ansible.vault_password_file = ".vault_pass.txt"
+      #ansible.verbose = "v"
     end
   end
 
@@ -220,15 +218,15 @@ Vagrant.configure("2") do |config|
     u20.vm.box = "ubuntu/focal64"
     u20.vm.network 'private_network', ip: '192.168.10.120'
     u20.vm.hostname = 'u20'
-    u20.vm.provision "shell", inline: <<-SHELL
-      apt-get -y install python3
-    SHELL
+#     u20.vm.provision "shell", inline: <<-SHELL
+#       apt-get -y install python3
+#     SHELL
     u20.vm.provision "ansible" do |ansible|
       ansible.compatibility_mode = "2.0"
       ansible.playbook = "play-vagrant.yaml"
       ansible.inventory_path = "./inventory_vagrant"
-      ansible.vault_password_file = ".vault_pass.txt"
-      # ansible.verbose = "v"
+      #ansible.vault_password_file = ".vault_pass.txt"
+      #ansible.verbose = "v"
     end
   end
 
