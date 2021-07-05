@@ -117,10 +117,10 @@
 - include_tasks: "{{ ansible_os_family }}_services.yaml"
 
 # this is very long, so it's separate for clarity
-- include_tasks: easy-rsa.yaml
+- import_tasks: easy-rsa.yaml
 
 # generate configuration and systemd files
-- include_tasks: gen-configs.yaml
+- import_tasks: gen-configs.yaml
 
 
 - name: build openvpn-iptables.service
@@ -147,4 +147,4 @@
     register: vpn_service
 - debug: var=vpn_service.stdout_lines
 
-- include_tasks: "users.yaml"
+- import_tasks: users.yaml
