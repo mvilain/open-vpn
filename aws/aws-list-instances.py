@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
 # 202105.30MeV
 # uses aws boto3 to crawl through a region's running instances
 # extracts various info
