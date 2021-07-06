@@ -1,6 +1,6 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
 """
-202106.19MeV
+202107.06MeV
 uses aws boto3 to crawl through AWS' marketplace and list instances for
 - centos7 centos8 almalinux (centos8 replacement)
 - debian9 debian10
@@ -30,16 +30,16 @@ PROG = os.path.basename( sys.argv[0] )
 
 # distro and ProductCode for each vpn-supported distros
 DISTROS = dict(
-    alma8    =  '2pag55a9fkn96t01w4zg0hjzx',
+    alma8    =  'be714bpjscoj5uvqz0of5mscl',
     centos7  =  'aw0evgkw8e5c1q413zgy5pjce',
-    centos8  =  'ef6kit54bxdxm5ec5h7921duf',
-    debian9  =  'wa59nhjens2s3nbfqlcjxiyy',
-    debian10 =  'a8to8juz0snuukwdxuz7x3ol8',
+    centos8  =  '47k9ia2igxpcce2bzo8u3kj03',
+    debian9  =  '55q52qvgjfpdj2fpfy9mb1lo4',
+    debian10 =  'auhljmclkudu651zy27rih2x2',
     fedora32 =  '633jhlnyl61qp9ukyefuy0a07',
     fedora33 =  '7qjerp2ue62lxpstjf287pwk9',
     fedora34 =  '4qwehlrxvcsc9mxvcn5sx08zi',
     ubuntu18 =  '3iplms73etrdhxdepv72l6ywj',
-    ubuntu20 =  '9rxhntdy981dz5t3gbzpdd60w'
+    ubuntu20 =  'a8jyynf4hjutohctm41o2z18m'
 )
 
 def parse_arguments(default_region):
