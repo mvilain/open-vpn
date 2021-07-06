@@ -43,12 +43,29 @@ Each Linode is running a nanode-sized Linode in a mix of regions.  The file `lin
 
 ## AWS configuration
 
-### Repo has submodules
+In order to create Linodes which you can use to install and configure OpenVPN, install the Terraform tool on your system, create a Linode account, and obtain an authorization token. This will allow you to use the Terraform model in the `aws` directory to create the following Linodes:
+
+- CentOS 7 and 8
+- Debian 9 and 10
+- Fedora 32, 33, and 34
+- Ubuntu 18.04 and 20.04
+- AlmaLinux 8
+
+Each instance is running a t2.micro instance in the default region set in the AWS CLI's configuration file.  The file `aws-vars.tf` contains the default values for the *pre-existing* AWS DNS domain to which these instances will be added and the default region, if not passed to the terraform module.
+
+As of 6/25/2021, RockyLinux does not have an official AWS AMI. There are two AMIs offered by Supported Images, but they cost 30x/hour to run over CentOS 8 or AlmaLinux.  Wait until the official AMI is released.
+
+
+
+## Repo has submodules
 
 Since this repo has submodules, you'll need to clone it and populate the submodules:
 
     git clone --recurse-submodules https://github.com/mvilain/vpn.git
 
+
+
+## APPENDIX
 
 ### adding submodule to git
 
