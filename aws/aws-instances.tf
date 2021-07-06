@@ -164,34 +164,6 @@ module "vpn_debian10" {
 }
 
 
-
-module "vpn_ubuntu16" {
-  source                 = "./terraform-modules/terraform-aws-ec2-instance"
-
-  name                   = var.aws_ubuntu16_name  # defined in aws-vars.tf
-  ami                    = var.aws_ubuntu16_ami   # defined in aws-vars.tf
-  domain                 = var.aws_domain         # defined in aws-vars.tf
-
-  instance_type          = "t2.medium"
-  instance_count         = 1
-  key_name               = aws_key_pair.vpn_key.key_name
-  monitoring             = true
-  vpc_security_group_ids = [ aws_security_group.vpn_sg.id ]
-  subnet_id              = aws_subnet.vpn_subnet.id
-  tags = {
-    Terraform   = "true"
-    Environment = "vpn"
-    os          = "ubuntu16"
-  }
-  user_data = <<-EOF
-    #!/bin/bash
-    echo "preserve_hostname: false" >> /etc/cloud/cloud.cfg
-
-    apt-get update -y
-    apt-get install -y apt-transport-https python-apt
-  EOF
-}
-
 module "vpn_ubuntu18" {
   source                 = "./terraform-modules/terraform-aws-ec2-instance"
 
