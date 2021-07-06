@@ -27,7 +27,7 @@ module "vpn_alma8" {
   ami                    = var.aws_alma8_ami   # defined in aws-vars.tf
   domain                 = var.aws_domain      # defined in aws-vars.tf
 
-  instance_type          = "t2.medium"
+  instance_type          = "t2.micro"
   instance_count         = 1
   key_name               = aws_key_pair.vpn_key.key_name
   monitoring             = true
@@ -45,7 +45,7 @@ module "vpn_alma8" {
     dnf install -y epel-release
     dnf config-manager --set-enabled powertools
     dnf makecache
-    dnf install -y ansible
+#    dnf install -y ansible
     alternatives --set python /usr/bin/python3
   EOF
 }
@@ -57,7 +57,7 @@ module "vpn_centos7" {
   ami                    = var.aws_centos7_ami   # defined in aws-vars.tf
   domain                 = var.aws_domain      # defined in aws-vars.tf
 
-  instance_type          = "t2.medium"
+  instance_type          = "t2.micro"
   instance_count         = 1
   key_name               = aws_key_pair.vpn_key.key_name
   monitoring             = true
@@ -73,7 +73,7 @@ module "vpn_centos7" {
     echo "preserve_hostname: false" >> /etc/cloud/cloud.cfg
 
     yum install -y epel-release
-    yum install -y ansible
+#    yum install -y ansible
 #    yum install -y python3 libselinux-python3 git
     alternatives --set python /usr/bin/python
   EOF
@@ -86,7 +86,7 @@ module "vpn_centos8" {
   ami                    = var.aws_centos8_ami   # defined in aws-vars.tf
   domain                 = var.aws_domain      # defined in aws-vars.tf
 
-  instance_type          = "t2.medium"
+  instance_type          = "t2.micro"
   instance_count         = 1
   key_name               = aws_key_pair.vpn_key.key_name
   monitoring             = true
@@ -104,7 +104,7 @@ module "vpn_centos8" {
     dnf install -y epel-release
     dnf config-manager --set-enabled powertools
     dnf makecache
-    dnf install -y ansible
+#    dnf install -y ansible
     alternatives --set python /usr/bin/python3
   EOF
 }
@@ -116,7 +116,7 @@ module "vpn_debian9" {
   ami                    = var.aws_debian9_ami   # defined in aws-vars.tf
   domain                 = var.aws_domain        # defined in aws-vars.tf
 
-  instance_type          = "t2.medium"
+  instance_type          = "t2.micro"
   instance_count         = 1
   key_name               = aws_key_pair.vpn_key.key_name
   monitoring             = true
@@ -143,7 +143,7 @@ module "vpn_debian10" {
   ami                    = var.aws_debian10_ami   # defined in aws-vars.tf
   domain                 = var.aws_domain         # defined in aws-vars.tf
 
-  instance_type          = "t2.medium"
+  instance_type          = "t2.micro"
   instance_count         = 1
   key_name               = aws_key_pair.vpn_key.key_name
   monitoring             = true
@@ -171,7 +171,7 @@ module "vpn_ubuntu18" {
   ami                    = var.aws_ubuntu18_ami   # defined in aws-vars.tf
   domain                 = var.aws_domain         # defined in aws-vars.tf
 
-  instance_type          = "t2.medium"
+  instance_type          = "t2.micro"
   instance_count         = 1
   key_name               = aws_key_pair.vpn_key.key_name
   monitoring             = true
@@ -198,7 +198,7 @@ module "vpn_ubuntu20" {
   ami                    = var.aws_ubuntu20_ami   # defined in aws-vars.tf
   domain                 = var.aws_domain         # defined in aws-vars.tf
 
-  instance_type          = "t2.medium"
+  instance_type          = "t2.micro"
   instance_count         = 1
   key_name               = aws_key_pair.vpn_key.key_name
   monitoring             = true
