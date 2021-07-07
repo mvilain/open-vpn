@@ -178,7 +178,17 @@ resource "aws_security_group_rule" "vpn_sgr_ssh_mul_sf" {
   security_group_id = aws_security_group.vpn_sg.id
 }
 
-resource "aws_security_group_rule" "vpn_sgr_ssh_mul_sj" {
+resource "aws_security_group_rule" "vpn_sgr_ssh_mul_sj198" {
+  type              = "ingress"
+  description       = "vpn ssh tor SJ"
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  cidr_blocks       = [ "198.54.134.0/24" ]
+  security_group_id = aws_security_group.vpn_sg.id
+}
+
+resource "aws_security_group_rule" "vpn_sgr_ssh_mul_sj199" {
   type              = "ingress"
   description       = "vpn ssh tor SJ"
   from_port         = 22
