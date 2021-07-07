@@ -3,10 +3,12 @@
 #    ansible-playbook play-aws.yaml --vault-password-file ~/.vault_pass.txt
 ---
 - hosts: all
-  vars:
-  vars_files:
-    - group_vars/vpn
   become: true
 
   roles:
     - role: vpn
+
+- hosts: ubuntu_aws debian_aws
+  become: true
+  roles:
+    - 2fa

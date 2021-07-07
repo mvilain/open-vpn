@@ -1,46 +1,46 @@
 # vpn demo inventory using aws and aws-list-instances.py
 
-[alma]
+[alma_aws]
 {% for index in alma -%}
 {{ index.name }} ansible_host={{ index.public_ip }} # {{ index.dns }} {{ index.avz }} {{ index.ImageID }}
 {% endfor %}
 
-[centos]
+[centos_aws]
 {% for index in centos -%}
 {{ index.name }} ansible_host={{ index.public_ip }} # {{ index.dns }} {{ index.avz }} {{ index.ImageID }}
 {% endfor %}
 
-[debian]
+[debian_aws]
 {% for index in debian -%}
 {{ index.name }} ansible_host={{ index.public_ip }} # {{ index.dns }} {{ index.avz }} {{ index.ImageID }}
 {% endfor %}
 
-[ubuntu]
+[ubuntu_aws]
 {% for index in ubuntu -%}
 {{ index.name }} ansible_host={{ index.public_ip }} # {{ index.dns }} {{ index.avz }} {{ index.ImageID }}
 {% endfor %}
 
-[unk]
+[unk_aws]
 {% for index in unk -%}
 {{ index.name }} ansible_host={{ index.public_ip }} # {{ index.dns }} {{ index.avz }} {{ index.ImageID }}
 {% endfor %}
 
-[alma:vars]
+[alma_aws:vars]
 ansible_ssh_user=ec2-user
-ansible_ssh_private_key_file=./id_rsa
+ansible_ssh_private_key_file=./aws/id_rsa
 ansible_python_interpreter=/usr/libexec/platform-python
 
-[centos:vars]
+[centos_aws:vars]
 ansible_ssh_user=centos
-ansible_ssh_private_key_file=./id_rsa
+ansible_ssh_private_key_file=./aws/id_rsa
 ansible_python_interpreter=/usr/libexec/platform-python
 
-[debian:vars]
+[debian_aws:vars]
 ansible_ssh_user=admin
-ansible_ssh_private_key_file=./id_rsa
+ansible_ssh_private_key_file=./aws/id_rsa
 ansible_python_interpreter=/usr/bin/python3
 
-[ubuntu:vars]
+[ubuntu_aws:vars]
 ansible_ssh_user=ubuntu
-ansible_ssh_private_key_file=./id_rsa
+ansible_ssh_private_key_file=./aws/id_rsa
 ansible_python_interpreter=/usr/bin/python3
