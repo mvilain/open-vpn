@@ -141,8 +141,8 @@ def descr_instances(regionconfig):
     ) 
     # list of dict{Reservations[dict{Group,Instances,OwnerId,ReservationId}], ResponseMetadata}
     # convert into:
-    instances = []       # - list of dict{Instances}
-    instance_id = []
+    instances = []       # list of dict{Instances}
+    instance_id = {}     # dict of AMIs
     for res in response['Reservations']:
         for ins in res['Instances']:
             # add duplicate Tags from list of dict{Key,Value} to Tag_KEY: VALUE
