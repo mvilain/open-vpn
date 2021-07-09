@@ -4,3 +4,4 @@ jinja2
 jmespath
 
 linode_api4
+python-digitalocean
