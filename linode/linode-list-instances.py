@@ -4,7 +4,6 @@
 # extracts various info
 #
 # python3 and the linode_api4 library are required to run this tool
-# uses region defined in awscli's credentials if not specified in REGION
 # credentials file must be present with the region
 # allows for jinja2 templating with -t <TEMPLATE> option
 
@@ -30,7 +29,7 @@ def parse_arguments():
         a namespace with the arguments passed and their values
     """
     parser = argparse.ArgumentParser(
-                description='list running AWS instance information')
+                description='list running linode instance information')
     parser.add_argument('REGION',
                         action="store",
                         help='region to use for running Linode images [default: {}]'.format(DEFAULT_REGION),
@@ -263,12 +262,12 @@ def main():
                 templ_fedora.append(d)
             elif d['os'] == 'rocky8':
                 templ_rocky.append(d)
-            elif d['os'] == 'ubuntu16lts' or d['os'] == 'ubuntu18' or d['os'] == 'ubuntu20':
+            elif d['os'] == 'ubuntu18' or d['os'] == 'ubuntu20':
                 templ_ubuntu.append(d)
             else:
                 templ_unk.append(d)
 
-        # processed the region's AMIs, so fill in Jinja2 template
+        # processed the region's running linodes, so fill in Jinja2 template
         # jinja2 can't deal with lots of variables, so do multiple sections
         if args.template:
             file_loader = jinja2.FileSystemLoader('.')
