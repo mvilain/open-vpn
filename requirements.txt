@@ -5,3 +5,4 @@ jmespath
 
 linode_api4
 python-digitalocean
+digitalocean-inventory

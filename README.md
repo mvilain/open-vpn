@@ -26,20 +26,6 @@ While the vagrant instances install OpenVPN and configure it correctly, attempti
 Note that another OpenVPN client, Viscosity, won't connect to the instances at all. I haven't found a way to review any client connection errors and the log file, when enabled on the instances, reports no connection attempted.  TunnelBlick is much better at telling you what is going on.
 
 
-## Linode configuration
-
-In order to create Linodes which you can use to install and configure OpenVPN, install the Terraform tool on your system, create a Linode account, and obtain an authorization token. This will allow you to use the Terraform model in the `linode` directory to create the following Linodes:
-
-- CentOS 7 and 8
-- Debian 9 and 10
-- Fedora 32, 33, and 34
-- Ubuntu 18.04 and 20.04
-- AlmaLinux 8
-- RockyLinux 8
-
-Each Linode is running a nanode-sized Linode in a mix of regions.  The file `linode-vars.tf` contains the default values for the *pre-existing* Linode DNS domain to which these Linodes will be added and the default region, if not passed to the terraform module.
-
-
 
 ## AWS configuration
 
@@ -56,12 +42,43 @@ Each instance is running a t2.micro instance in the default region set in the AW
 As of 6/25/2021, RockyLinux does not have an official AWS AMI. There are two AMIs offered by Supported Images, but they cost 30x/hour to run over CentOS 8 or AlmaLinux.  Wait until the official AMI is released.
 
 
+## Digital Ocean configuration
+
+In order to create Digital Ocean droplets which you can use to install and configure OpenVPN, install the Terraform tool on your system, create a Digital Ocean account, and obtain an authorization token. This will allow you to use the Terraform model in the `do` directory to create the following droplets:
+
+- CentOS 7 and 8
+- Debian 9 and 10
+- Fedora 32, 33, and 34
+- Ubuntu 18.04 and 20.04
+- AlmaLinux 8
+
+Note that the tool does not work well behind a firewall or VPN. You'll need turn off your VPN to access the Digital Ocean endpoint for better responce.  It *will* work, but accessing the endpoint times out, taking the python tool 2 minutes to return listings of images, regions, sizes, and running droplets.
+
+Digital Ocean has a dynamic inventory tools which can be used to generate ansible inventories.
+
+    https://pypi.org/project/digitalocean-inventory/
+
 
 ## Repo has submodules
 
 Since this repo has submodules, you'll need to clone it and populate the submodules:
 
     git clone --recurse-submodules https://github.com/mvilain/vpn.git
+
+
+
+## Linode configuration
+
+In order to create Linodes which you can use to install and configure OpenVPN, install the Terraform tool on your system, create a Linode account, and obtain an authorization token. This will allow you to use the Terraform model in the `linode` directory to create the following Linodes:
+
+- CentOS 7 and 8
+- Debian 9 and 10
+- Fedora 32, 33, and 34
+- Ubuntu 18.04 and 20.04
+- AlmaLinux 8
+- RockyLinux 8
+
+Each Linode is running a nanode-sized Linode in a mix of regions.  The file `linode-vars.tf` contains the default values for the *pre-existing* Linode DNS domain to which these Linodes will be added and the default region, if not passed to the terraform module.
 
 
 
