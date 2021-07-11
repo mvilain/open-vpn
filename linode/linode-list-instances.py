@@ -192,7 +192,7 @@ def main():
     # display regions
     if args.regions:
         print('{} -- valid regions:'.format(PROG))
-        regions_print(incr=6)
+        regions_print(incr=1)
         return 0
 
     # display types
@@ -216,7 +216,7 @@ def main():
         # validate region (done here b/c don't like output of add_argument choices
         if not valid_region(args.REGION):
             print('{} -- "{}" REGION invalid...valid regions:'.format(PROG,args.REGION))
-            regions_print(incr=6)
+            regions_print(incr=1)
             return 1
 
         paginated_list = descr_instances()

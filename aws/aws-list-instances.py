@@ -97,7 +97,7 @@ def regions_print(incr=5,tab='    '):
     while start < len( valid_regions ):
         print('{}{}'.format(tab,' '.join(valid_regions[start:stop])))
         start = stop
-        stop = stop + 5
+        stop = stop + incr
     return None
 
 def valid_region(region):
