@@ -8,7 +8,7 @@ Note: the instructions for adding 2-Factor Authentication with Google Authentica
 
 [Linode's Stackscript 1](https://cloud.linode.com/stackscripts/1) has many pre-defined functions useful in setting up Linodes.
 
-[Nyr's VPN setup script](https://github.com/Nyr/openvpn-install) is also mentioned.
+[Nyr's VPN setup script](https://raw.githubusercontent.com/Nyr/openvpn-install/master/openvpn-install.sh) is also mentioned.
 
 ## Vagrant configuration
 
@@ -59,14 +59,6 @@ Digital Ocean has a dynamic inventory tools which can be used to generate ansibl
     https://pypi.org/project/digitalocean-inventory/
 
 
-## Repo has submodules
-
-Since this repo has submodules, you'll need to clone it and populate the submodules:
-
-    git clone --recurse-submodules https://github.com/mvilain/vpn.git
-
-
-
 ## Linode configuration
 
 In order to create Linodes which you can use to install and configure OpenVPN, install the Terraform tool on your system, create a Linode account, and obtain an authorization token. This will allow you to use the Terraform model in the `linode` directory to create the following Linodes:
@@ -81,6 +73,14 @@ In order to create Linodes which you can use to install and configure OpenVPN, i
 Each Linode is running a nanode-sized Linode in a mix of regions.  The file `linode-vars.tf` contains the default values for the *pre-existing* Linode DNS domain to which these Linodes will be added and the default region, if not passed to the terraform module.
 
 
+## Repo has submodules
+
+Since this repo has submodules, you'll need to clone it and populate the submodules:
+
+    git clone --recurse-submodules https://github.com/mvilain/vpn.git
+
+
+
 
 ## APPENDIX
 
@@ -88,10 +88,15 @@ Each Linode is running a nanode-sized Linode in a mix of regions.  The file `lin
 
 This creates a HEADless snapshot of the submodule in the main repo.
 
-    cd ~/vpn/linode/terraform-modules
-    git submodule add git@github.com:mvilain/terraform-linode-instance.git
     cd ~/vpn/aws/terraform-modules
     git submodule add git@github.com:mvilain/terraform-aws-ec2-instance.git
+    
+    cd ~/vpn/do/terraform-modules
+    git submodule add git@github.com:mvilain/terraform-digitalocean-droplet.git
+    
+    cd ~/vpn/linode/terraform-modules
+    git submodule add git@github.com:mvilain/terraform-linode-instance.git
+    
     cd ~/vpn/roles/wireguard
     git submodule add git@github.com:mvilain/wireguard.git
 
