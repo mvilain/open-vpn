@@ -9,10 +9,15 @@ terraform {
       version = "~> 3.0"
     }
 
-    linode = {
-      source  = "linode/linode"
-      version = ">= 1.16.0"
-    }
+#    digitalocean = {
+#      source = "digitalocean/digitalocean"
+#      version = "1.22.2"
+#    }
+
+#     linode = {
+#       source  = "linode/linode"
+#       version = ">= 1.16.0"
+#     }
 
     local = {
       source  = "hashicorp/local"
