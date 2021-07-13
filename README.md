@@ -10,7 +10,9 @@ Note: the instructions for adding 2-Factor Authentication with Google Authentica
 
 [Nyr's VPN setup script](https://raw.githubusercontent.com/Nyr/openvpn-install/master/openvpn-install.sh) is also mentioned.
 
-## Vagrant configuration
+
+
+## Vagrant Configuration
 
 This repo has a Vagrantfile which will create VirtualBox instances for the following
 
@@ -27,7 +29,7 @@ Note that another OpenVPN client, Viscosity, won't connect to the instances at a
 
 
 
-## AWS configuration
+## AWS Configuration
 
 In order to create Linodes which you can use to install and configure OpenVPN, install the Terraform tool on your system, create a Linode account, and obtain an authorization token. This will allow you to use the Terraform model in the `aws` directory to create the following Linodes:
 
@@ -42,24 +44,23 @@ Each instance is running a t2.micro instance in the default region set in the AW
 As of 6/25/2021, RockyLinux does not have an official AWS AMI. There are two AMIs offered by Supported Images, but they cost 30x/hour to run over CentOS 8 or AlmaLinux.  Wait until the official AMI is released.
 
 
-## Digital Ocean configuration
+## Digital Ocean Configuration
 
 In order to create Digital Ocean droplets which you can use to install and configure OpenVPN, install the Terraform tool on your system, create a Digital Ocean account, and obtain an authorization token. This will allow you to use the Terraform model in the `do` directory to create the following droplets:
 
 - CentOS 7 and 8
 - Debian 9 and 10
-- Fedora 32, 33, and 34
+- Fedora 33 and 34
 - Ubuntu 18.04 and 20.04
-- AlmaLinux 8
 
-Note that the tool does not work well behind a firewall or VPN. You'll need turn off your VPN to access the Digital Ocean endpoint for better responce.  It *will* work, but accessing the endpoint times out, taking the python tool 2 minutes to return listings of images, regions, sizes, and running droplets.
+Note that the tool does not work well behind the Mullvad VPN but it's fine with Torguard. You'll need turn off the Mullvad VPN to access the Digital Ocean endpoint for a faster responce.  It *will* work, but accessing the endpoint times out, taking the python tool 2 minutes to return listings of images, regions, sizes, and running droplets.
 
 Digital Ocean has a dynamic inventory tools which can be used to generate ansible inventories.
 
     https://pypi.org/project/digitalocean-inventory/
 
 
-## Linode configuration
+## Linode Configuration
 
 In order to create Linodes which you can use to install and configure OpenVPN, install the Terraform tool on your system, create a Linode account, and obtain an authorization token. This will allow you to use the Terraform model in the `linode` directory to create the following Linodes:
 

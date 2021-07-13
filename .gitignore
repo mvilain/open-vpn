@@ -6,7 +6,7 @@
 *.log
 *.textlog
 *.retry
-*.sublime-workspace
+*.sublime-*
 venv/*
 
 # Local .terraform directories
