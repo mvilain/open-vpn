@@ -38,10 +38,9 @@ In order to create Linodes which you can use to install and configure OpenVPN, i
 - Fedora 32, 33, and 34
 - Ubuntu 18.04 and 20.04
 - AlmaLinux 8
+- RockyLinux 8
 
 Each instance is running a t2.micro instance in the default region set in the AWS CLI's configuration file.  The file `aws-vars.tf` contains the default values for the *pre-existing* AWS DNS domain to which these instances will be added and the default region, if not passed to the terraform module.
-
-As of 6/25/2021, RockyLinux does not have an official AWS AMI. There are two AMIs offered by Supported Images, but they cost 30x/hour to run over CentOS 8 or AlmaLinux.  Wait until the official AMI is released.
 
 
 ## Digital Ocean Configuration
