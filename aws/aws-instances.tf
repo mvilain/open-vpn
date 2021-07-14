@@ -84,7 +84,7 @@ module "vpn_centos8" {
 
   name                   = var.aws_centos8_name  # defined in aws-vars.tf
   ami                    = var.aws_centos8_ami   # defined in aws-vars.tf
-  domain                 = var.aws_domain      # defined in aws-vars.tf
+  domain                 = var.aws_domain        # defined in aws-vars.tf
 
   instance_type          = "t2.micro"
   instance_count         = 1
@@ -96,6 +96,36 @@ module "vpn_centos8" {
     Terraform   = "true"
     Environment = "vpn"
     os          = "centos8"
+  }
+  user_data = <<-EOF
+    #!/bin/bash
+    echo "preserve_hostname: false" >> /etc/cloud/cloud.cfg
+
+    dnf install -y epel-release
+    dnf config-manager --set-enabled powertools
+    dnf makecache
+#    dnf install -y ansible
+    alternatives --set python /usr/bin/python3
+  EOF
+}
+
+module "vpn_rocky8" {
+  source                 = "./terraform-modules/terraform-aws-ec2-instance"
+
+  name                   = var.aws_rocky8_name  # defined in aws-vars.tf
+  ami                    = var.aws_rocky8_ami   # defined in aws-vars.tf
+  domain                 = var.aws_domain       # defined in aws-vars.tf
+
+  instance_type          = "t2.micro"
+  instance_count         = 1
+  key_name               = aws_key_pair.vpn_key.key_name
+  monitoring             = true
+  vpc_security_group_ids = [ aws_security_group.vpn_sg.id ]
+  subnet_id              = aws_subnet.vpn_subnet.id
+  tags = {
+    Terraform   = "true"
+    Environment = "vpn"
+    os          = "rocky8"
   }
   user_data = <<-EOF
     #!/bin/bash

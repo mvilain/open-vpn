@@ -38,6 +38,7 @@ DISTROS = dict(
     fedora32 =  '633jhlnyl61qp9ukyefuy0a07',
     fedora33 =  '7qjerp2ue62lxpstjf287pwk9',
     fedora34 =  '4qwehlrxvcsc9mxvcn5sx08zi',
+    rocky8   =  '9r9iruhbixm6yrrtvnvufjare',
     ubuntu18 =  '3iplms73etrdhxdepv72l6ywj',
     ubuntu20 =  'a8jyynf4hjutohctm41o2z18m'
 )

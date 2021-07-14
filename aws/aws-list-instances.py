@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# 202105.30MeV
+# 202107.13MeV
 # uses aws boto3 to crawl through a region's running instances
 # extracts various info
 #
@@ -221,6 +221,7 @@ def main():
         templ_alma = []
         templ_centos = []
         templ_debian  = []
+        templ_rocky  = []
         templ_ubuntu = []
         templ_unk = []
 
@@ -241,6 +242,8 @@ def main():
                 templ_centos.append(d)
             elif ins['Tag_os'] == 'debian9' or ins['Tag_os'] == 'debian10':
                 templ_debian.append(d)
+            elif ins['Tag_os'] == 'rocky8':
+                templ_rocky.append(d)
             elif ins['Tag_os'] == 'ubuntu18' or ins['Tag_os'] == 'ubuntu20':
                 templ_ubuntu.append(d)
             else:
@@ -256,6 +259,7 @@ def main():
                 alma=templ_alma,
                 centos=templ_centos,
                 debian=templ_debian,
+                rocky=templ_rocky,
                 ubuntu=templ_ubuntu,
                 unk=templ_unk
                 )
@@ -270,24 +274,38 @@ def main():
                     size = os.get_terminal_size()
                     print('{} {}'.format(dashes, 'alma'))
                     pprint.pprint(templ_alma, width=size.columns)
+                    
                     print('{} {}'.format(dashes, 'centos'))
                     pprint.pprint(templ_centos, width=size.columns)
+                    
                     print('{} {}'.format(dashes, 'debian'))
                     pprint.pprint(templ_debian, width=size.columns)
+                    
+                    print('{} {}'.format(dashes, 'rocky'))
+                    pprint.pprint(templ_rocky, width=size.columns)
+                    
                     print('{} {}'.format(dashes, 'ubuntu'))
                     pprint.pprint(templ_ubuntu, width=size.columns)
+                    
                     print('{} {}'.format(dashes, 'unk'))
                     pprint.pprint(templ_unk, width=size.columns)
 
                 except OSError:     # likely can't get terminal info in debugging session
                     print('{} {}'.format(dashes, 'alma'))
                     pprint.pprint(templ_alma, width=132)
+                    
                     print('{} {}'.format(dashes, 'centos'))
                     pprint.pprint(templ_centos, width=132)
+                    
                     print('{} {}'.format(dashes, 'debian'))
                     pprint.pprint(templ_debian, width=132)
+                    
+                    print('{} {}'.format(dashes, 'rocky'))
+                    pprint.pprint(templ_rocky, width=132)
+                    
                     print('{} {}'.format(dashes, 'ubuntu'))
                     pprint.pprint(templ_ubuntu, width=132)
+                    
                     print('{} {}'.format(dashes, 'unk'))
                     pprint.pprint(templ_unk, width=132)
 
