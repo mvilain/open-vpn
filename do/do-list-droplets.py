@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# 202107.14MeV
+# 202107.18MeV
 # uses do's python-digitalocean to crawl through do's running droplets
 # extracts various info
 #
@@ -164,11 +164,12 @@ def valid_region(region):
         DIGITALOCEAN_TOKEN must be defined
     """
     valid_regions = regions_list()
-    # do a simple "in" rather than bother with regex
-    if region in valid_regions:
-        return True
-    else:
-        return False
+    # use re.search because region_list contains strings in form "region (description)"
+    for r in valid_regions:
+        if re.search(r'^{}'.format(region), r):
+            return True
+    # if not found
+    return False
 
 def descr_instances():
     """
@@ -227,12 +228,12 @@ def main():
         # validate region (done here b/c don't like output of add_argument choices
         if not valid_region(args.REGION):
             print('{} -- "{}" REGION invalid...valid regions:'.format(PROG,args.REGION))
-            regions_print(incr=6)
+            regions_print()
             return 1
 
-        paginated_list = descr_instances()
+        paginated_list = descr_instances() # instances in all regions
         if not paginated_list:
-            print('{} -- no instances found in {}'.format(PROG,args.REGION))
+            print('{} -- no instances found'.format(PROG))
             return 0
 
         elif args.verbose:
