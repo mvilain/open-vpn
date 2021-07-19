@@ -54,6 +54,10 @@ In order to create Digital Ocean droplets which you can use to install and confi
 
 Note that the tool does not work well behind the Mullvad VPN but it's fine with Torguard. You'll need turn off the Mullvad VPN to access the Digital Ocean endpoint for a faster responce.  It *will* work, but accessing the endpoint times out, taking the python tool 2 minutes to return listings of images, regions, sizes, and running droplets.
 
+As of 7/18/21, adding additional block storage was problematic when developing infrastructure.  Either the user-data install script delayed the droplet from spinning up or there was some bug that prevented quick apply/destroy cycles such that addition volumes could not be deleted for some time after creation.
+
+Also, there is a limit to the number of floating IPs that an account has initially. The 8 droplets defined in the `do-instances.tf` file went over that limit.  A ticket to increase that limit is required to run the terraform configuration.
+
 Digital Ocean has a dynamic inventory tools which can be used to generate ansible inventories.
 
     https://pypi.org/project/digitalocean-inventory/

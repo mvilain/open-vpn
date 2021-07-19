@@ -7,36 +7,34 @@
 
 # terraform-digitalocean-droplet
 # inputs:
-#  password  - root password                              [default: NONE ]
-#  ssh_key   - public ssh key for setting authorize_hosts [default: NONE ]
-#  image     - Image type used to create instance         [default: "do/ubuntu18.04"]
-#  region    - region where instance will run             [default: "francisco-3"]
-#                amsterdam-2
-#                amsterdam-3
-#                bangalore-1
-#                frankfurt-1
-#                london
-#                newyork-1
-#                newyork-2
-#                newyork-3
-#                francisco-1
-#                francisco-2
-#                francisco-3
-#                singapore-1
-#                toronto-1
-#   type      - image size to use                          [default: "s-1vcpu-1gb"]
-#                s-1vcpu-1gb
-#                s-2vcpu-2gb
-#                s-2vcpu-4gb
-#                s-4vcpu-8gb
-#                c2
-#                c4
-#                m-2vcpu-16gb
-#                g-2vcpu-8gb
-#                gd-2vcpu-8gb
-#   name      - name used to create the instance and hostname  [default: ""]
-#   domain    - pre-existing DNS domain used to assign host IP  [default: "example.com"]
-#   user-data - user-data cloud-init script to run on boot   [default: NONE ]
+#  application   - application being deployed
+#  environment   - environment (e.g. dev, test, stage, prod)
+#  label_order   - array of args above order for tags
+#  name          - name of droplet combined w/ above in label_order [default: example]
+#  droplet_count - number of droplets to spin up [default: 1]
+#  ssh_keys      - array of ssh key names checked into digital ocean for ssh access
+#  domain        - pre-existing DNS domain name to add droplet [default: example.com]
+#  vpc_uuid      - default vpc for region or a pre-defined one created
+#  region        - region to create droplet in [default: "sfo3"]
+#                  ams2 ams3 blr1 fra1 lon1 nyc1 nyc2 nyc3 sfo1 sfo2 sfo3 sgp1 tor1
+#  image_name    - droplet image to spin up. can be distro or private [default: "ubuntu-18-04-x64"]
+#  droplet_size  - what size of droplet (# CPU and memory) [default: "s-1vcpu-1gb"]
+#                  s-1vcpu-1gb
+#                  s-2vcpu-2gb
+#                  s-2vcpu-4gb
+#                  s-4vcpu-8gb
+#                  c2
+#                  c4
+#                  m-2vcpu-16gb
+#                  g-2vcpu-8gb
+#                  gd-2vcpu-8gb
+#  monitoring    - turn on monitor from digital ocean dashboard
+#  private_networking - don't make droplet publically accessible
+#  ipv6          - use IPv6 networking
+#  floating_ip   - enable permanent IP that can be assigned to droplet
+#  block_storage_enabled - add additional block storage volume
+#  block_storage_size - size of additional storage
+#  user-data - user-data cloud-init script to run on boot   [default: NONE ]
 #
 # outputs:
 #   id     - ID of droplet
@@ -49,7 +47,7 @@
 module "drop_c7" {
   source                = "./terraform-modules/terraform-digitalocean-droplet/"
   application           = "vpn"
-  environment           = "test"
+  environment           = "centos"
   label_order           = ["environment", "application", "name"]
 
   name                  = "c7sfo3"  # hostname: test-vpn-<NAME>-<DROPLET-COUNT -1>
@@ -57,24 +55,24 @@ module "drop_c7" {
   ssh_keys              = [ digitalocean_ssh_key.do_vpn_ssh_key.id ]
   domain                = var.do_domain
   vpc_uuid              = data.digitalocean_vpc.default.id
-  # "ams2" "ams3" "blr1" "fra1" "lon1" "nyc1" "nyc2" "nyc3" "sfo1" "sfo2" "sfo3" "sgp1" "tor1"
-  region                = var.do_region  # "sfo3"
+  
+  region                = "sfo3" # var.do_region
 
   image_name            = "centos-7-x64"
   droplet_size          = "nano"
-  monitoring            = false
+  monitoring            = true
   private_networking    = false
   ipv6                  = false
   floating_ip           = true
-  block_storage_enabled = true
-  block_storage_size    = 5
+  block_storage_enabled = false
+  block_storage_size    = 0
 
   user_data             = file("ud-centos7.sh")
 }
 module "drop_c8" {
   source                = "./terraform-modules/terraform-digitalocean-droplet/"
   application           = "vpn"
-  environment           = "test"
+  environment           = "centos"
   label_order           = ["environment", "application", "name"]
 
   name                  = "c8sfo3"  # hostname: test-vpn-<NAME>-<DROPLET-COUNT -1>
@@ -83,25 +81,25 @@ module "drop_c8" {
   domain                = var.do_domain
   vpc_uuid              = data.digitalocean_vpc.default.id
   # "ams2" "ams3" "blr1" "fra1" "lon1" "nyc1" "nyc2" "nyc3" "sfo1" "sfo2" "sfo3" "sgp1" "tor1"
-  region                = var.do_region  # "sfo3"
+  region                = "sfo3" # var.do_region
 
   image_name            = "centos-8-x64"
   droplet_size          = "nano"
-  monitoring            = false
+  monitoring            = true
   private_networking    = false
   ipv6                  = false
   floating_ip           = true
-  block_storage_enabled = true
-  block_storage_size    = 5
+  block_storage_enabled = false
+  block_storage_size    = 0
 
-  user_data             = file("ud-centos8.sh")
+  user_data             = file("ud-redhat.sh")
 }
 
 
 module "drop_d9" {
   source                = "./terraform-modules/terraform-digitalocean-droplet/"
   application           = "vpn"
-  environment           = "test"
+  environment           = "debian"
   label_order           = ["environment", "application", "name"]
 
   name                  = "d9sfo3"  # hostname: test-vpn-<NAME>-<DROPLET-COUNT -1>
@@ -110,23 +108,23 @@ module "drop_d9" {
   domain                = var.do_domain
   vpc_uuid              = data.digitalocean_vpc.default.id
   # "ams2" "ams3" "blr1" "fra1" "lon1" "nyc1" "nyc2" "nyc3" "sfo1" "sfo2" "sfo3" "sgp1" "tor1"
-  region                = var.do_region  # "sfo3"
+  region                = "sfo3" # var.do_region
 
   image_name            = "debian-9-x64"
   droplet_size          = "nano"
-  monitoring            = false
+  monitoring            = true
   private_networking    = false
   ipv6                  = false
   floating_ip           = true
-  block_storage_enabled = true
-  block_storage_size    = 5
+  block_storage_enabled = false
+  block_storage_size    = 0
 
   user_data             = file("ud-debian.sh")
 }
 module "drop_d10" {
   source                = "./terraform-modules/terraform-digitalocean-droplet/"
   application           = "vpn"
-  environment           = "test"
+  environment           = "debian"
   label_order           = ["environment", "application", "name"]
 
   name                  = "d10sfo3"  # hostname: test-vpn-<NAME>-<DROPLET-COUNT -1>
@@ -135,16 +133,16 @@ module "drop_d10" {
   domain                = var.do_domain
   vpc_uuid              = data.digitalocean_vpc.default.id
   # "ams2" "ams3" "blr1" "fra1" "lon1" "nyc1" "nyc2" "nyc3" "sfo1" "sfo2" "sfo3" "sgp1" "tor1"
-  region                = var.do_region  # "sfo3"
+  region                = "sfo3" # var.do_region
 
   image_name            = "debian-10-x64"
   droplet_size          = "nano"
-  monitoring            = false
+  monitoring            = true
   private_networking    = false
   ipv6                  = false
   floating_ip           = true
-  block_storage_enabled = true
-  block_storage_size    = 5
+  block_storage_enabled = false
+  block_storage_size    = 0
 
   user_data             = file("ud-debian.sh")
 }
@@ -153,7 +151,7 @@ module "drop_d10" {
 module "drop_f33" {
   source                = "./terraform-modules/terraform-digitalocean-droplet/"
   application           = "vpn"
-  environment           = "test"
+  environment           = "fedora"
   label_order           = ["environment", "application", "name"]
 
   name                  = "f33sfo3"  # hostname: test-vpn-<NAME>-<DROPLET-COUNT -1>
@@ -162,23 +160,23 @@ module "drop_f33" {
   domain                = var.do_domain
   vpc_uuid              = data.digitalocean_vpc.default.id
   # "ams2" "ams3" "blr1" "fra1" "lon1" "nyc1" "nyc2" "nyc3" "sfo1" "sfo2" "sfo3" "sgp1" "tor1"
-  region                = var.do_region  # "sfo3"
+  region                = "sfo3" # var.do_region
 
   image_name            = "fedora-33-x64"
   droplet_size          = "nano"
-  monitoring            = false
+  monitoring            = true
   private_networking    = false
   ipv6                  = false
   floating_ip           = true
-  block_storage_enabled = true
-  block_storage_size    = 5
+  block_storage_enabled = false
+  block_storage_size    = 0
 
   user_data             = file("ud-redhat.sh")
 }
 module "drop_f34" {
   source                = "./terraform-modules/terraform-digitalocean-droplet/"
   application           = "vpn"
-  environment           = "test"
+  environment           = "fedora"
   label_order           = ["environment", "application", "name"]
 
   name                  = "f34sfo3"  # hostname: test-vpn-<NAME>-<DROPLET-COUNT -1>
@@ -187,16 +185,16 @@ module "drop_f34" {
   domain                = var.do_domain
   vpc_uuid              = data.digitalocean_vpc.default.id
   # "ams2" "ams3" "blr1" "fra1" "lon1" "nyc1" "nyc2" "nyc3" "sfo1" "sfo2" "sfo3" "sgp1" "tor1"
-  region                = var.do_region  # "sfo3"
+  region                = "sfo3" # var.do_region
 
   image_name            = "fedora-34-x64"
   droplet_size          = "nano"
-  monitoring            = false
+  monitoring            = true
   private_networking    = false
   ipv6                  = false
   floating_ip           = true
-  block_storage_enabled = true
-  block_storage_size    = 5
+  block_storage_enabled = false
+  block_storage_size    = 0
 
   user_data             = file("ud-redhat.sh")
 }
@@ -204,7 +202,7 @@ module "drop_f34" {
 module "drop_u18" {
   source                = "./terraform-modules/terraform-digitalocean-droplet/"
   application           = "vpn"
-  environment           = "test"
+  environment           = "ubuntu"
   label_order           = ["environment", "application", "name"]
 
   name                  = "u18sfo3"  # hostname: test-vpn-<NAME>-<DROPLET-COUNT -1>
@@ -213,23 +211,23 @@ module "drop_u18" {
   domain                = var.do_domain
   vpc_uuid              = data.digitalocean_vpc.default.id
   # "ams2" "ams3" "blr1" "fra1" "lon1" "nyc1" "nyc2" "nyc3" "sfo1" "sfo2" "sfo3" "sgp1" "tor1"
-  region                = var.do_region  # "sfo3"
+  region                = "sfo3" # var.do_region
 
   image_name            = "ubuntu-18-04-x64"
   droplet_size          = "nano"
-  monitoring            = false
+  monitoring            = true
   private_networking    = false
   ipv6                  = false
   floating_ip           = true
-  block_storage_enabled = true
-  block_storage_size    = 5
+  block_storage_enabled = false
+  block_storage_size    = 0
 
   user_data             = file("ud-debian.sh")
 }
 module "drop_u20" {
   source                = "./terraform-modules/terraform-digitalocean-droplet/"
   application           = "vpn"
-  environment           = "test"
+  environment           = "ubuntu"
   label_order           = ["environment", "application", "name"]
 
   name                  = "u20sfo3"  # hostname: test-vpn-<NAME>-<DROPLET-COUNT -1>
@@ -238,16 +236,16 @@ module "drop_u20" {
   domain                = var.do_domain
   vpc_uuid              = data.digitalocean_vpc.default.id
   # "ams2" "ams3" "blr1" "fra1" "lon1" "nyc1" "nyc2" "nyc3" "sfo1" "sfo2" "sfo3" "sgp1" "tor1"
-  region                = var.do_region  # "sfo3"
+  region                = "sfo3" # var.do_region
 
   image_name            = "ubuntu-20-04-x64"
   droplet_size          = "nano"
-  monitoring            = false
+  monitoring            = true
   private_networking    = false
   ipv6                  = false
   floating_ip           = true
-  block_storage_enabled = true
-  block_storage_size    = 5
+  block_storage_enabled = false
+  block_storage_size    = 0
 
   user_data             = file("ud-debian.sh")
 }
