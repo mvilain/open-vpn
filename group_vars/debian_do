@@ -1,0 +1,3 @@
+# group_vars debian_do for digital ocean vpn servers
+---
+group_vars: "debian_do"

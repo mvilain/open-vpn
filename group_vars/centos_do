@@ -1,0 +1,3 @@
+# group_vars centos_do for digital ocean vpn servers
+---
+group_vars: "centos_do"

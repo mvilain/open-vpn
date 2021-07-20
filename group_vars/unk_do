@@ -1,0 +1,3 @@
+# group_vars unk_do for digital ocean vpn servers
+---
+group_vars: "unk_do"

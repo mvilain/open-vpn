@@ -9,18 +9,15 @@
 
 import argparse
 import jinja2
-import digitalocean
+import digitalocean  # https://github.com/koalalorenzo/python-digitalocean
 
 import os
 import pprint
 import re
 import sys
-import requests
-import urllib
 
 # shell expands '~' but you need to do it explicitly in python
 TOKEN = os.environ.get('DIGITALOCEAN_TOKEN')
-END_POINT = 'https://api.digitalocean.com/v2/'
 PROG = os.path.basename( sys.argv[0] )
 DEFAULT_REGION = 'sfo3'
 
@@ -171,7 +168,7 @@ def valid_region(region):
     # if not found
     return False
 
-def descr_instances():
+def descr_droplets():
     """
     get the running droplets for the owner of the DIGITALOCEAN_TOKEN
 
@@ -181,16 +178,9 @@ def descr_instances():
     requires
         DIGITALOCEAN_TOKEN must be defined
     """
-    # this returns list pageinatedItems
-    # Images is a list of dicts containing each image's info
-    # client = do_api4.doClient(TOKEN)
-    # response = client.do.instances()   # - list of paginatedItems
-    # PaginatedList
-    # for t in res.tags: res[ 'tag_{}'.format(t) ] = t
-    # instances = []
-    # for res in response:
-    #     instances.append(res)  # add instance to list of instances to return
-    return None
+    manager = digitalocean.Manager(token=TOKEN)
+    droplets = manager.get_all_droplets() # list of digitalocean.Droplet.Droplet
+    return droplets
 
 
 def main():
@@ -231,50 +221,79 @@ def main():
             regions_print()
             return 1
 
-        paginated_list = descr_instances() # instances in all regions
-        if not paginated_list:
+        droplets_list = descr_droplets() # droplets in all regions
+        if not droplets_list:
             print('{} -- no instances found'.format(PROG))
             return 0
 
         elif args.verbose:
-            pprint.pprint(paginated_list)
+            tab = 4
+            eol = ''
+            for d in droplets_list:
+                print('{} id {} {} {}'.format(60*'-',d.name,d.id,d.created_at))
+                print('  {} GB {} CPU {} disk'.format(d.memory,d.vcpus,d.disk))
+                print('  locked: {} status: {} kernel: {}'.format(d.locked,d.status,d.kernel))
+                print('  features:', end=eol)
+                pprint.pprint(d.features,indent=tab)
+                print('  next_backup_window: {} backups_ids:'.format(d.next_backup_window), end=eol)
+                pprint.pprint(d.backup_ids,indent=tab)
+                print('  snapshot_ids:', end=eol)
+                pprint.pprint(d.snapshot_ids,indent=tab)
+                print('  image: ', end=eol)
+                pprint.pprint(d.image,indent=tab)
+                print('  volume_ids: ', end=eol)
+                pprint.pprint(d.volume_ids,indent=tab)
+                print('  {}  size: '.format(d.size_slug), end=eol)
+                pprint.pprint(d.size,indent=tab)
+                print('  networks: ', end=eol)
+                pprint.pprint(d.networks,indent=tab)
+                print('  region: ', end=eol)
+                pprint.pprint(d.region,indent=tab)
+                print('  tags: ', end=eol)
+                pprint.pprint(d.tags,indent=tab)
+                print('  ssh_keys: ', end=eol)
+                pprint.pprint(d.ssh_keys,indent=tab)
+                print('  user_data: ', end=eol)
+                pprint.pprint(d.user_data,indent=tab)
             return 0
 
-        # convert PaginatedList with keys for template
-        # into list of strings with key fields
-        # While AWS has different user accounts depending on the AMI,
-        # dos all give access to root, so this really isn't needed
-        templ_alma = []
+        # convert droplets into list of dict w/ keys for template
         templ_centos = []
         templ_debian = []
         templ_fedora = []
-        templ_rocky = []
         templ_ubuntu = []
         templ_unk = []
 
-        for ins in paginated_list:
-            n = re.sub(r'_instance.*', '', str(ins.label))
-            o = str(ins.image).replace('Image: ','')
+        for droplet in droplets_list:
             d = dict(
-                region     = str(ins.region).replace('Region: ',''),
-                os         = o.replace('do/','').replace('.04',''),
-                id         = ins.id,
-                name       = n.replace('Label: ',''),
-                type       = str(ins.type).replace('Type: ',''),
-                public_ip  = ins.ipv4[0]    # requires support to give 2nd IP
+                region     = droplet.region['slug'],
+                os_slug    = droplet.image['slug'],
+                os         = droplet.image['distribution'].lower(),
+                id         = droplet.id,
+                name       = droplet.name,
+                size       = droplet.size['slug'],
+                public_ip  = droplet.ip_address,
+                created    = droplet.created_at
             )
+            for tag in droplet.tags:
+                if re.search('Name:-',tag):
+                    d['name_slug'] = tag.replace('Name:-','')
+                elif re.search('Environment:-',tag):
+                    d['environment'] = tag.replace('Environment:-','')
+                elif re.search('Createdby:-',tag):
+                    d['createdby'] = tag.replace('Createdby:-','')
+                elif re.search('Application:-',tag):
+                    d['application'] = tag.replace('Application:-','')
+                else:
+                    d['tag_unk'] = tag
 
-            if d['os'] == 'almalinux8':
-                templ_alma.append(d)
-            elif d['os'] == 'centos7' or d['os'] == 'centos8':
+            if d['os'] == 'centos':
                 templ_centos.append(d)
-            elif d['os'] == 'debian9' or d['os'] == 'debian10':
+            elif d['os'] == 'debian':
                 templ_debian.append(d)
-            elif d['os'] == 'fedora32' or d['os'] == 'fedora33' or d['os'] == 'fedora34':
+            elif d['os'] == 'fedora':
                 templ_fedora.append(d)
-            elif d['os'] == 'rocky8':
-                templ_rocky.append(d)
-            elif d['os'] == 'ubuntu16lts' or d['os'] == 'ubuntu18' or d['os'] == 'ubuntu20':
+            elif d['os'] == 'ubuntu':
                 templ_ubuntu.append(d)
             else:
                 templ_unk.append(d)
@@ -286,11 +305,9 @@ def main():
             env = jinja2.Environment(loader=file_loader)
             template = env.get_template(args.template)
             output = template.render(
-                alma=templ_alma,
                 centos=templ_centos,
                 debian=templ_debian,
                 fedora=templ_fedora,
-                rocky=templ_rocky,
                 ubuntu=templ_ubuntu,
                 unk=templ_unk
                 )
@@ -303,9 +320,6 @@ def main():
                 dashes = 60*'-'
                 try:
                     size = os.get_terminal_size()
-                    print('{} {}'.format(dashes,'alma'))
-                    pprint.pprint(templ_alma,width=size.columns)
-
                     print('{} {}'.format(dashes,'centos'))
                     pprint.pprint(templ_centos,width=size.columns)
 
@@ -315,9 +329,6 @@ def main():
                     print('{} {}'.format(dashes,'fedora'))
                     pprint.pprint(templ_fedora,width=size.columns)
 
-                    print('{} {}'.format(dashes,'rocky'))
-                    pprint.pprint(templ_rocky,width=size.columns)
-
                     print('{} {}'.format(dashes,'ubuntu'))
                     pprint.pprint(templ_ubuntu,width=size.columns)
 
@@ -325,9 +336,6 @@ def main():
                     pprint.pprint(templ_unk,width=size.columns)
 
                 except OSError:     # likely can't get terminal info in debugging session
-                    print('{} {}'.format(dashes,'alma'))
-                    pprint.pprint(templ_alma,width=132)
-
                     print('{} {}'.format(dashes,'centos'))
                     pprint.pprint(templ_centos,width=132)
 
@@ -336,9 +344,6 @@ def main():
 
                     print('{} {}'.format(dashes,'fedora'))
                     pprint.pprint(templ_fedora,width=132)
-
-                    print('{} {}'.format(dashes,'rocky'))
-                    pprint.pprint(templ_rocky,width=132)
 
                     print('{} {}'.format(dashes,'ubuntu'))
                     pprint.pprint(templ_ubuntu,width=132)

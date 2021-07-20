@@ -43,6 +43,7 @@ In order to create Linodes which you can use to install and configure OpenVPN, i
 Each instance is running a t2.micro instance in the default region set in the AWS CLI's configuration file.  The file `aws-vars.tf` contains the default values for the *pre-existing* AWS DNS domain to which these instances will be added and the default region, if not passed to the terraform module.
 
 
+
 ## Digital Ocean Configuration
 
 In order to create Digital Ocean droplets which you can use to install and configure OpenVPN, install the Terraform tool on your system, create a Digital Ocean account, and obtain an authorization token. This will allow you to use the Terraform model in the `do` directory to create the following droplets:
@@ -56,11 +57,14 @@ Note that the tool does not work well behind the Mullvad VPN but it's fine with 
 
 As of 7/18/21, adding additional block storage was problematic when developing infrastructure.  Either the user-data install script delayed the droplet from spinning up or there was some bug that prevented quick apply/destroy cycles such that addition volumes could not be deleted for some time after creation.
 
-Also, there is a limit to the number of floating IPs that an account has initially. The 8 droplets defined in the `do-instances.tf` file went over that limit.  A ticket to increase that limit is required to run the terraform configuration.
+Initially, there is a limit to the number of floating IPs for an individual account. The 8 droplets defined in the `do-instances.tf` file goes over that limit.  You will have to file a support ticket to increase your FIPS limit to run the terraform configuration.
 
 Digital Ocean has a dynamic inventory tools which can be used to generate ansible inventories.
 
     https://pypi.org/project/digitalocean-inventory/
+
+As an aside, I've found that Digital Ocean has more outages and seems more fragile than Linode.  It's infrastructure is more robust, but it seems the underlaying code is prone to outages.  Just running the Terraform configuration  then destroying the resources can cause errors.  While this model works, I'm not spending any more time with this cloud provider due to these errors.
+
 
 
 ## Linode Configuration
@@ -77,12 +81,12 @@ In order to create Linodes which you can use to install and configure OpenVPN, i
 Each Linode is running a nanode-sized Linode in a mix of regions.  The file `linode-vars.tf` contains the default values for the *pre-existing* Linode DNS domain to which these Linodes will be added and the default region, if not passed to the terraform module.
 
 
+
 ## Repo has submodules
 
 Since this repo has submodules, you'll need to clone it and populate the submodules:
 
     git clone --recurse-submodules https://github.com/mvilain/vpn.git
-
 
 
 
