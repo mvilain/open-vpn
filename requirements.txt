@@ -1,8 +1,11 @@
 boto3
 botocore
-jinja2
+Jinja2 
+jsonpickle 
 jmespath
 
+charset-normalizer 
+MarkupSafe 
+
 linode_api4
-python-digitalocean
 digitalocean-inventory
