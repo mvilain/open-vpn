@@ -1,0 +1,7 @@
+boto3
+botocore
+jmespath
+python-dateutil
+s3transfer
+Jinja2
+MarkupSafe

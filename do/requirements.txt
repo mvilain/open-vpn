@@ -1,0 +1,6 @@
+digitalocean-python
+idna
+charset-normalizer
+requests
+Jinja2
+MarkupSafe
