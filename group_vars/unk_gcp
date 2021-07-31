@@ -1,0 +1,3 @@
+# group_vars unk_gcp for Google Cloud vpn servers
+---
+group_vars: "unk_gcp"

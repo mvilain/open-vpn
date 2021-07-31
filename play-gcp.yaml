@@ -1,0 +1,14 @@
+# playbook for vpn server hosts on GCP
+# this will install both roles, then run the handlers for both roles
+#    ansible-playbook play-gcp.yaml --vault-password-file ~/.vault_pass.txt
+---
+- hosts: all
+  become: true
+
+  roles:
+    - role: vpn
+
+- hosts: ubuntu_gcp debian_gcp
+  become: true
+  roles:
+    - 2fa
