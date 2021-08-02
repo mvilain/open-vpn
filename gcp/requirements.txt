@@ -1,0 +1,41 @@
+# API all-inclusive interface instead of Google Cloud Compute library
+# https://googleapis.github.io/google-api-python-client/docs/
+# https://github.com/googleapis/google-api-python-client
+google-api-python-client
+cachetools
+charset-normalizer
+google-api-core
+google-auth
+google-auth-httplib2
+googleapis-common-protos
+httplib2
+idna
+oauth2client
+packaging
+pyasn1
+pyasn1-modules
+pyparsing
+pytz
+requests
+rsa
+uritemplate
+Jinja2
+MarkupSafe
+
+# as of 7/28/21, the Google Cloud Compute python library is alpha release
+# and not ready for prime time.  So, don't bother writing to use this interface
+#google-cloud-compute
+#cachetools
+#google-api-core
+#google-auth
+#googleapis-common-protos
+#grpcio
+#packaging
+#proto-plus
+#pyasn1
+#pyasn1-modules
+#pyparsing
+#pytz
+#rsa
+#Jinja2
+#MarkupSafe
