@@ -84,9 +84,9 @@ Each Linode is running a nanode-sized Linode in a mix of regions.  The file `lin
 
 ## Google Cloud Platform Configuration
 
-In order to create gcp instances which you can use to install and configure OpenVPN, install the Terraform tool on your system, create a GCP account and project, and install the GCP SDK.  Obtain an authorization token using
+In order to create gcp instances which you can use to install and configure OpenVPN, install the Terraform tool on your system, create a GCP account and project, and install the GCP SDK.  Enable the Compute Engine API and generate a service key.
 
-    gcloud auth login
+    gcloud auth application-default login
 
 This will allow you to use the Terraform model in the `gcp` directory to create the following Linodes:
 
@@ -99,7 +99,7 @@ This will allow you to use the Terraform model in the `gcp` directory to create 
 
 Each instance is running a nano-sized instance a single region.  The file `gcp-vars.tf` contains the default values for the *pre-existing* gcp DNS domain to which these instances will be added and the default region, if not passed to the terraform module.
 
-**NOTE:** gcloud commands don't work from behind a mullvad VPN but are OK behind a Torguard VPN.
+**NOTE:** gcloud commands don't work from behind a Mullvad VPN but are OK behind a Torguard VPN.
 
 
 
