@@ -3,27 +3,25 @@
 terraform {
   required_providers {
 
-     aws = {
-       source  = "hashicorp/aws"
-       version = "~> 3.0"
-     }
-
-    digitalocean = {
-      source = "digitalocean/digitalocean"
-      version = "1.22.2"
-    }
-
+#     aws = {
+#       source  = "hashicorp/aws"
+#       version = "~> 3.0"
+#     }
+#
+#    digitalocean = {
+#      source = "digitalocean/digitalocean"
+#      version = "1.22.2"
+#    }
 
       google = {
         source = "hashicorp/google"
         version = "3.76.0"
       }
 
-
-     linode = {
-       source  = "linode/linode"
-       version = ">= 1.16.0"
-     }
+#     linode = {
+#       source  = "linode/linode"
+#       version = ">= 1.16.0"
+#     }
 
     local = {
       source  = "hashicorp/local"
