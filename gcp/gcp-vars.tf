@@ -2,7 +2,6 @@
 //================================================== PROVIDERS
 //================================================== VARIABLES (in terraform.tfvars)
 
-
 variable "gcp_domain" {
   description = "DNS domain where compute are running"
   type        = string
