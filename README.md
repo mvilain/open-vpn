@@ -88,6 +88,35 @@ In order to create gcp instances which you can use to install and configure Open
 
     gcloud auth application-default login
 
+The regions and zones are described in depth [here](https://cloud.google.com/compute/docs/gcloud-compute#set_default_zone_and_region_in_your_local_client).
+
+The various supported OS images listed [here](https://console.cloud.google.com/compute/instanceTemplates/list(cameo:browse)?filter=solution-type:vm&filter=category:os&filter=price:free&project=eminent-century-320421&supportedpurview=project&pli=1) and described [here](https://cloud.google.com/compute/docs/images/os-details).
+
+To set the project ID
+
+    gcloud compute project-info describe --project PROJECT_ID
+    export CLOUDSDK_CORE_PROJECT=PROJECT_ID
+
+To set a configuration in the SDK for multi-project development:
+
+    gcloud config configurations activate CONFIGURATION_NAME
+
+To list the region, zone, and available images in the gcloud SDK:
+
+    gcloud compute regions list
+    gcloud compute zones list
+    for p in almalinux-cloud centos-cloud rocky-linux-cloud fedora-cloud ubuntu-os-cloud; do \
+      gcloud compute images list --project $p --no-standard-images
+    done
+
+To set the region and zone in the gcloud SDK and using environment variables:
+
+    gcloud config set compute/region REGION
+    gcloud config set compute/zone ZONE
+    export CLOUDSDK_COMPUTE_REGION=REGION
+    export CLOUDSDK_COMPUTE_ZONE=ZONE
+
+
 This will allow you to use the Terraform model in the `gcp` directory to create the following Linodes:
 
 - CentOS 7 and 8
@@ -100,7 +129,6 @@ This will allow you to use the Terraform model in the `gcp` directory to create 
 Each instance is running a nano-sized instance a single region.  The file `gcp-vars.tf` contains the default values for the *pre-existing* gcp DNS domain to which these instances will be added and the default region, if not passed to the terraform module.
 
 **NOTE:** gcloud commands don't work from behind a Mullvad VPN but are OK behind a Torguard VPN.
-
 
 
 
