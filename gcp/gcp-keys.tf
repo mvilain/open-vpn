@@ -7,10 +7,10 @@ provider "google" {
   zone    = var.gcp_zone
 }
 
-data "aws_region" "current" {}
-# data.aws_region.name - The name of the selected region.
-# data.aws_region.endpoint - The EC2 endpoint for the selected region.
-# data.aws_region.description - region's description in this format: "Location (Region name)"
+data "google_compute_regions" "current" {
+  project  = var.gcp_project
+}
+# data.google_compute_regions.current.names - names of the region for the project
 
 //================================================== S3 BACKEND (in gcp-s3-backend.tf)
 //================================================== GENERATE KEYS AND SAVE
@@ -33,13 +33,13 @@ resource "local_file" "vpn_priv_ssh_key" {
   file_permission      = "0600"
 }
 
-resource "aws_key_pair" "vpn_key" {
-  key_name             = "vpn_key"
-  public_key           = chomp(tls_private_key.vpn_ssh_key.public_key_openssh)
+resource "google_os_login_ssh_public_key" "vpn_key" {
+  user                 = data.google_client_openid_userinfo.me.email
+  key                  = file("./id_rsa.pub")
 }
 #id - The key pair name.
 #arn - The key pair ARN.
-#key_name - The key pair name.
-#key_pair_id - The key pair ID.
-#fingerprint - The MD5 public key fingerprint as specified in section 4 of RFC 4716.
+#key_name - The key pair name
+#key_pair_id - The key pair ID
+#fingerprint - The MD5 public key fingerprint as specified in section 4 of RFC 4716
 #tags_all
