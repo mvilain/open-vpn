@@ -1,7 +1,0 @@
-python-digitalocean
-idna
-charset-normalizer
-jsonpickle
-requests
-Jinja2
-MarkupSafe

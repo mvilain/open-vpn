@@ -7,6 +7,3 @@
 [submodule "roles/wireguard"]
 	path = roles/wireguard
 	url = git@github.com:mvilain/wireguard.git
-[submodule "do/terraform-modules/terraform-digitalocean-droplet"]
-	path = do/terraform-modules/terraform-digitalocean-droplet
-	url = git@github.com:mvilain/terraform-digitalocean-droplet.git
