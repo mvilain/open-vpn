@@ -88,6 +88,8 @@ In order to create gcp instances which you can use to install and configure Open
 
     gcloud auth application-default login
 
+A great starting tutorial is [here](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/provider_reference)
+
 The regions and zones are described in depth [here](https://cloud.google.com/compute/docs/gcloud-compute#set_default_zone_and_region_in_your_local_client).
 
 The various supported OS images listed [here](https://console.cloud.google.com/compute/instanceTemplates/list(cameo:browse)?filter=solution-type:vm&filter=category:os&filter=price:free&project=eminent-century-320421&supportedpurview=project&pli=1) and described [here](https://cloud.google.com/compute/docs/images/os-details).
