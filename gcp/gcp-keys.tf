@@ -7,10 +7,16 @@ provider "google" {
   zone    = var.gcp_zone
 }
 
-data "google_compute_regions" "current" {
-  project  = var.gcp_project
-}
-# data.google_compute_regions.current.names - names of the region for the project
+# https://registry.terraform.io/providers/hashicorp/google/latest/docs/data-sources/client_config
+data "google_client_config" "default" {}
+# data.google_client_config.default.project - The ID of the project to apply any resources to
+# data.google_client_config.default.region - The region to operate under
+# data.google_client_config.default.zone - The zone to operate under
+# data.google_client_config.default.access_token - OAuth2 access token used by the client to authenticate
+
+
+data "google_client_openid_userinfo" "me" {}
+# data.google_client_openid_userinfo.me.email
 
 //================================================== S3 BACKEND (in gcp-s3-backend.tf)
 //================================================== GENERATE KEYS AND SAVE
@@ -35,7 +41,7 @@ resource "local_file" "vpn_priv_ssh_key" {
 
 resource "google_os_login_ssh_public_key" "vpn_key" {
   user                 = data.google_client_openid_userinfo.me.email
-  key                  = file("./id_rsa.pub")
+  key                  = local_file.vpn_pub_ssh_key.filename
 }
 #id - The key pair name.
 #arn - The key pair ARN.
