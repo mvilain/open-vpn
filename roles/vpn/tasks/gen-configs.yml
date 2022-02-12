@@ -1,0 +1,67 @@
+---
+# gen-configs.yaml for vpn
+# generates server, client, and systemd files
+
+- name: build server.conf
+  template:
+    src: templates/server.conf.j2
+    dest: /etc/openvpn/server/server.conf
+    owner: root
+    group: root
+    mode: "0644"
+    backup: yes
+  register: server_conf
+#- debug: var=server_conf
+
+# extract ca text for client.ovpn
+- name: get cert text
+  shell: cat ca.crt
+  args:
+    chdir: /etc/openvpn/server/easy-rsa/pki/
+    warn: no
+  register: ca_text
+#- debug: var=ca_text.stdout_lines
+
+# extract certificate text for client.ovpn
+- name: get cert text
+  shell: sed -ne '/BEGIN CERTIFICATE/,$ p' "{{ inventory_hostname }}.crt"
+  args:
+    chdir: /etc/openvpn/server/easy-rsa/pki/issued/
+    warn: no
+  register: cert_text
+#- debug: var=cert_text.stdout_lines
+
+# extract key text for client.ovpn
+- name: get key text
+  shell: cat "{{ inventory_hostname }}".key
+  args:
+    chdir: /etc/openvpn/server/easy-rsa/pki/private/
+    warn: no
+  register: key_text
+#- debug: var=key_text.stdout_lines
+
+# extract tls key text for client.ovpn
+- name: get cert text
+  shell: sed -ne '/BEGIN OpenVPN Static key/,$ p' tc.key
+  args:
+    chdir: /etc/openvpn/server/
+    warn: no
+  register: tls_text
+#- debug: var=tls_text.stdout_lines
+
+- name: build and fetch client.ovpn
+  block:
+  - template:
+      src: templates/client-common.txt.j2
+      dest: /etc/openvpn/server/client-common.txt
+  - template:
+      src: templates/client.ovpn.j2
+      dest: client.ovpn
+    register: client_ovpn
+#  - debug: var=client_ovpn
+  - fetch:
+      src: client.ovpn
+      dest: "./client-{{ inventory_hostname }}.ovpn"
+      flat: true
+    register: fetch_client
+- debug: var=fetch_client.dest

@@ -1,0 +1,123 @@
+# RedHat install tasks for vpn
+---
+- name: RHEL epel-release contains openvpn package
+  package:
+    name: epel-release
+    state: present
+  when:  ansible_distribution != "Fedora"
+
+# ansible 2.7 deprecates with_items and nosquash, should use variable directly
+# but it takes a long time to process all the packages at once, so do separately
+# this displays the packages after they're installed
+- name: RedHat packages
+  package:
+    name: '{{ item }}'
+    state: present
+  loop:
+    - "{{ RedHat_packages }}"
+
+# 6/28/21 fedora32 has connectivity issue with it's repos. 
+# policycoreutils-python-utils loads exceedingly slowly on f32
+- name: selinux package
+  block:
+  - package:
+      name: policycoreutils-python
+      state: present
+    when: ansible_distribution_major_version|int == 7
+  - package:
+      name: policycoreutils-python-utils
+      state: present
+    when: ansible_distribution_major_version|int != 7
+
+# selinux module untested on Debian systems, use edit of selinux/conf instead
+- name: configure SElinux (requires reboot)
+  selinux:
+    state: disabled
+  when: not is_aws_environment
+
+- name: enable/start firewalld
+  service:
+    name: firewalld
+    enabled: true
+    state: started
+
+#firewall-cmd --add-port="$port"/"$protocol"
+#firewall-cmd --permanent --add-port="$port"/"$protocol"
+- name: add firewalld port
+  firewalld:
+    port: "{{ openvpn_port }}/{{ openvpn_protocol }}"
+    permanent: yes
+    immediate: yes
+    state: enabled
+  register: fw_port
+- debug: var=fw_port.msg
+
+#firewall-cmd --zone=trusted --add-source=10.8.0.0/24
+#firewall-cmd --permanent --zone=trusted --add-source=10.8.0.0/24
+- name: add firewalld source
+  firewalld:
+    source: 10.8.0.0/24
+    zone: trusted
+    state: enabled
+    permanent: yes
+    immediate: yes
+  register: fw_source
+- debug: var=fw_source.msg
+
+# firewall-cmd --direct --add-rule ipv4 nat POSTROUTING 0 -s 10.8.0.0/24 ! -d 10.8.0.0/24 -j SNAT --to "$ip"
+- name: add direct firewalld NAT postrouting
+  shell: >
+    firewall-cmd --direct --add-rule ipv4 nat POSTROUTING 0 \
+      -s 10.8.0.0/24 ! -d 10.8.0.0/24 \
+      -j SNAT --to "{{ ansible_host }}"
+  args:
+    warn: no
+  register: fw_nat_direct
+#- debug: var=fw_nat_direct.stdout_lines
+
+#firewall-cmd --permanent --direct --add-rule ipv4 nat POSTROUTING 0 -s 10.8.0.0/24 ! -d 10.8.0.0/24 -j SNAT --to "$ip"
+- name: add perm firewalld NAT postrouting
+  shell: >
+    firewall-cmd --permanent --direct --add-rule ipv4 nat POSTROUTING 0 \
+      -s 10.8.0.0/24 ! -d 10.8.0.0/24 \
+      -j SNAT --to "{{ ansible_host }}"
+  args:
+    warn: no
+  register: fw_nat_perm
+#- debug: var=fw_nat_perm.stdout_lines
+
+- name: reload firewall
+  shell: firewall-cmd --reload
+  args:
+    warn: no
+  register: fw_reload
+#- debug: var=fw_reload.stdout_lines
+
+## Set NAT for the VPN subnet
+#if [[ -n "$ip6" ]]; then
+#  firewall-cmd --zone=trusted --add-source=fddd:1194:1194:1194::/64
+#  firewall-cmd --permanent --zone=trusted --add-source=fddd:1194:1194:1194::/64
+#  firewall-cmd --direct --add-rule ipv6 nat POSTROUTING 0 -s fddd:1194:1194:1194::/64 ! -d fddd:1194:1194:1194::/64 -j SNAT --to "$ip6"
+#  firewall-cmd --permanent --direct --add-rule ipv6 nat POSTROUTING 0 -s fddd:1194:1194:1194::/64 ! -d fddd:1194:1194:1194::/64 -j SNAT --to "$ip6"
+
+
+# these are used to get the path for the iptables+ip6tables commands for systemd startup
+- name: get iptables location
+  block:
+  - shell: command -v iptables
+    args:
+      warn: no
+    register: iptables
+  - set_fact:
+      iptables_path: "{{ iptables.stdout_lines[0] }}"
+#- debug: var=iptables_path
+
+- name: get ip6tables location
+  block:
+  - shell: command -v ip6tables
+    args:
+      warn: no
+    register: ip6tables
+  - set_fact:
+      ip6tables_path: "{{ ip6tables.stdout_lines[0] }}"
+#- debug: var=ip6tables_path

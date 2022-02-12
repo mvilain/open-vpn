@@ -1,0 +1,30 @@
+# RedHat install tasks for vpn
+---
+- fail:
+    msg: "Fedora not supported"
+  when: ansible_distribution == "Fedora"
+
+- assert:
+    that: "ansible_distribution_major_version is version_compare('7', '==')"
+#    success_msg: "CentOS 7 supported"
+    fail_msg: "CentOS 8, AlamaLinux, or RockyLinux not supported"
+#- debug: var=ansible_distribution_major_version
+
+- name: RHEL epel-release contains openvpn package
+  package:
+    name: epel-release
+    state: present
+  when: >
+    ansible_distribution == "AlmaLinux" or
+    ansible_distribution == "CentOS" or
+    ansible_distribution == "RedHat"
+
+# ansible 2.7 deprecates with_items and nosquash, should use variable directly
+# but it takes a long time to process all the packages at once, so do separately
+# this displays the packages after they're installed
+- name: RedHat packages
+  package:
+    name: '{{ item }}'
+    state: present
+  loop:
+    - "{{ RedHat_packages }}"
