@@ -1,6 +1,0 @@
-# NOTE: THESE CANNOT BE OVERRRIDEN BY THE COMMAND LINE
-# os_default vars file for common
-# put default values in defaults/main.yaml
-# host-specific variables can also go here
----
-nobody_group_id: nobody

@@ -1,19 +1,32 @@
-// aws-vpc.tf -- define the vpn aws vpc
+// gpc-net.tf -- define the vpn gpc network
 // ================================================= NETWORK+SUBNETS+ACLs
-data "aws_vpc" "default" {
-  default    = true
+resource "google_compute_network" "vpn-net" {
+  name                    = "vpn-net"
+  auto_create_subnetworks = false
 }
+# google_compute_network.vpn-net.id - an identifier for resource with format projects/{{project}}/global/networks/{{name}}
+# google_compute_network.vpn-net.gateway_ipv4 - gateway address for default routing out of the network. This value is selected by GCP.
+# google_compute_network.vpn-net.self_link - URI of the created resource
 
-#data "aws_subnet_ids" "default" {
-#vpc_id    = data.aws_vpc.default.id
-#}
-# data.aws_subnet_ids.default.ids lists region's default subnet ids
+# aws requires a CIDR for VPC and CIDRs for each subnet
+# gpc puts both CIDR in subnetwork API call
+resource "google_compute_subnetwork" "vpn-net" {
+  name                    = "vpn-subnet"
+  ip_cidr_range           = "192.168.0.0/16"
+  region                  = var.gcp_region
+  network                 = google_compute_network.vpn-net.id
+  secondary_ip_range {
+    range_name            = "services-range"
+    ip_cidr_range         = "192.168.10.0/24"
+  }
 
-## data "aws_availability_zones" "available" {
-##   state    = "available"
-## }
-### data.aws_availability_zones.available.names is list region's availability zones
-### data.aws_availability_zones.available.zone_ids is list region's availability zone ids
+}
+# google_compute_subnetwork.vpn-net.id - an identifier for resource with format projects/{{project}}/regions/{{region}}/subnetworks/{{name}}
+# google_compute_subnetwork.vpn-net.creation_timestamp - Creation timestamp in RFC3339 text format.
+# google_compute_subnetwork.vpn-net.gateway_address - gateway address for default routes to reach destination addresses outside this subnetwork.
+# google_compute_subnetwork.vpn-net.self_link - URI of the created resource.
+
+
 
 resource "aws_vpc" "vpn_vpc" {
   cidr_block           = "192.168.0.0/16"

@@ -1,7 +1,0 @@
-# RedHat services tasks for vpn
----
-- name: start and enable firewalld
-  systemd:
-    name: firewalld
-    enabled: yes
-    state: started

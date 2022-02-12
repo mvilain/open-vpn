@@ -30,12 +30,21 @@ DEFAULTS = dict(
     REGION  = os.environ.get('CLOUDSDK_COMPUTE_REGION'),
     ZONE    = os.environ.get('CLOUDSDK_COMPUTE_ZONE')
     )
+
+# https://cloud.google.com/compute/docs/images/os-details
+# cos = Container-Optimized OS https://cloud.google.com/container-optimized-os/docs
+# rhel = RedHat Enterprise Linux (requires license)
+# suse = SUSE Linux Enterprise Server (requires license)
 IMAGE_PROJECTS = [
     "almalinux-cloud",
     "centos-cloud",
+#     "cos-cloud",
     "debian-cloud",
+#     "fedora-coreos-cloud",
     "fedora-cloud",
+#     "rhel-cloud",
     "rocky-linux-cloud",
+#     "suse-cloud",
     "ubuntu-os-cloud"
     ]
 
@@ -161,15 +170,17 @@ def images_list( project ):
     image_list = []
     while request is not None:
         response = request.execute()
-        # pprint.pprint(response)
         for image in response['items']:
-            # pprint.pprint(image)
-            storage_locations = ', '.join(image['storageLocations']).upper()
-            if 'deprecated' not in image: # ignore DEPRECATED images (there are a lot)
-                image_list.append('{} -- {:.70}...in {}'.format(
-                    image['name'], image['description'], storage_locations )
+#             storage_locations = ', '.join(sorted(image['storageLocations'])).upper()
+            # ignore DEPRECATED images (there are a lot)
+            # 8/15/21 removed storage_locations from output
+            if 'deprecated' not in image:
+                image_list.append('{} -- {:.100}...'.format(
+                                                        image['name']
+                                                        ,image['description']
+                                                    #   ,storage_locations
+                                                        )
                 )
-            # print(image_list)
         request = service.images().list_next(
                         previous_request=request, 
                         previous_response=response)
@@ -193,11 +204,13 @@ def machine_list( zone, project ):
     while request is not None:
         response = request.execute()
         for machine in response['items']: # dict
-            if 'deprecated' in machine:
-                m_list.append( '* {} **DEPRECATED** ({})'.format(machine['name'],
-                                                              machine['description'] ))
-            else:
-                m_list.append( '{:15}  ({})'.format(machine['name'], machine['description'] ))
+            # ignore deprecated
+            if 'deprecated' not in machine:
+                m_list.append( '{:15}  ({})'.format(machine['name'], 
+                                                    machine['description'] ))
+#             else:
+#                 m_list.append( '* {} **DEPRECATED** ({})'.format(machine['name'],
+#                                                                  machine['description'] ))
         request = service.machineTypes().list_next(
                         previous_request=request, 
                         previous_response=response)
@@ -226,28 +239,27 @@ def regions_list( project ):
             for z in region['zones']:   # list of URLs for zones
                 # split urls along "/" and select the last entry as the zone name
                 z_list.append( z.split('/')[-1] )
-            r_list.append( '{:20} zones: {}'.format(region['name'], ', '.join(z_list) ))
+            r_list.append( '{:24} zones: {}'.format(region['name'], ', '.join(z_list) ))
         request = service.regions().list_next(
                         previous_request=request, 
                         previous_response=response)
     return sorted(r_list)
 
 
-def regions_print(incr=1,tab='    '):
+def regions_print(tab='    '):
     """
-    print the regions as a list of sort strings INCR number per line
+    print the regions as a list of sorted strings
 
-    :param: incr -- int number of elements to print per line
+    with other cloud services, their region strings were shorter
+    so it made sense to be able to print multiple strings on a line
+    gcp has long string names for regions and zones
+
     :param: tab -- string of spaces at beginning of line
 
     :return: returns None
     """
-    start = 0; stop = incr
-    valid_regions = regions_list( project=DEFAULTS['PROJECT'] )
-    while start < len( valid_regions ):
-        print('{}{}'.format(tab,' '.join(valid_regions[start:stop])))
-        start = stop
-        stop = stop + incr
+    for valid_region in regions_list( project=DEFAULTS['PROJECT'] ):
+        print('{} {}'.format(tab,valid_region))
     return None
 
 
