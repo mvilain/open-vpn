@@ -8,6 +8,7 @@
 *.retry
 *.sublime-*
 **/venv/*
+*.iml
 
 # Local .terraform directories
 **/.terraform/*
