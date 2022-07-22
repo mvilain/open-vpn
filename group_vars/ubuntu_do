@@ -1,3 +1,0 @@
-# group_vars ubuntu_do for linode vpn servers
----
-group_vars: "ubuntu_do"

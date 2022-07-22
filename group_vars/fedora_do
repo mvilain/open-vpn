@@ -1,3 +1,0 @@
-# group_vars fedora_do for digital ocean vpn servers
----
-group_vars: "fedora_do"

@@ -1,3 +1,0 @@
-# group_vars debian_gcp for Google Cloud vpn servers
----
-group_vars: "debian_gcp"

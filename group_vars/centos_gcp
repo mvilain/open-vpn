@@ -1,3 +1,0 @@
-# group_vars centos_gcp for Google Cloud vpn servers
----
-group_vars: "centos_gcp"

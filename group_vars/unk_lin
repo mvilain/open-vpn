@@ -1,3 +1,0 @@
-# group_vars unk_lin for linode vpn servers
----
-group_vars: "unk_lin"
